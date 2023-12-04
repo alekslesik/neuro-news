@@ -1,0 +1,62 @@
+name: Audit and deploy
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+
+  audit:
+    runs-on: ubuntu-22.04
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Go
+      uses: actions/setup-go@v2
+      with:
+        go-version: 1.21
+
+    - name: Verify dependencies
+      run: go mod verify
+
+    - name: Run go vet
+      run: go vet ./...
+
+    - name: Install staticcheck
+      run: go install honnef.co/go/tools/cmd/staticcheck@latest
+
+    - name: Run staticcheck
+      run: staticcheck ./...
+
+    - name: Run tests
+      run: go test -race -vet=off ./...
+
+  deploy:
+    runs-on: ubuntu-22.04
+    # We use the needs keyword to instruct GitHub that we don't want to execute
+    # the deploy job until after the audit job has completed successfully.
+    needs: audit
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.21
+
+      - name: Build binary
+        run: go build ./cmd/neuro-news/
+
+      - name: Run Ansible playbook at ./ops/production/ansible/deploy.yml
+        uses: dawidd6/action-ansible-playbook@v2
+        with:
+          playbook: deploy.yml
+          directory: ./ops/production/ansible
+          # SSH private key and ansible vault password needed to run the
+          # playbook are read from GitHub secrets.
+          key: ${{secrets.DEPLOY_USER_PUBLIC_KEY}}
+          vault_password: ${{secrets.VAULT_PASSWORD}}
+          options: |
+            --inventory hosts.ini
