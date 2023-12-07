@@ -1,0 +1,39 @@
+- name: Deploy Neuro News Application
+  hosts: alekslesik
+  become: yes
+  vars:
+    - app_host_path: "/var/www"
+    - app_name: "neuro-news"
+    - app_service: "neuro-news.service"
+
+  tasks:
+    # Copy neuro-news binary to the specified path on the remote host
+    - name: Copy neuro-news binary
+      copy:
+        src: "{{ app_name }}"
+        dest: "{{ app_host_path }}"
+
+    # Copy systemd unit file to /etc/systemd/system/
+    - name: Copy systemd unit file
+      become_user: root
+      copy:
+        src: "{{ app_service }}"
+        dest: /etc/systemd/system/{{ app_service }}
+
+    # Set executable permissions for neuro-news binary
+    - name: Set executable permissions for neuro-news binary
+      become_user: root
+      file:
+        path: "{{ app_host_path }}"
+        mode: +x
+
+    # Reload systemd to apply changes
+    - name: Reload systemd
+      systemd:
+        daemon_reload: yes
+
+    # Restart the application using systemd
+    - name: Restart the application
+      systemd:
+        name: "{{ app_name }}"
+        state: restarted
