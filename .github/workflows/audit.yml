@@ -4,9 +4,9 @@ name: Audit and deploy
 # Trigger the workflow on pushes and pull requests to the main branch
 on:
   push:
-    branches: [test-github-actions]
+    branches: [main]
   pull_request:
-    branches: [test-github-actions]
+    branches: [main]
 
 # Define jobs for the workflow
 jobs:
