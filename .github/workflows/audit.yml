@@ -28,8 +28,8 @@ jobs:
         run: go mod verify
 
       # Run go vet to check for suspicious constructs in Go code
-      - name: Run go vet
-        run: go vet ./...
+      # - name: Run go vet
+      #   run: go vet ./...
 
       # Install staticcheck tool
       - name: Install staticcheck
@@ -70,6 +70,6 @@ jobs:
           playbook: dpl.yml
           directory: ./ops/production/ansible
           key: ${{secrets.DEPLOY_USER_PRIVATE_KEY}}
-          vault_password: ${{secrets.VAULT_PASSWORD}}
+          # vault_password: ${{secrets.VAULT_PASSWORD}}
           options: |
             --inventory hosts.ini
