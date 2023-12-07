@@ -61,7 +61,7 @@ jobs:
 
       # Build the binary for the neuro-news application
       - name: Build binary
-        run: go build ./cmd/neuro-news/
+        run: go build -o ./ops/production/ansible/ ./cmd/neuro-news/
 
       # Run Ansible playbook located at ./ops/production/ansible/deploy.yml
       - name: Run Ansible playbook
