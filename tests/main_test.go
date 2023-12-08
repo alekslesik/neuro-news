@@ -1,5 +1,5 @@
 // tests/main_test.go
-package tests
+package main
 
 import (
 	"testing"
