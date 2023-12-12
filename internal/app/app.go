@@ -3,9 +3,9 @@ package app
 import (
 	"database/sql"
 
+	"github.com/alekslesik/neuro-news/internal/app/model"
 	"github.com/alekslesik/neuro-news/internal/pkg/middleware"
 	"github.com/alekslesik/neuro-news/internal/pkg/router"
-	"github.com/alekslesik/neuro-news/internal/pkg/sqlmodel"
 	"github.com/alekslesik/neuro-news/internal/pkg/template"
 
 	"github.com/alekslesik/neuro-news/pkg/config"
@@ -20,7 +20,7 @@ type Application struct {
 	router     *router.Router
 	middleware *middleware.Middleware
 	session    *session.Session
-	model      *sqlmodel.Model
+	model      *model.Model
 	template   *template.Template
 	dataBase   *sql.DB
 	mailer     *mailer.Mailer
