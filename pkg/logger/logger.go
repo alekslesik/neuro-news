@@ -10,11 +10,11 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
-type level string
+type Level string
 
 const (
-	DEVELOPMENT level = "development"
-	PRODUCTION  level = "production"
+	DEVELOPMENT Level = "development"
+	PRODUCTION  Level = "production"
 )
 
 var ErrLevelMissing error = errors.New("logging level missing")
@@ -25,22 +25,22 @@ type Logger struct {
 }
 
 // Create new logger
-func New(l level, file string) (*Logger, error) {
+func New(l Level, file string) (*Logger, error) {
 	setGlobalLogger()
 
 	switch l {
 	case DEVELOPMENT:
 		logFile, err := createLogFile(file)
 		if err != nil {
-			log.Err(ErrCreateFile)
+			return nil, err
 		}
 
 		return getDevLogger(logFile), nil
-		
+
 	case PRODUCTION:
 		logFile, err := createLogFile(file)
 		if err != nil {
-			log.Err(ErrCreateFile)
+			return nil, err
 		}
 
 		return getProdLogger(logFile), nil
@@ -70,7 +70,7 @@ func createLogFile(logFilePath string) (*os.File, error) {
 	return logFile, nil
 }
 
-// Log to file only
+// Logging within log file only
 func getProdLogger(file *os.File) *Logger {
 	zerolog.TimeFieldFormat = time.RFC1123
 	z := zerolog.New(file).
@@ -82,7 +82,7 @@ func getProdLogger(file *os.File) *Logger {
 	return &Logger{z}
 }
 
-// Log to file and console
+// Logging within log file and console
 func getDevLogger(file *os.File) *Logger {
 	consoleWriter := zerolog.ConsoleWriter{Out: os.Stdout, TimeFormat: time.RFC1123}
 	multi := zerolog.MultiLevelWriter(consoleWriter, file)
