@@ -3,20 +3,25 @@ package router
 import (
 	"net/http"
 
+	"github.com/alekslesik/neuro-news/internal/app/handler"
 	"github.com/gin-gonic/gin"
 )
 
 type Router struct {
+	h *handler.AppHandler
 }
 
-func New() *Router {
-	return &Router{}
+func New(handler *handler.AppHandler) *Router {
+	return &Router{
+		h: handler,
+	}
 }
 
 func (r *Router) Route() http.Handler {
 	// Creates a gin router with default middleware:
 	// logger and recovery (crash-free) middleware
 	engine := gin.Default()
+
 
 	engine.GET("/")
 	// router.POST("/somePost", posting)

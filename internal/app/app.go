@@ -5,11 +5,14 @@ import (
 	"flag"
 	"log"
 
-	"github.com/alekslesik/neuro-news/internal/app/model"
+	"github.com/alekslesik/neuro-news/internal/app/handler"
+	// "github.com/alekslesik/neuro-news/internal/app/model"
+	"github.com/alekslesik/neuro-news/internal/app/repository"
+	"github.com/alekslesik/neuro-news/internal/app/service"
+	"github.com/alekslesik/neuro-news/internal/pkg/db"
 	"github.com/alekslesik/neuro-news/internal/pkg/middleware"
 	"github.com/alekslesik/neuro-news/internal/pkg/router"
 	"github.com/alekslesik/neuro-news/internal/pkg/template"
-	"github.com/alekslesik/neuro-news/internal/pkg/db"
 
 	"github.com/alekslesik/neuro-news/pkg/config"
 	"github.com/alekslesik/neuro-news/pkg/logger"
@@ -23,7 +26,7 @@ type Application struct {
 	router     *router.Router
 	middleware *middleware.Middleware
 	session    *session.Session
-	model      *model.Model
+	// model      *model.Model
 	template   *template.Template
 	dataBase   *sql.DB
 	mailer     *mailer.Mailer
@@ -58,11 +61,20 @@ func New() (*Application, error) {
 		logger.Error().Msgf("%s: open db error: %v", op, err)
 	}
 
+	// Инициализация репозиториев
+	repositories := repository.NewMySQLRepository(db)
+
+	// Инициализация сервисов
+	articleService := service.NewArticleService(repositories.GetArticleRepository())
+	userService := service.NewUserService(repositories.GetUserRepository())
+
+	handler := handler.NewAppHandler(articleService, userService)
+
 	// Инициализация модели данных
-	model := model.New(db)
+	// model := model.New(db)
 
 	// Инициализация роутера
-	appRouter := router.New()
+	appRouter := router.New(handler)
 
 	// Инициализация почтового сервиса
 	// appMailer := mailer.New(appConfig.SMTPConfig)
@@ -77,14 +89,14 @@ func New() (*Application, error) {
 	// appMiddleware := middleware.New()
 
 	return &Application{
-		config:     config,
-		logger:     logger,
-		router:     appRouter,
+		config: config,
+		logger: logger,
+		router: appRouter,
 		// middleware: appMiddleware,
 		// session:    appSession,
-		model:      model,
+		// model:      model,
 		// template:   appTemplate,
-		dataBase:   db,
+		dataBase: db,
 		// mailer:     appMailer,
 	}, nil
 }

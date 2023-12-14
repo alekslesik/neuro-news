@@ -11,9 +11,13 @@ import (
 func main() {
 	const op = "main()"
 
-	app := app.New()
+	app, err := app.New()
+	if err != nil {
+		log.Fatalf("%s > create app error: %v", op, err)
 
-	err := app.Run()
+	}
+
+	err = app.Run()
 	if err != nil {
 		log.Fatalf("%s > run app error: %v", op, err)
 	}

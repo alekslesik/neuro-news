@@ -2,7 +2,6 @@ package model
 
 import (
 	"errors"
-	"time"
 )
 
 var (
@@ -12,17 +11,3 @@ var (
 	//If a user tries to signup with an email address that's already in use.
 	ErrDuplicateEmail = errors.New("models: duplicate email")
 )
-
-type Article struct {
-	ID      int
-	Title   string
-	Body    string
-	Image   string
-	Created time.Time
-}
-
-type ArticleRepository interface {
-    GetAllArticles() ([]Article, error)
-    GetArticleByID(id int) (*Article, error)
-}
-

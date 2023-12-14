@@ -1,27 +1,19 @@
 package handler
 
-import (
-    "net/http"
-    "github.com/alekslesik/neuro-news/internal/app/service"
-)
+import "github.com/alekslesik/neuro-news/internal/app/service"
 
-type Handler struct {
-    // Зависимости handler, например, сервисы
-    UserService    *service.UserService
-    ArticleService *service.ArticleService
-    // ...
+
+
+type AppHandler struct {
+    ArticleService service.ArticleService
+    UserService    service.UserService
 }
 
-func NewHandler(userService *service.UserService, articleService *service.ArticleService) *Handler {
-    return &Handler{
-        UserService:    userService,
+func NewAppHandler(articleService service.ArticleService, userService service.UserService) *AppHandler {
+    return &AppHandler{
         ArticleService: articleService,
-        // ...
+        UserService:    userService,
     }
 }
 
-// Обработчики HTTP-запросов, например:
-func (h *Handler) GetUserHandler(w http.ResponseWriter, r *http.Request) {
-    // Обработка запроса для получения пользователя
-    // ...
-}
+// Теперь вы можете использовать AppHandler в ваших обработчиках, обращаясь к ArticleService и UserService
