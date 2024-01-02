@@ -1,35 +1,30 @@
 package app
 
 import (
-	"database/sql"
-	"flag"
 	"log"
+	"net/http"
 
 	"github.com/alekslesik/neuro-news/internal/app/handler"
 	// "github.com/alekslesik/neuro-news/internal/app/model"
 	"github.com/alekslesik/neuro-news/internal/app/repository"
 	"github.com/alekslesik/neuro-news/internal/app/service"
 	"github.com/alekslesik/neuro-news/internal/pkg/db"
-	"github.com/alekslesik/neuro-news/internal/pkg/middleware"
+	"github.com/alekslesik/neuro-news/internal/pkg/flag"
 	"github.com/alekslesik/neuro-news/internal/pkg/router"
-	"github.com/alekslesik/neuro-news/internal/pkg/template"
 
 	"github.com/alekslesik/neuro-news/pkg/config"
 	"github.com/alekslesik/neuro-news/pkg/logger"
-	"github.com/alekslesik/neuro-news/pkg/mailer"
-	"github.com/alekslesik/neuro-news/pkg/session"
 )
 
 type Application struct {
 	config     *config.Config
 	logger     *logger.Logger
 	router     *router.Router
-	middleware *middleware.Middleware
-	session    *session.Session
-	// model      *model.Model
-	template   *template.Template
-	dataBase   *sql.DB
-	mailer     *mailer.Mailer
+	// middleware *middleware.Middleware
+	// session    *session.Session
+	// template *template.Template
+	// dataBase *sql.DB
+	// mailer   *mailer.Mailer
 }
 
 func New() (*Application, error) {
@@ -39,15 +34,8 @@ func New() (*Application, error) {
 	//TODO add error returning
 	config := config.New()
 
-	flag.StringVar(&config.App.Env, "env", string(logger.DEVELOPMENT), "Environment (development|staging|production)")
-	flag.IntVar(&config.App.Port, "port", 443, "API server port")
-	config.MySQL.DSN = *flag.String("dsn", config.MySQL.DSN, "Name SQL data Source")
-	flag.StringVar(&config.SMTP.Host, "smtp-host", "app.debugmail.io", "SMTP host")
-	flag.IntVar(&config.SMTP.Port, "smtp-port", 25, "SMTP port")
-	flag.StringVar(&config.SMTP.Username, "smtp-username", "d40e021c-f8d5-49af-a118-81f40f7b84b7", "SMTP username")
-	flag.StringVar(&config.SMTP.Password, "smtp-password", "a8c960ed-d3ad-44e6-8461-37d40f15e569", "SMTP password")
-	flag.StringVar(&config.SMTP.Sender, "smtp-sender", "alekslesik@gmail.com", "SMTP sender")
-	flag.Parse()
+	// flag init
+	flag.Init(config)
 
 	// logger init
 	logger, err := logger.New(logger.Level(config.Logger.LogLevel), config.Logger.LogFilePath)
@@ -61,20 +49,20 @@ func New() (*Application, error) {
 		logger.Error().Msgf("%s: open db error: %v", op, err)
 	}
 
-	// Инициализация репозиториев
-	repositories := repository.NewMySQLRepository(db)
+	// repository init
+	repositories := repository.New(db)
 
-	// Инициализация сервисов
-	articleService := service.NewArticleService(repositories.GetArticleRepository())
-	userService := service.NewUserService(repositories.GetUserRepository())
+	// services init
+	services := service.New(repositories)
 
-	handler := handler.NewAppHandler(articleService, userService)
+	// handlers init
+	handler := handler.New(services)
 
-	// Инициализация модели данных
-	// model := model.New(db)
+	// TODO Инициализация промежуточных обработчиков
+	// appMiddleware := middleware.New()
 
-	// Инициализация роутера
-	appRouter := router.New(handler)
+	// router init
+	router := router.New(handler)
 
 	// Инициализация почтового сервиса
 	// appMailer := mailer.New(appConfig.SMTPConfig)
@@ -85,24 +73,29 @@ func New() (*Application, error) {
 	// Инициализация шаблонов
 	// appTemplate := template.New()
 
-	// Инициализация промежуточных обработчиков
-	// appMiddleware := middleware.New()
+
 
 	return &Application{
 		config: config,
 		logger: logger,
-		router: appRouter,
+		router: router,
 		// middleware: appMiddleware,
 		// session:    appSession,
 		// model:      model,
 		// template:   appTemplate,
-		dataBase: db,
+		// dataBase: db,
 		// mailer:     appMailer,
 	}, nil
 }
 
 func (app *Application) Run() error {
-	// Ваш код запуска приложения
+
 	log.Println("Application is running...")
+
+	err := http.ListenAndServe(":8080", app.router.Route())
+	if err != nil {
+		return err
+	}
+
 	return nil
 }

@@ -7,15 +7,15 @@ import (
 )
 
 type MySQLArticleRepository struct {
-    db *sql.DB
+	db *sql.DB
 }
 
 func (r *MySQLArticleRepository) GetAllArticles() ([]model.Article, error) {
-    // Реализация получения всех статей из базы данных
-	return nil, nil
+	articles := []model.Article{{ID: 1}, {ID: 2}}
+	return articles, nil
 }
 
 func (r *MySQLArticleRepository) GetArticleByID(id int) (*model.Article, error) {
-    // Реализация получения статьи по ID из базы данных
+	// Реализация получения статьи по ID из базы данных
 	return nil, nil
 }

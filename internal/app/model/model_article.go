@@ -12,8 +12,7 @@ type Article struct {
 	Created time.Time
 }
 
-type ArticleRepository interface {
-    GetAllArticles() ([]Article, error)
-    GetArticleByID(id int) (*Article, error)
+type ArticleModel interface {
+	GetAllArticles() ([]Article, error)
+	GetArticleByID(id int) (*Article, error)
 }
-

@@ -4,7 +4,6 @@ import (
 	"net/http"
 
 	"github.com/alekslesik/neuro-news/internal/app/handler"
-	"github.com/gin-gonic/gin"
 )
 
 type Router struct {
@@ -20,10 +19,10 @@ func New(handler *handler.AppHandler) *Router {
 func (r *Router) Route() http.Handler {
 	// Creates a gin router with default middleware:
 	// logger and recovery (crash-free) middleware
-	engine := gin.Default()
+	mux := http.NewServeMux()
 
 
-	engine.GET("/")
+	mux.HandleFunc("/", r.h.ArticleHandler.GetAllArticles)
 	// router.POST("/somePost", posting)
 	// router.PUT("/somePut", putting)
 	// router.DELETE("/someDelete", deleting)
@@ -34,12 +33,12 @@ func (r *Router) Route() http.Handler {
 	// Пример использования функции Dir
 	// В данном случае, мы указываем путь к директории "static", которая будет доступна на сервере
 	// Если listDirectory установлено в true, то файлы директории будут отображаться, иначе - нет
-	engine.StaticFS("/static", http.Dir("./"))
+	// engine.StaticFS("/static", http.Dir("./"))
 
 	// for end-to-end testing
 	// mux.Get("/ping", http.HandlerFunc(ping))
 
 	// return standardMiddleware.Then(mux)
 
-	return engine
+	return mux
 }

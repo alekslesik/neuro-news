@@ -5,28 +5,27 @@ import (
     "net/http"
 )
 
-// ArticleHandler обрабатывает запросы, связанные со статьями.
+// ArticleHandler handle requests related with articles
 type ArticleHandler struct {
     AppHandler *AppHandler
 }
 
-// NewArticleHandler создает новый экземпляр ArticleHandler.
+// Create new instance of ArticleHandler.
 func NewArticleHandler(appHandler *AppHandler) *ArticleHandler {
     return &ArticleHandler{
         AppHandler: appHandler,
     }
 }
 
-// GetAllArticles обрабатывает запрос на получение всех статей.
+// GetAllArticles handle request to get all articles
 func (ah *ArticleHandler) GetAllArticles(w http.ResponseWriter, r *http.Request) {
-    articles, err := ah.AppHandler.ArticleService.GetAllArticles()
+    articles, err := ah.AppHandler.articleService.GetAllArticles()
     if err != nil {
-        // Обработка ошибки
         http.Error(w, "Internal Server Error", http.StatusInternalServerError)
         return
     }
 
-    // Отправляем статьи в виде JSON-ответа
+    // Send articles as json response
     w.Header().Set("Content-Type", "application/json")
     json.NewEncoder(w).Encode(articles)
 }

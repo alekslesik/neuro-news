@@ -3,17 +3,25 @@ package handler
 import "github.com/alekslesik/neuro-news/internal/app/service"
 
 
-
 type AppHandler struct {
-    ArticleService service.ArticleService
-    UserService    service.UserService
+    articleService service.ArticleService
+    userService service.UserService
+    ArticleHandler ArticleHandler
+    UserHandler UserHandler
 }
 
-func NewAppHandler(articleService service.ArticleService, userService service.UserService) *AppHandler {
-    return &AppHandler{
-        ArticleService: articleService,
-        UserService:    userService,
+func New(services *service.Services) *AppHandler {
+
+    appHandler := & AppHandler{
+        articleService: services.GetArticleService(),
+        userService: services.GetUserService(),
     }
-}
 
-// Теперь вы можете использовать AppHandler в ваших обработчиках, обращаясь к ArticleService и UserService
+    articleHandler := NewArticleHandler(appHandler)
+    userHandler := NewUserHandler(appHandler)
+
+    appHandler.ArticleHandler = *articleHandler
+    appHandler.UserHandler = *userHandler
+
+    return appHandler
+}

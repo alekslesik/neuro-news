@@ -20,6 +20,11 @@ confirm:
 # DEVELOPMENT
 # ==================================================================================== #
 
+## run: build app to ops/production/ansible
+.PHONY: run
+run:
+	go run ./
+
 ## build: build app to ops/production/ansible
 .PHONY: build
 build:
