@@ -20,10 +20,10 @@ confirm:
 # DEVELOPMENT
 # ==================================================================================== #
 
-## run: build app to ops/production/ansible
+## run: run app
 .PHONY: run
 run:
-	go run ./
+	go run ./cmd/neuro-news/main.go
 
 ## build: build app to ops/production/ansible
 .PHONY: build

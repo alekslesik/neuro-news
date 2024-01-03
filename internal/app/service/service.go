@@ -4,16 +4,24 @@ import (
 	"github.com/alekslesik/neuro-news/internal/app/repository"
 )
 
-type Services struct {}
+type Services struct {
+    r *repository.MySQLRepository
+}
 
 func New(r *repository.MySQLRepository) *Services {
-    return &Services{}
+    return &Services{
+        r: r,
+    }
 }
 
 func (s *Services) GetArticleService() ArticleService {
-    return &articleService{}
+    return &articleService{
+        ArticleRepository: s.r.GetArticleRepository(),
+    }
 }
 
 func (s *Services) GetUserService() UserService {
-    return &userService{}
+    return &userService{
+        UserRepository: s.r.GetUserRepository(),
+    }
 }

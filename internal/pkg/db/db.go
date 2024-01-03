@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"errors"
 
-	
+	_ "github.com/go-sql-driver/mysql"
 )
 
 var ErrNoDriver = errors.New("driver: not supported")
