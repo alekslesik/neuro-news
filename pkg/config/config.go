@@ -33,7 +33,7 @@ type LoggerConfig struct {
 
 type MySQLConfig struct {
 	Driver string `env:"MYSQL_DRIVER" env-default:"mysql"`
-	DSN    string `env:"MYSQL_DSN" env-default:"root:486464@tcp(localhost:3306)/neuro-news?parseTime=true"`
+	DSN    string `env:"MYSQL_DSN" env-default:"root:486464@tcp(localhost:3306)/neuronews?parseTime=true"`
 }
 
 type TlsConfig struct {
