@@ -27,9 +27,7 @@ func OpenDB(dsn, driver string) (*sql.DB, error) {
 		if err = db.Ping(); err != nil {
 			return nil, err
 		}
-	default:
-		return nil, ErrNoDriver
 	}
 
-	return db, nil
+	return nil, ErrNoDriver
 }
