@@ -37,7 +37,10 @@ func New() (*Application, error) {
 	config := config.New()
 
 	// flag init
-	flag.Init(config)
+	err := flag.Init(config)
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	// logger init
 	logger, err := logger.New(logger.Level(config.Logger.LogLevel), config.Logger.LogFilePath)
