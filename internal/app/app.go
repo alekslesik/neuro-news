@@ -1,6 +1,7 @@
 package app
 
 import (
+	"database/sql"
 	"log"
 	"net/http"
 
@@ -17,9 +18,10 @@ import (
 )
 
 type Application struct {
-	config     *config.Config
-	logger     *logger.Logger
-	router     *router.Router
+	config *config.Config
+	logger *logger.Logger
+	router *router.Router
+	db     *sql.DB
 	// middleware *middleware.Middleware
 	// session    *session.Session
 	// template *template.Template
@@ -73,12 +75,11 @@ func New() (*Application, error) {
 	// Инициализация шаблонов
 	// appTemplate := template.New()
 
-
-
 	return &Application{
 		config: config,
 		logger: logger,
 		router: router,
+		db:     db,
 		// middleware: appMiddleware,
 		// session:    appSession,
 		// model:      model,
@@ -89,6 +90,9 @@ func New() (*Application, error) {
 }
 
 func (app *Application) Run() error {
+	const op = "app.Run()"
+
+	defer app.closeDB()
 
 	log.Println("Application is running...")
 
@@ -98,4 +102,16 @@ func (app *Application) Run() error {
 	}
 
 	return nil
+}
+
+
+func (app *Application) closeDB() {
+	const op = "app.Close()"
+
+
+
+
+	if err := app.db.Close(); err != nil {
+		app.logger.Err(err).Msgf("%s > failed to close data base", op)
+	}
 }
