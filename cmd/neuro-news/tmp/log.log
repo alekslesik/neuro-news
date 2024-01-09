@@ -1,4 +1,0 @@
-{"level":"error","time":"2024-01-02T20:28:00+03:00","caller":"/home/kasian/go/src/github.com/alekslesik/neuro-news/internal/app/app.go:49","message":"app.New(): open db error: sql: unknown driver \"mysql\" (forgotten import?)"}
-{"level":"error","time":"2024-01-02T20:28:15+03:00","caller":"/home/kasian/go/src/github.com/alekslesik/neuro-news/internal/app/app.go:49","message":"app.New(): open db error: sql: unknown driver \"mysql\" (forgotten import?)"}
-{"level":"error","time":"2024-01-02T20:28:40+03:00","caller":"/home/kasian/go/src/github.com/alekslesik/neuro-news/internal/app/app.go:49","message":"app.New(): open db error: sql: unknown driver \"mysql\" (forgotten import?)"}
-{"level":"error","time":"2024-01-02T20:33:59+03:00","caller":"/home/kasian/go/src/github.com/alekslesik/neuro-news/internal/app/app.go:49","message":"app.New(): open db error: sql: unknown driver \"mysql\" (forgotten import?)"}

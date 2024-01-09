@@ -34,12 +34,15 @@ func New() (*Application, error) {
 
 	// config init
 	//TODO add error returning
-	config := config.New()
+	config, err := config.New()
+	if err != nil {
+		log.Fatalf("%s: config initialization error:  %s", op, err)
+	}
 
 	// flag init
-	err := flag.Init(config)
+	err = flag.Init(config)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("%s: flag initialization error:  %s", op, err)
 	}
 
 	// logger init
@@ -107,12 +110,8 @@ func (app *Application) Run() error {
 	return nil
 }
 
-
 func (app *Application) closeDB() {
 	const op = "app.Close()"
-
-
-
 
 	if err := app.db.Close(); err != nil {
 		app.logger.Err(err).Msgf("%s > failed to close data base", op)

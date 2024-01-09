@@ -10,8 +10,9 @@
       "request": "launch",
       "mode": "auto",
       "program": "${workspaceFolder}/cmd/neuro-news/main.go",
-      // flag test
-      "args": ["-env=staging", "-port=abs"]
+      "output": "${workspaceFolder}/neuro-news",
+      "cwd": "${workspaceFolder}",
+      // "args": ["-env=staging", "-port=abs"]
     }
   ]
 }

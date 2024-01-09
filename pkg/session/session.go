@@ -1,6 +1,5 @@
 package session
 
-
 import (
 	"net/http"
 	"time"

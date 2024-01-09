@@ -21,7 +21,6 @@ func (r *Router) Route() http.Handler {
 	// logger and recovery (crash-free) middleware
 	mux := http.NewServeMux()
 
-
 	mux.HandleFunc("/", r.h.ArticleHandler.GetAllArticles)
 	// router.POST("/somePost", posting)
 	// router.PUT("/somePut", putting)

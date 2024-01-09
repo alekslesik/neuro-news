@@ -1,19 +1,12 @@
 package config
 
 import (
-	"log"
-	"sync"
-
 	"github.com/ilyakaznacheev/cleanenv"
-)
-
-const (
-	LISTEN_TYPE_SOCK = "sock"
-	LISTEN_TYPE_PORT = "port"
+	"github.com/joho/godotenv"
 )
 
 type AppConfig struct {
-	Port      int    `env:"PORT" env-default:"80"`
+	Port      int    `env:"PORT" env-default:"443"`
 	Host      string `env:"HOST" env-default:"localhost"`
 	Env       string `env:"ENV" env-default:"development"`
 	AdminUser struct {
@@ -36,7 +29,7 @@ type MySQLConfig struct {
 	DSN    string `env:"MYSQL_DSN" env-default:"root:486464@tcp(localhost:3306)/neuronews?parseTime=true"`
 }
 
-type TlsConfig struct {
+type TLSConfig struct {
 	KeyPath  string `env:"TLS_KEY_PATH" env-default:"./tls/key.pem"`
 	CertPath string `env:"TLS_CERT_PATH" env-default:"./tls/cert.pem"`
 }
@@ -46,11 +39,11 @@ type SessionConfig struct {
 }
 
 type SMTPConfig struct {
-	Host     string
-	Port     int
-	Username string
-	Password string
-	Sender   string
+	Host     string `env:"SMTP_HOST"`
+	Port     int    `env:"SMTP_PORT"`
+	Username string `env:"SMTP_USERNAME"`
+	Password string `env:"SMTP_PASSWORD"`
+	Sender   string `env:"SMTP_SENDER"`
 }
 
 type Config struct {
@@ -58,26 +51,41 @@ type Config struct {
 	Logger  LoggerConfig
 	MySQL   MySQLConfig
 	Session SessionConfig
-	TLS     TlsConfig
+	TLS     TLSConfig
 	SMTP    SMTPConfig
 }
 
 // Singleton pattern
-var instance *Config
-var once sync.Once
+// var cfg *Config
+// var once sync.Once
 
-// Return instance of config
-func New() *Config {
-	once.Do(func() {
-		instance = &Config{}
+// New return instance of config
+func New() (*Config, error) {
+	// once.Do(func() {
+	// instance = &Config{}
 
-		if err := cleanenv.ReadEnv(instance); err != nil {
-			helpText := "Neuro news"
-			help, _ := cleanenv.GetDescription(instance, &helpText)
-			log.Print(help)
-			log.Fatal(err)
-		}
-	})
+	// if err := cleanenv.ReadEnv(instance); err != nil {
+	// 	helpText := "Neuro news"
+	// 	help, _ := cleanenv.GetDescription(instance, &helpText)
+	// 	log.Print(help)
+	// 	log.Fatal(err)
+	// }
+	// })
 
-	return instance
+	// var cfg *Config
+	// load environments from .env file
+	err := godotenv.Load()
+	if err != nil {
+		return nil, err
+	}
+
+	cfg := &Config{}
+
+	// Загрузка переменных окружения из .env файла
+	err = cleanenv.ReadEnv(cfg)
+	if err != nil {
+		return nil, err
+	}
+
+	return cfg, nil
 }
