@@ -13,7 +13,7 @@ const (
 	MYSQL = "mysql"
 )
 
-// Open DB connection pool depends on driver
+// OpenDB Opening data base connection pool depends on driver
 func OpenDB(dsn, driver string) (*sql.DB, error) {
 	var db *sql.DB
 	var err error

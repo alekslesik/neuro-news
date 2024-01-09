@@ -24,7 +24,7 @@ type Logger struct {
 	zerolog.Logger
 }
 
-// Create new logger
+// New create new logger
 func New(l Level, file string) (*Logger, error) {
 	setGlobalLogger()
 

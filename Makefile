@@ -1,5 +1,5 @@
 # Change these variables as necessary.
-MAIN_PACKAGE_PATH := ./cmd/neuro-news
+MAIN_PATH := ./cmd/neuro-news
 BINARY_NAME := neuro-news
 
 # ==================================================================================== #
@@ -23,12 +23,46 @@ confirm:
 ## run: run app
 .PHONY: run
 run:
-	go run ./cmd/neuro-news/main.go
+	go run $(MAIN_PATH)/main.go
 
-## build: build app to ops/production/ansible
+## run-build: run and build app local
+.PHONY: run-build
+run-build: build
+	./$(BINARY_NAME)
+
+## build: build app local
 .PHONY: build
-build:
-	go build -o ./ops/production/ansible/ ./cmd/neuro-news/
+build: audit tidy
+	go build -o ./ $(MAIN_PATH)/
+
+## build-ansible: build app to ops/production/ansible
+.PHONY: build-ansible
+build-ansible:
+	go build -o ./ops/production/ansible/ $(MAIN_PATH)/
+
+## tidy: format code and tidy modfile
+.PHONY: tidy
+tidy:
+	go fmt ./...
+	go mod tidy -v
+
+## audit: run quality control checks
+.PHONY: audit
+audit:
+	go mod verify
+	go vet ./...
+	go run honnef.co/go/tools/cmd/staticcheck@latest -checks=all,-ST1000,-U1000 ./...
+	go run golang.org/x/vuln/cmd/govulncheck@latest ./...
+	go test -race -buildvcs -vet=off ./...
+
+# ==================================================================================== #
+# TESTING
+# ==================================================================================== #
+## test-cover: test cover of whole project
+.PHONY: test-cover
+test-cover:
+	go test -v -race -coverprofile=./tests/coverage.out ./...
+	go tool cover -html=./tests/coverage.out -o ./tests/coverage.html
 
 # ==================================================================================== #
 # MYSQL
@@ -47,3 +81,17 @@ mysql-root:
 .PHONY: deploy
 deploy: build
 	ansible-playbook -i ops/production/ansible/hosts.ini ops/production/ansible/dpl.yml -vv
+
+# ==================================================================================== #
+# OTHER
+# ==================================================================================== #
+
+## go-update: update Golang, use "v" for version (go-update v=1.21.5)
+.PHONY: go-update
+go-update:
+	sudo rm -rf go$(v).linux-amd64.tar.gz
+	wget https://go.dev/dl/go$(v).linux-amd64.tar.gz
+	sudo rm -rf /usr/local/go
+	sudo tar -C /usr/local -xzf go$(v).linux-amd64.tar.gz
+	sudo rm -rf go$(v).linux-amd64.tar.gz
+	go version

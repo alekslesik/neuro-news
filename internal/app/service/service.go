@@ -5,23 +5,23 @@ import (
 )
 
 type Services struct {
-    r *repository.MySQLRepository
+	r *repository.MySQLRepository
 }
 
 func New(r *repository.MySQLRepository) *Services {
-    return &Services{
-        r: r,
-    }
+	return &Services{
+		r: r,
+	}
 }
 
 func (s *Services) GetArticleService() ArticleService {
-    return &articleService{
-        ArticleRepository: s.r.GetArticleRepository(),
-    }
+	return &articleService{
+		ArticleRepository: s.r.GetArticleRepository(),
+	}
 }
 
 func (s *Services) GetUserService() UserService {
-    return &userService{
-        UserRepository: s.r.GetUserRepository(),
-    }
+	return &userService{
+		UserRepository: s.r.GetUserRepository(),
+	}
 }
