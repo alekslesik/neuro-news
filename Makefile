@@ -56,6 +56,15 @@ audit:
 	go test -race -buildvcs -vet=off ./...
 
 # ==================================================================================== #
+# TESTING
+# ==================================================================================== #
+## test-cover: test cover of whole project
+.PHONY: test-cover
+test-cover:
+	go test -v -race -coverprofile=./tests/coverage.out ./...
+	go tool cover -html=./tests/coverage.out -o ./tests/coverage.html
+
+# ==================================================================================== #
 # MYSQL
 # ==================================================================================== #
 
