@@ -28,8 +28,8 @@ jobs:
         run: go mod verify
 
       # Run go vet to check for suspicious constructs in Go code
-      # - name: Run go vet
-      #   run: go vet ./...
+      - name: Run go vet
+        run: go vet ./...
 
       # Install staticcheck tool
       - name: Install staticcheck
@@ -37,7 +37,15 @@ jobs:
 
       # Run staticcheck to analyze Go code statically
       - name: Run staticcheck
-        run: staticcheck ./...
+        run: staticcheck -checks=all,-ST1000,-U1000 ./...
+
+      # Install govulncheck
+      - name: Install govulncheck
+        run: go install golang.org/x/vuln/cmd/govulncheck@latest
+
+      # Run govulncheck
+      - name: Run govulncheck
+        run: govulncheck ./...
 
       # Run tests with race detection and vet disabled
       - name: Run tests

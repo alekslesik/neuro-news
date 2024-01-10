@@ -1,10 +1,20 @@
 package config
 
 import (
+	"errors"
+	"io/fs"
+	"log"
+	"sync"
+
 	"github.com/ilyakaznacheev/cleanenv"
 	"github.com/joho/godotenv"
 )
 
+var (
+	ErrEnvNotExists error = errors.New(".env file is not exists")
+)
+
+// app config part
 type AppConfig struct {
 	Port      int    `env:"PORT" env-default:"443"`
 	Host      string `env:"HOST" env-default:"localhost"`
@@ -15,6 +25,7 @@ type AppConfig struct {
 	}
 }
 
+// logger config part
 type LoggerConfig struct {
 	LogLevel    string `env:"LOG_LEVEL" env-default:"development"`
 	LogFilePath string `env:"LOG_FILE" env-default:"./tmp/log.log"`
@@ -24,20 +35,24 @@ type LoggerConfig struct {
 	Compress    bool   `env:"LOG_COMPRESS" env-default:"true"`
 }
 
+// MYSQL config part
 type MySQLConfig struct {
 	Driver string `env:"MYSQL_DRIVER" env-default:"mysql"`
 	DSN    string `env:"MYSQL_DSN" env-default:"root:486464@tcp(localhost:3306)/neuronews?parseTime=true"`
 }
 
+// TLS config part
 type TLSConfig struct {
 	KeyPath  string `env:"TLS_KEY_PATH" env-default:"./tls/key.pem"`
 	CertPath string `env:"TLS_CERT_PATH" env-default:"./tls/cert.pem"`
 }
 
+// session config part
 type SessionConfig struct {
 	Secret string `env:"SESSION_SECRET" env-default:"s6Ndh+pPbnzHbS*+9Pk8qGWhTzbpa@ge"`
 }
 
+// SMTP config part
 type SMTPConfig struct {
 	Host     string `env:"SMTP_HOST"`
 	Port     int    `env:"SMTP_PORT"`
@@ -46,6 +61,7 @@ type SMTPConfig struct {
 	Sender   string `env:"SMTP_SENDER"`
 }
 
+// whole config
 type Config struct {
 	App     AppConfig
 	Logger  LoggerConfig
@@ -55,33 +71,41 @@ type Config struct {
 	SMTP    SMTPConfig
 }
 
-// Singleton pattern
-// var cfg *Config
-// var once sync.Once
+var (
+	instance *Config
+	once     sync.Once
+)
 
-// New return instance of config
+// New return instance of config (singleton)
 func New() (*Config, error) {
-	// once.Do(func() {
-	// instance = &Config{}
+	var err error
 
-	// if err := cleanenv.ReadEnv(instance); err != nil {
-	// 	helpText := "Neuro news"
-	// 	help, _ := cleanenv.GetDescription(instance, &helpText)
-	// 	log.Print(help)
-	// 	log.Fatal(err)
-	// }
-	// })
+	once.Do(func() {
+		instance, err = loadEnv()
+	})
 
-	// var cfg *Config
+	return instance, err
+}
+
+// loadEnv load environments from .env file
+func loadEnv() (*Config, error) {
 	// load environments from .env file
 	err := godotenv.Load()
+
+	// if .env file not exists continue code and take default environments
 	if err != nil {
-		return nil, err
+		var pathErr *fs.PathError
+
+		if !errors.As(err, &pathErr) {
+			return nil, err
+		} else {
+			log.Println(err)
+			log.Println(ErrEnvNotExists)
+		}
 	}
 
+	// read environments in structure
 	cfg := &Config{}
-
-	// Загрузка переменных окружения из .env файла
 	err = cleanenv.ReadEnv(cfg)
 	if err != nil {
 		return nil, err

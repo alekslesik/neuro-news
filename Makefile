@@ -32,7 +32,7 @@ run-build: build
 
 ## build: build app local
 .PHONY: build
-build: audit tidy
+build: tidy
 	go build -o ./ $(MAIN_PATH)/
 
 ## build-ansible: build app to ops/production/ansible

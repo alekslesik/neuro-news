@@ -96,7 +96,7 @@ func New() (*Application, error) {
 }
 
 func (app *Application) Run() error {
-	const op = "app.Run()"
+	// const op = "app.Run()"
 
 	defer app.closeDB()
 
