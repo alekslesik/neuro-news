@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"testing"
 
-	"github.com/alekslesik/neuro-news/pkg/config"
+	"github.com/alekslesik/config"
 )
 
 // TestInitWithInvalidArgs testing Init() with wrong args

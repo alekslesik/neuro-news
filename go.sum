@@ -1,6 +1,10 @@
 github.com/BurntSushi/toml v1.2.1/go.mod h1:CxXYINrC8qIiEnFrOxCa7Jy5BFHlXnUU2pbicEuybxQ=
 github.com/BurntSushi/toml v1.3.2 h1:o7IhLm0Msx3BaB+n3Ag7L8EVlByGnpq14C4YWiu/gL8=
 github.com/BurntSushi/toml v1.3.2/go.mod h1:CxXYINrC8qIiEnFrOxCa7Jy5BFHlXnUU2pbicEuybxQ=
+github.com/alekslesik/config v1.1.0 h1:JF+jHeZhKYqGDUCWdMSQX32LA5odGc3MPTsTiupwG6Q=
+github.com/alekslesik/config v1.1.0/go.mod h1:5xoQQXEALlPdN9OaQw+YO/JaQW/fHtIAtDGUQlkLBZU=
+github.com/alekslesik/config v1.21.0 h1:j72vidEHXeScyMK2ePoHcy0rao11ez3lsmyjOOxBxco=
+github.com/alekslesik/config v1.21.0/go.mod h1:5S0F2G72Hxs/StWcCfRqyzZfWTgXeVIdtFHr+vdne4E=
 github.com/coreos/go-systemd/v22 v22.5.0/go.mod h1:Y58oyj3AT4RCenI/lSvhwexgC+NSVTIJ3seZv2GcEnc=
 github.com/go-mail/mail/v2 v2.3.0 h1:wha99yf2v3cpUzD1V9ujP404Jbw2uEvs+rBJybkdYcw=
 github.com/go-mail/mail/v2 v2.3.0/go.mod h1:oE2UK8qebZAjjV1ZYUpY7FPnbi/kIU53l1dmqPRb4go=

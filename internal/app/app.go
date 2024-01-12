@@ -5,15 +5,14 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/alekslesik/config"
 	"github.com/alekslesik/neuro-news/internal/app/handler"
-	// "github.com/alekslesik/neuro-news/internal/app/model"
 	"github.com/alekslesik/neuro-news/internal/app/repository"
 	"github.com/alekslesik/neuro-news/internal/app/service"
 	"github.com/alekslesik/neuro-news/internal/pkg/db"
 	"github.com/alekslesik/neuro-news/internal/pkg/flag"
 	"github.com/alekslesik/neuro-news/internal/pkg/router"
 
-	"github.com/alekslesik/neuro-news/pkg/config"
 	"github.com/alekslesik/neuro-news/pkg/logger"
 )
 

@@ -5,7 +5,7 @@ import (
 	"flag"
 	"os"
 
-	"github.com/alekslesik/neuro-news/pkg/config"
+	"github.com/alekslesik/config"
 	"github.com/alekslesik/neuro-news/pkg/logger"
 )
 
@@ -43,4 +43,3 @@ func Init(config *config.Config) error {
 
 	return nil
 }
-
