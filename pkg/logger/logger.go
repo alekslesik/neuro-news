@@ -4,6 +4,7 @@ import (
 	"errors"
 	"os"
 	"path/filepath"
+	"sync"
 	"time"
 
 	"github.com/rs/zerolog"
@@ -17,16 +18,19 @@ const (
 	PRODUCTION  Level = "production"
 )
 
-var ErrLevelMissing error = errors.New("logging level missing")
-var ErrCreateFile error = errors.New("create log file error")
+var (
+	once            sync.Once
+	ErrCreateFile   error = errors.New("create log file error")
+	ErrLevelMissing error = errors.New("logging level missing")
+)
 
 type Logger struct {
 	zerolog.Logger
 }
 
-// New create new logger
+// New create new logger instance with level. File string must be like "./path/logname.log"
 func New(l Level, file string) (*Logger, error) {
-	setGlobalLogger()
+	SetGlobalLog()
 
 	switch l {
 	case DEVELOPMENT:
@@ -49,7 +53,7 @@ func New(l Level, file string) (*Logger, error) {
 	return nil, ErrLevelMissing
 }
 
-// Create log file in specified filePath
+// createLogFile create log file in specified filePath
 func createLogFile(logFilePath string) (*os.File, error) {
 	// Get dir where log file must be
 	logDir := filepath.Dir(logFilePath)
@@ -70,7 +74,7 @@ func createLogFile(logFilePath string) (*os.File, error) {
 	return logFile, nil
 }
 
-// Logging within log file only
+// getProdLogger return logger with logging in file only
 func getProdLogger(file *os.File) *Logger {
 	zerolog.TimeFieldFormat = time.RFC1123
 	z := zerolog.New(file).
@@ -82,7 +86,7 @@ func getProdLogger(file *os.File) *Logger {
 	return &Logger{z}
 }
 
-// Logging within log file and console
+// getDevLogger return logger with logging in file and console
 func getDevLogger(file *os.File) *Logger {
 	consoleWriter := zerolog.ConsoleWriter{Out: os.Stdout, TimeFormat: time.RFC1123}
 	multi := zerolog.MultiLevelWriter(consoleWriter, file)
@@ -98,7 +102,22 @@ func getDevLogger(file *os.File) *Logger {
 	return &Logger{z}
 }
 
-// Set global logger
-func setGlobalLogger() {
-	log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stdout})
+// SetGlobalLog set global logger
+func SetGlobalLog() {
+	// set up once
+	once.Do(setOnceGlobalLog)
+}
+
+func setOnceGlobalLog() {
+	log.Logger = log.Output(zerolog.ConsoleWriter{
+		Out:        os.Stdout,
+		NoColor:    false,
+		TimeFormat: "15:04:05",
+		PartsOrder: []string{
+			zerolog.TimestampFieldName,
+			zerolog.LevelFieldName,
+			zerolog.CallerFieldName,
+			zerolog.MessageFieldName,
+		},
+	})
 }

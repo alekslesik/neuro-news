@@ -2,7 +2,6 @@ package app
 
 import (
 	"database/sql"
-	"log"
 	"net/http"
 
 	"github.com/alekslesik/config"
@@ -14,6 +13,7 @@ import (
 	"github.com/alekslesik/neuro-news/internal/pkg/router"
 
 	"github.com/alekslesik/neuro-news/pkg/logger"
+	"github.com/rs/zerolog/log"
 )
 
 type Application struct {
@@ -32,28 +32,27 @@ func New() (*Application, error) {
 	const op = "app.New()"
 
 	// config init
-	//TODO add error returning
 	config, err := config.New()
 	if err != nil {
-		log.Fatalf("%s: config initialization error:  %s", op, err)
+		log.Fatal().Msgf("%s: config initialization error:  %s", op, err)
 	}
 
 	// flag init
 	err = flag.Init(config)
 	if err != nil {
-		log.Fatalf("%s: flag initialization error:  %s", op, err)
+		log.Fatal().Msgf("%s: flag initialization error:  %s", op, err)
 	}
 
 	// logger init
 	logger, err := logger.New(logger.Level(config.Logger.LogLevel), config.Logger.LogFilePath)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal().Msgf("%s: logger initialization error:  %s", op, err)
 	}
 
-	// data base init
+	// db init
 	db, err := db.OpenDB(config.MySQL.DSN, config.MySQL.Driver)
 	if err != nil {
-		logger.Error().Msgf("%s: open db error: %v", op, err)
+		logger.Error().Msgf("%s: db initialization error: %v", op, err)
 	}
 
 	// repository init
@@ -99,7 +98,7 @@ func (app *Application) Run() error {
 
 	defer app.closeDB()
 
-	log.Println("Application is running...")
+	log.Info().Msg("Application is running ...")
 
 	err := http.ListenAndServe(":8080", app.router.Route())
 	if err != nil {
