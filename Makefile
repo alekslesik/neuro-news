@@ -48,7 +48,7 @@ tidy:
 
 ## audit: run quality control checks
 .PHONY: audit
-audit:
+audit: tidy
 	go mod verify
 	go vet ./...
 	go run honnef.co/go/tools/cmd/staticcheck@latest -checks=all,-ST1000,-U1000 ./...
