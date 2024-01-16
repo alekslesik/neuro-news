@@ -6,7 +6,7 @@ import (
 	"os"
 
 	"github.com/alekslesik/config"
-	"github.com/alekslesik/neuro-news/pkg/logger"
+	// "github.com/alekslesik/neuro-news/pkg/logger"
 )
 
 var (
@@ -20,8 +20,8 @@ func Init(config *config.Config) error {
 	flagSet := flag.NewFlagSet("flag", flag.ContinueOnError)
 
 	// define flags in flagset
-	flagSet.StringVar(&config.App.Env, "env", string(logger.DEVELOPMENT), "Environment (development|staging|production)")
-	flagSet.IntVar(&config.App.Port, "port", 443, "API server port")
+	flagSet.StringVar(&config.App.Env, "env", config.App.Env, "Environment (development|staging|production)")
+	flagSet.IntVar(&config.App.Port, "port", config.App.Port, "API server port")
 
 	// take arguments transferred to application using os.Args slice
 	args := os.Args[1:]
