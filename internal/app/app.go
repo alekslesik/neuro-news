@@ -3,6 +3,7 @@ package app
 import (
 	"database/sql"
 	"net/http"
+	"strconv"
 
 	"github.com/alekslesik/config"
 	"github.com/alekslesik/neuro-news/internal/app/handler"
@@ -17,9 +18,9 @@ import (
 )
 
 type Application struct {
-	config *config.Config
-	logger *logger.Logger
-	router *router.Router
+	c *config.Config
+	l *logger.Logger
+	r *router.Router
 	db     *sql.DB
 	// middleware *middleware.Middleware
 	// session    *session.Session
@@ -80,9 +81,9 @@ func New() (*Application, error) {
 	// appTemplate := template.New()
 
 	return &Application{
-		config: config,
-		logger: logger,
-		router: router,
+		c: config,
+		l: logger,
+		r: router,
 		db:     db,
 		// middleware: appMiddleware,
 		// session:    appSession,
@@ -93,25 +94,29 @@ func New() (*Application, error) {
 	}, nil
 }
 
-func (app *Application) Run() error {
-	// const op = "app.Run()"
+func (a *Application) Run() error {
+	const op = "app.Run()"
 
-	defer app.closeDB()
+	defer a.closeDB()
+	defer a.l.LogFile.Close()
 
-	log.Info().Msg("Application is running ...")
+	a.l.Info().Msg("Application is running ...")
 
-	err := http.ListenAndServe(":8080", app.router.Route())
+	addr := a.c.App.Host + ":" + strconv.Itoa(a.c.App.Port)
+
+	err := http.ListenAndServe(addr, a.r.Route())
 	if err != nil {
+		a.l.Err(err).Msgf("%s > failed to listen and serve", op)
 		return err
 	}
 
 	return nil
 }
 
-func (app *Application) closeDB() {
+func (a *Application) closeDB() {
 	const op = "app.Close()"
 
-	if err := app.db.Close(); err != nil {
-		app.logger.Err(err).Msgf("%s > failed to close data base", op)
+	if err := a.db.Close(); err != nil {
+		a.l.Err(err).Msgf("%s > failed to close data base", op)
 	}
 }

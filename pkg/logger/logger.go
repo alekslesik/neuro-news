@@ -24,32 +24,31 @@ var (
 	ErrLevelMissing error = errors.New("logging level missing")
 )
 
+// Logger with zerolog logger instance and log file
 type Logger struct {
 	zerolog.Logger
+	LogFile *os.File
 }
 
 // New create new logger instance with level. File string must be like "./path/logname.log"
 func New(l Level, file string) (*Logger, error) {
 	SetGlobalLog()
 
+	// create log file
+	logFile, err := createLogFile(file)
+	if err != nil {
+		return nil, err
+	}
+
+	// new logger depends on log level
 	switch l {
 	case DEVELOPMENT:
-		logFile, err := createLogFile(file)
-		if err != nil {
-			return nil, err
-		}
-
 		return getDevLogger(logFile), nil
-
 	case PRODUCTION:
-		logFile, err := createLogFile(file)
-		if err != nil {
-			return nil, err
-		}
-
 		return getProdLogger(logFile), nil
 	}
 
+	// wrong log level
 	return nil, ErrLevelMissing
 }
 
@@ -83,7 +82,7 @@ func getProdLogger(file *os.File) *Logger {
 		Timestamp().
 		Logger()
 
-	return &Logger{z}
+	return &Logger{z, file}
 }
 
 // getDevLogger return logger with logging in file and console
@@ -99,7 +98,7 @@ func getDevLogger(file *os.File) *Logger {
 		Caller().
 		Logger()
 
-	return &Logger{z}
+	return &Logger{z, file}
 }
 
 // SetGlobalLog set global logger
@@ -108,6 +107,7 @@ func SetGlobalLog() {
 	once.Do(setOnceGlobalLog)
 }
 
+// setOnceGlobalLog set once global logger in application
 func setOnceGlobalLog() {
 	log.Logger = log.Output(zerolog.ConsoleWriter{
 		Out:        os.Stdout,
@@ -121,3 +121,41 @@ func setOnceGlobalLog() {
 		},
 	})
 }
+
+// TODO
+// Потенциальные Улучшения
+// Документация:
+//     Добавьте комментарии к экспортируемым функциям и типам в соответствии с конвенциями Go.
+//     Это улучшит понимание кода и его использование.
+// Обработка Ошибок:
+//     В функции createLogFile, если ошибка при создании директории не относится к os.IsNotExist,
+//     она будет проигнорирована. Рекомендуется обрабатывать все возможные ошибки.
+// Уровни Логирования:
+//     Уровни логирования (DEVELOPMENT и PRODUCTION) могут быть расширены для большей гибкости.
+//     Например, добавление уровней DEBUG, INFO, WARN, ERROR позволит более детально контролировать логирование.
+// Глобальная Конфигурация:
+//     Ваша функция SetGlobalLog устанавливает глобальный логгер с фиксированными настройками.
+//     Хотя это и удобно, это также ограничивает гибкость. Рассмотрите возможность передачи параметров в SetGlobalLog,
+//     чтобы позволить настройку глобального логгера в зависимости от потребностей приложения.
+
+// Замечания
+// Возврат ошибок:
+//     Рассмотрите возможность добавления более специфичных ошибок вместо ErrCreateFile и ErrLevelMissing.
+//     Это может помочь при отладке и обработке ошибок.
+
+// Закрытие Файлов:
+//     Важно убедиться, что файлы, открытые для логирования, корректно закрываются при завершении программы или при переключении логгера.
+//     В текущей реализации файлы остаются открытыми.
+
+// Конфигурация Пути к Файлу:
+//     Путь к файлу лога задается напрямую в функции New. Рассмотрите использование конфигурационного файла
+//     или переменных окружения для более гибкой конфигурации пути к файлу лога.
+
+// Расширяемость:
+//     Ваш пакет предоставляет заранее определенные конфигурации логгера.
+//     Возможно, стоит предусмотреть механизм для более тонкой настройки логгера
+//     (например, изменение формата вывода, выбор уровней логирования) во время выполнения.
+
+// Использование Констант:
+//     Рассмотрите использование встроенных в zerolog констант для уровней логирования вместо собственных
+//     строковых представлений.
