@@ -6,7 +6,6 @@ import (
 	"os"
 
 	"github.com/alekslesik/config"
-	// "github.com/alekslesik/neuro-news/pkg/logger"
 )
 
 var (

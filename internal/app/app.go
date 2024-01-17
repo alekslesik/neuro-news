@@ -18,10 +18,10 @@ import (
 )
 
 type Application struct {
-	c *config.Config
-	l *logger.Logger
-	r *router.Router
-	db     *sql.DB
+	c  *config.Config
+	l  *logger.Logger
+	r  *router.Router
+	db *sql.DB
 	// middleware *middleware.Middleware
 	// session    *session.Session
 	// template *template.Template
@@ -81,10 +81,10 @@ func New() (*Application, error) {
 	// appTemplate := template.New()
 
 	return &Application{
-		c: config,
-		l: logger,
-		r: router,
-		db:     db,
+		c:  config,
+		l:  logger,
+		r:  router,
+		db: db,
 		// middleware: appMiddleware,
 		// session:    appSession,
 		// model:      model,

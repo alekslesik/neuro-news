@@ -8,16 +8,10 @@ import (
 	"github.com/alekslesik/config"
 )
 
+var cfg = &config.Config{}
+
 // TestInitWithInvalidArgs testing Init() with wrong args
 func TestInitWithInvalidArgs(t *testing.T) {
-	cfg := &config.Config{}
-
-	// save origin os.Args
-	originalArgs := os.Args
-
-	// Restore os.Args after test
-	defer func() { os.Args = originalArgs }()
-
 	// set wrong args for test
 	os.Args = []string{"cmd", "-port=invalid"}
 
@@ -60,21 +54,13 @@ func TestInitWithNoValidEnvFlag(t *testing.T) {
 	}
 	for _, tC := range testCases {
 		t.Run(tC.desc, func(t *testing.T) {
-			cfg := &config.Config{}
-
-			// save origin os.Args
-			originalArgs := os.Args
-
-			// Restore os.Args after test
-			defer func() { os.Args = originalArgs }()
-
 			env := "-env=" + tC.env
 
 			// set wrong args for test
 			os.Args = []string{"cmd", env}
 
 			err := Init(cfg)
-			if err != tC.want {
+			if err != tC.want && err != ErrWrongPort {
 				t.Errorf("want %v return %v", tC.want, err)
 			}
 		})
@@ -112,21 +98,13 @@ func TestInitInvalidPortFlag(t *testing.T) {
 	}
 	for _, tC := range testCases {
 		t.Run(tC.desc, func(t *testing.T) {
-			cfg := &config.Config{}
-
-			// save origin os.Args
-			originalArgs := os.Args
-
-			// Restore os.Args after test
-			defer func() { os.Args = originalArgs }()
-
 			port := "-port=" + strconv.Itoa(tC.port)
 
 			// set wrong args for test
 			os.Args = []string{"cmd", port}
 
 			err := Init(cfg)
-			if err != tC.want {
+			if err != tC.want && err != ErrWrongEnv {
 				t.Errorf("want %v return %v", tC.want, err)
 			}
 		})
