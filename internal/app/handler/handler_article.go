@@ -2,6 +2,7 @@ package handler
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 )
 
@@ -27,5 +28,6 @@ func (ah *ArticleHandler) GetAllArticles(w http.ResponseWriter, r *http.Request)
 
 	// Send articles as json response
 	w.Header().Set("Content-Type", "application/json")
+	log.Println("GET /")
 	json.NewEncoder(w).Encode(articles)
 }

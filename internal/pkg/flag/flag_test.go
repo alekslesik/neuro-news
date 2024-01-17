@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"testing"
 
-	"github.com/alekslesik/config"
+	"github.com/alekslesik/neuro-news/pkg/config"
 )
 
 var cfg = &config.Config{}

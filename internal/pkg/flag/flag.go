@@ -5,7 +5,7 @@ import (
 	"flag"
 	"os"
 
-	"github.com/alekslesik/config"
+	"github.com/alekslesik/neuro-news/pkg/config"
 )
 
 var (
@@ -20,6 +20,7 @@ func Init(config *config.Config) error {
 
 	// define flags in flagset
 	flagSet.StringVar(&config.App.Env, "env", config.App.Env, "Environment (development|staging|production)")
+	flagSet.StringVar(&config.App.Host, "host", config.App.Host, "Host name")
 	flagSet.IntVar(&config.App.Port, "port", config.App.Port, "API server port")
 
 	// take arguments transferred to application using os.Args slice

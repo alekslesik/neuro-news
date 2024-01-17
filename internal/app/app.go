@@ -11,7 +11,6 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/alekslesik/config"
 	"github.com/alekslesik/neuro-news/internal/app/handler"
 	"github.com/alekslesik/neuro-news/internal/app/repository"
 	"github.com/alekslesik/neuro-news/internal/app/service"
@@ -19,6 +18,7 @@ import (
 	"github.com/alekslesik/neuro-news/internal/pkg/flag"
 	"github.com/alekslesik/neuro-news/internal/pkg/router"
 
+	"github.com/alekslesik/neuro-news/pkg/config"
 	"github.com/alekslesik/neuro-news/pkg/logger"
 	"github.com/rs/zerolog/log"
 )
@@ -137,7 +137,7 @@ func (a *Application) Run() error {
 	signal.Notify(done, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
 
 	switch srv.Addr {
-	case "localhost:80", "localhost:8080":
+	case "localhost:80", "localhost:8080", ":80", ":8080":
 		go func() {
 			if err := srv.ListenAndServe(); err != nil {
 				serverErr = err
@@ -145,7 +145,7 @@ func (a *Application) Run() error {
 			}
 		}()
 		a.l.Info().Msgf("server started on %s/", srv.Addr)
-	case "localhost:443", "localhost:8443":
+	case "localhost:443", "localhost:8443", ":443", ":8443":
 		go func() {
 			if err := srv.ListenAndServeTLS(a.c.TLS.CertPath, a.c.TLS.KeyPath); err != nil {
 				serverErr = err
