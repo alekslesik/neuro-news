@@ -1,9 +1,15 @@
 package app
 
 import (
+	"crypto/tls"
+	"crypto/x509"
 	"database/sql"
+	"fmt"
 	"net/http"
-	"strconv"
+	"os"
+	"os/signal"
+	"syscall"
+	"time"
 
 	"github.com/alekslesik/config"
 	"github.com/alekslesik/neuro-news/internal/app/handler"
@@ -100,18 +106,61 @@ func (a *Application) Run() error {
 	defer a.closeDB()
 	defer a.l.LogFile.Close()
 
+	// addr := a.c.App.Host + ":" + strconv.Itoa(a.c.App.Port)
 
-	addr := a.c.App.Host + ":" + strconv.Itoa(a.c.App.Port)
+	// a.l.Info().Msgf("Application is running on %v", addr)
 
-	a.l.Info().Msgf("Application is running on %v", addr)
+	var serverErr error
 
-	err := http.ListenAndServe(addr, a.r.Route())
+	// Get root certificate from system storage
+	rootCAs, err := x509.SystemCertPool()
 	if err != nil {
-		a.l.Err(err).Msgf("%s > failed to listen and serve", op)
+		a.l.Err(err).Msgf("%s > get root certificate", op)
 		return err
 	}
 
-	return nil
+	// Set up server
+	srv := &http.Server{
+		Addr:    fmt.Sprintf("%s:%d", a.c.App.Host, a.c.App.Port),
+		Handler: a.r.Route(),
+		TLSConfig: &tls.Config{
+			MinVersion:         tls.VersionTLS12,
+			RootCAs:            rootCAs,
+			InsecureSkipVerify: false,
+		},
+		IdleTimeout:  time.Minute,
+		ReadTimeout:  5 * time.Second,
+		WriteTimeout: 10 * time.Second,
+	}
+
+	done := make(chan os.Signal, 1)
+	signal.Notify(done, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
+
+	switch srv.Addr {
+	case "localhost:80", "localhost:8080":
+		go func() {
+			if err := srv.ListenAndServe(); err != nil {
+				serverErr = err
+				a.l.Err(err).Msgf("%s > failed to start server", op)
+			}
+		}()
+		a.l.Info().Msgf("server started on %s/", srv.Addr)
+	case "localhost:443", "localhost:8443":
+		go func() {
+			if err := srv.ListenAndServeTLS(a.c.TLS.CertPath, a.c.TLS.KeyPath); err != nil {
+				serverErr = err
+				a.l.Err(err).Msgf("%s > failed to start server", op)
+			}
+		}()
+		a.l.Info().Msgf("server started on %s/", srv.Addr)
+	default:
+		a.l.Error().Msgf("%s: port not exists %s", op, srv.Addr)
+	}
+
+	<-done
+	a.l.Info().Msg("server stopped")
+
+	return serverErr
 }
 
 func (a *Application) closeDB() {
