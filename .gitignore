@@ -21,8 +21,9 @@
 # Go workspace file
 go.work
 ops/production/ansible/neuro-news
-tmp/log.log
+tmp/
 .env
 neuro-news
-cmd/neuro-news/tmp/log.log
+cmd/neuro-news/tmp/
 tests/coverage.html
+tls/
