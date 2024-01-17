@@ -100,9 +100,10 @@ func (a *Application) Run() error {
 	defer a.closeDB()
 	defer a.l.LogFile.Close()
 
-	a.l.Info().Msg("Application is running ...")
 
 	addr := a.c.App.Host + ":" + strconv.Itoa(a.c.App.Port)
+
+	a.l.Info().Msgf("Application is running on %v", addr)
 
 	err := http.ListenAndServe(addr, a.r.Route())
 	if err != nil {
