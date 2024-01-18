@@ -27,3 +27,5 @@ neuro-news
 cmd/neuro-news/tmp/
 tests/coverage.html
 tls/
+tls/cert.pem
+tls/key.pem
