@@ -3,17 +3,21 @@ package handler
 import (
 	"encoding/json"
 	"net/http"
+
+	"github.com/alekslesik/neuro-news/pkg/logger"
 )
 
 // UserHandler handle requests related with users
 type UserHandler struct {
 	AppHandler *AppHandler
+	l  *logger.Logger
 }
 
 // NewUserHandler create new instance of UserHandler
-func NewUserHandler(appHandler *AppHandler) *UserHandler {
+func NewUserHandler(appHandler *AppHandler, l  *logger.Logger) *UserHandler {
 	return &UserHandler{
 		AppHandler: appHandler,
+		l: l,
 	}
 }
 

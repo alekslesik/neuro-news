@@ -77,7 +77,7 @@ func createLogFile(logFilePath string) (*os.File, error) {
 func getProdLogger(file *os.File) *Logger {
 	zerolog.TimeFieldFormat = time.RFC1123
 	z := zerolog.New(file).
-		Level(zerolog.InfoLevel).
+		Level(zerolog.WarnLevel).
 		With().
 		Timestamp().
 		Logger()
@@ -91,7 +91,7 @@ func getDevLogger(file *os.File) *Logger {
 	multi := zerolog.MultiLevelWriter(consoleWriter, file)
 
 	z := zerolog.New(multi).
-		Level(zerolog.TraceLevel).
+		Level(zerolog.DebugLevel).
 		With().
 		Stack().
 		Timestamp().

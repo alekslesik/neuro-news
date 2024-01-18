@@ -50,10 +50,10 @@ func New() (*Application, error) {
 	repositories := repository.New(db)
 
 	// services init
-	services := service.New(repositories)
+	services := service.New(repositories, logger)
 
 	// handlers init
-	handler := handler.New(services)
+	handler := handler.New(services, logger)
 
 	// TODO Инициализация промежуточных обработчиков
 	// appMiddleware := middleware.New()
@@ -89,10 +89,6 @@ func (a *Application) Run() error {
 
 	defer a.closeDB()
 	defer a.l.LogFile.Close()
-
-	// addr := a.c.App.Host + ":" + strconv.Itoa(a.c.App.Port)
-
-	// a.l.Info().Msgf("Application is running on %v", addr)
 
 	var serverErr error
 
@@ -136,13 +132,13 @@ func (a *Application) Run() error {
 				a.l.Err(err).Msgf("%s > failed to start server", op)
 			}
 		}()
-		a.l.Info().Msgf("server started on %s/", srv.Addr)
+		a.l.Warn().Msgf("server started on %s/", srv.Addr)
 	default:
 		a.l.Error().Msgf("%s: port not exists %s", op, srv.Addr)
 	}
 
 	<-done
-	a.l.Info().Msg("server stopped")
+	a.l.Warn().Msg("server stopped")
 
 	return serverErr
 }
