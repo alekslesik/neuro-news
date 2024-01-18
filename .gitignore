@@ -26,3 +26,5 @@ tmp/log.log
 neuro-news
 cmd/neuro-news/tmp/log.log
 tests/coverage.html
+tls/cert.pem
+tls/key.pem
