@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/alekslesik/neuro-news/internal/app/handler"
+	"github.com/gin-gonic/gin"
 )
 
 type Router struct {
@@ -19,9 +20,13 @@ func New(handler *handler.AppHandler) *Router {
 func (r *Router) Route() http.Handler {
 	// Creates a gin router with default middleware:
 	// logger and recovery (crash-free) middleware
-	mux := http.NewServeMux()
+	// mux := http.NewServeMux()
 
-	mux.HandleFunc("/", r.h.ArticleHandler.GetAllArticles)
+	engine := gin.New()
+
+	engine.GET("/", r.h.ArticleHandler.GetAllArticles)
+
+	// mux.HandleFunc("/", r.h.ArticleHandler.GetAllArticles)
 	// router.POST("/somePost", posting)
 	// router.PUT("/somePut", putting)
 	// router.DELETE("/someDelete", deleting)
@@ -39,5 +44,5 @@ func (r *Router) Route() http.Handler {
 
 	// return standardMiddleware.Then(mux)
 
-	return mux
+	return engine
 }

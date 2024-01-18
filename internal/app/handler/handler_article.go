@@ -1,9 +1,10 @@
 package handler
 
 import (
-	"encoding/json"
-	"log"
+
 	"net/http"
+
+	"github.com/gin-gonic/gin"
 )
 
 // ArticleHandler handle requests related with articles
@@ -19,15 +20,11 @@ func NewArticleHandler(appHandler *AppHandler) *ArticleHandler {
 }
 
 // GetAllArticles handle request to get all articles
-func (ah *ArticleHandler) GetAllArticles(w http.ResponseWriter, r *http.Request) {
+func (ah *ArticleHandler) GetAllArticles(c *gin.Context) {
 	articles, err := ah.AppHandler.articleService.GetAllArticles()
 	if err != nil {
-		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-		return
+		c.Error(err)
 	}
 
-	// Send articles as json response
-	w.Header().Set("Content-Type", "application/json")
-	log.Println("GET /")
-	json.NewEncoder(w).Encode(articles)
+	c.JSON(http.StatusOK, articles)
 }

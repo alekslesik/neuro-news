@@ -14,13 +14,10 @@ import (
 	"github.com/alekslesik/neuro-news/internal/app/handler"
 	"github.com/alekslesik/neuro-news/internal/app/repository"
 	"github.com/alekslesik/neuro-news/internal/app/service"
-	"github.com/alekslesik/neuro-news/internal/pkg/db"
-	"github.com/alekslesik/neuro-news/internal/pkg/flag"
 	"github.com/alekslesik/neuro-news/internal/pkg/router"
 
 	"github.com/alekslesik/neuro-news/pkg/config"
 	"github.com/alekslesik/neuro-news/pkg/logger"
-	"github.com/rs/zerolog/log"
 )
 
 type Application struct {
@@ -38,29 +35,16 @@ type Application struct {
 func New() (*Application, error) {
 	const op = "app.New()"
 
-	// config init
-	config, err := config.New()
-	if err != nil {
-		log.Fatal().Msgf("%s: config initialization error:  %s", op, err)
-	}
+	config := configInit()
 
 	// flag init
-	err = flag.Init(config)
-	if err != nil {
-		log.Fatal().Msgf("%s: flag initialization error:  %s", op, err)
-	}
+	flagInit(config)
 
 	// logger init
-	logger, err := logger.New(logger.Level(config.Logger.LogLevel), config.Logger.LogFilePath)
-	if err != nil {
-		log.Fatal().Msgf("%s: logger initialization error:  %s", op, err)
-	}
+	logger := loggerInit(config)
 
 	// db init
-	db, err := db.OpenDB(config.MySQL.DSN, config.MySQL.Driver)
-	if err != nil {
-		logger.Error().Msgf("%s: db initialization error: %v", op, err)
-	}
+	db := dbInit(config, logger)
 
 	// repository init
 	repositories := repository.New(db)
