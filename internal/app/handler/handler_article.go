@@ -10,14 +10,14 @@ import (
 // ArticleHandler handle requests related with articles
 type ArticleHandler struct {
 	AppHandler *AppHandler
-	l *logger.Logger
+	l          *logger.Logger
 }
 
 // NewArticleHandler create new instance of ArticleHandler.
 func NewArticleHandler(appHandler *AppHandler, l *logger.Logger) *ArticleHandler {
 	return &ArticleHandler{
 		AppHandler: appHandler,
-		l: l,
+		l:          l,
 	}
 }
 

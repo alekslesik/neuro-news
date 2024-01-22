@@ -3,8 +3,11 @@ package app
 import (
 	"database/sql"
 
+	"github.com/alekslesik/neuro-news/internal/app/handler"
 	"github.com/alekslesik/neuro-news/internal/pkg/db"
 	"github.com/alekslesik/neuro-news/internal/pkg/flag"
+	"github.com/alekslesik/neuro-news/internal/pkg/router"
+	"github.com/alekslesik/neuro-news/internal/pkg/server"
 	"github.com/alekslesik/neuro-news/pkg/config"
 	"github.com/alekslesik/neuro-news/pkg/logger"
 	"github.com/rs/zerolog/log"
@@ -22,7 +25,7 @@ func configInit() *config.Config {
 }
 
 // flag init
-func flagInit(c *config.Config)  {
+func flagInit(c *config.Config) {
 	const op = "flagInit()"
 	err := flag.Init(c)
 	if err != nil {
@@ -51,4 +54,21 @@ func dbInit(c *config.Config, l *logger.Logger) *sql.DB {
 	}
 
 	return db
+}
+
+// router init
+func routerInit(h *handler.AppHandler) *router.Router {
+	return router.New(h)
+}
+
+// server init
+func serverInit(c *config.Config, l *logger.Logger, r *router.Router) *server.Server {
+	const op = "serverInit()"
+
+	s, err := server.New(c, l, r)
+	if err != nil {
+		log.Fatal().Msgf("%s: server initialization error:  %s", op, err)
+	}
+
+	return s
 }

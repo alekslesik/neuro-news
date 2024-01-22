@@ -10,22 +10,22 @@ import (
 // UserHandler handle requests related with users
 type UserHandler struct {
 	AppHandler *AppHandler
-	l  *logger.Logger
+	l          *logger.Logger
 }
 
 // NewUserHandler create new instance of UserHandler
-func NewUserHandler(appHandler *AppHandler, l  *logger.Logger) *UserHandler {
+func NewUserHandler(appHandler *AppHandler, l *logger.Logger) *UserHandler {
 	return &UserHandler{
 		AppHandler: appHandler,
-		l: l,
+		l:          l,
 	}
 }
 
 // GetUser return user by ID
-func (ah *ArticleHandler) GetUser(w http.ResponseWriter, r *http.Request) {
+func (a *ArticleHandler) GetUser(w http.ResponseWriter, r *http.Request) {
 
 	userID := 1
-	user, err := ah.AppHandler.userService.GetUserByID(userID)
+	user, err := a.AppHandler.userService.GetUserByID(userID)
 	if err != nil {
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		return
