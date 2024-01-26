@@ -43,6 +43,4 @@ func (a *ArticleHandler) GetAllArticles(w http.ResponseWriter, r *http.Request) 
 		http.Error(w, "get all articles error", http.StatusInternalServerError)
 		return
 	}
-
-
 }
