@@ -1,5 +1,10 @@
 package app
 
+// 		log.Info().Msgf("Server started on %s/", a.srv.Addr)
+// 		log.Warn().Msg("Signal received, initiating shutdown")
+// 		log.Error().Msgf("%s: address or port are not exists > %s", op, a.srv.Addr)
+// 		log.Fatal().Msgf("%s: server initialization error > %s", op, err)
+
 import (
 	"context"
 	"database/sql"
@@ -14,6 +19,7 @@ import (
 	"github.com/alekslesik/neuro-news/internal/app/service"
 	"github.com/alekslesik/neuro-news/internal/pkg/router"
 	"github.com/alekslesik/neuro-news/internal/pkg/server"
+	"github.com/alekslesik/neuro-news/internal/pkg/template"
 
 	"github.com/alekslesik/neuro-news/pkg/config"
 	"github.com/alekslesik/neuro-news/pkg/logger"
@@ -25,6 +31,7 @@ type Application struct {
 	cfg *config.Config
 	log *logger.Logger
 	db  *sql.DB
+	tp  *template.Template
 	rtr *router.Router
 	srv *server.Server
 	// middleware *middleware.Middleware
@@ -47,11 +54,14 @@ func New(context context.Context, cancel context.CancelFunc) (*Application, erro
 	// db init
 	db := dbInit(config, logger)
 
+	// template init
+	templates := templateInit(logger)
+
 	// repository init
 	repositories := repository.New(db)
 
 	// services init
-	services := service.New(repositories, logger)
+	services := service.New(repositories, logger, templates)
 
 	// handlers init
 	handler := handler.New(services, logger)
@@ -80,6 +90,7 @@ func New(context context.Context, cancel context.CancelFunc) (*Application, erro
 		log: logger,
 		rtr: router,
 		db:  db,
+		tp:  templates,
 		srv: server,
 		// middleware: appMiddleware,
 		// session:    appSession,
@@ -110,13 +121,15 @@ func (a *Application) Run() error {
 			err = a.srv.ListenAndServe()
 		}()
 		a.log.Info().Msgf("server started on %s/", a.srv.Addr)
+
 	case "localhost:443", "localhost:8443", ":443", ":8443":
 		go func() {
 			err = a.srv.ListenAndServeTLS(a.cfg.TLS.CertPath, a.cfg.TLS.KeyPath)
 		}()
-		a.log.Info().Msgf("server started on %s/", a.srv.Addr)
+		a.log.Info().Msgf("Server started on %s/", a.srv.Addr)
+
 	default:
-		a.log.Error().Msgf("%s: address or port are not exists %s", op, a.srv.Addr)
+		a.log.Error().Msgf("%s: address or port are not exists > %s", op, a.srv.Addr)
 	}
 
 	if err != nil && err != http.ErrServerClosed {
@@ -128,9 +141,11 @@ func (a *Application) Run() error {
 		a.log.Warn().Msg("Context signal received, initiating shutdown")
 		a.srv.Shutdown(a.ctx)
 		time.Sleep(2 * time.Second)
+
 	case err := <-errChan:
-		a.log.Err(err).Msgf("%s > server failure", op)
+		a.log.Error().Msgf("%s: server failure > %s", op, err)
 		return err
+
 	case <-signals:
 		a.log.Warn().Msg("Signal received, initiating shutdown")
 		a.srv.Shutdown(a.ctx)
@@ -144,6 +159,6 @@ func (a *Application) closeDB() {
 	const op = "app.Close()"
 
 	if err := a.db.Close(); err != nil {
-		a.log.Err(err).Msgf("%s > failed to close data base", op)
+		a.log.Error().Msgf("%s: failed to close data base > %s", op, err)
 	}
 }

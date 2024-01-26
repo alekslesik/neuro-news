@@ -8,6 +8,8 @@ import (
 	"github.com/alekslesik/neuro-news/internal/pkg/flag"
 	"github.com/alekslesik/neuro-news/internal/pkg/router"
 	"github.com/alekslesik/neuro-news/internal/pkg/server"
+	"github.com/alekslesik/neuro-news/internal/pkg/template"
+
 	"github.com/alekslesik/neuro-news/pkg/config"
 	"github.com/alekslesik/neuro-news/pkg/logger"
 	"github.com/rs/zerolog/log"
@@ -18,7 +20,7 @@ func configInit() *config.Config {
 	const op = "configInit()"
 	c, err := config.New()
 	if err != nil {
-		log.Fatal().Msgf("%s: config initialization error:  %s", op, err)
+		log.Fatal().Msgf("%s: config initialization error > %s", op, err)
 	}
 
 	return c
@@ -29,7 +31,7 @@ func flagInit(c *config.Config) {
 	const op = "flagInit()"
 	err := flag.Init(c)
 	if err != nil {
-		log.Fatal().Msgf("%s: flag initialization error:  %s", op, err)
+		log.Fatal().Msgf("%s: flag initialization error > %s", op, err)
 	}
 }
 
@@ -38,7 +40,7 @@ func loggerInit(c *config.Config) *logger.Logger {
 	const op = "loggerInit()"
 	l, err := logger.New(logger.Level(c.Logger.LogLevel), c.Logger.LogFilePath)
 	if err != nil {
-		log.Fatal().Msgf("%s: logger initialization error:  %s", op, err)
+		log.Fatal().Msgf("%s: logger initialization error > %s", op, err)
 	}
 
 	return l
@@ -50,10 +52,15 @@ func dbInit(c *config.Config, l *logger.Logger) *sql.DB {
 	// db init
 	db, err := db.OpenDB(c.MySQL.DSN, c.MySQL.Driver)
 	if err != nil {
-		l.Error().Msgf("%s: db initialization error: %v", op, err)
+		l.Error().Msgf("%s: db initialization error > %v", op, err)
 	}
 
 	return db
+}
+
+// template init
+func templateInit(l *logger.Logger) *template.Template {
+	return template.New(l)
 }
 
 // router init
@@ -67,7 +74,7 @@ func serverInit(c *config.Config, l *logger.Logger, r *router.Router) *server.Se
 
 	s, err := server.New(c, l, r)
 	if err != nil {
-		log.Fatal().Msgf("%s: server initialization error:  %s", op, err)
+		log.Fatal().Msgf("%s: server initialization error > %s", op, err)
 	}
 
 	return s

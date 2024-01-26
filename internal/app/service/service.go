@@ -1,6 +1,8 @@
 package service
 
 import (
+	"github.com/alekslesik/neuro-news/internal/pkg/template"
+
 	"github.com/alekslesik/neuro-news/internal/app/repository"
 	"github.com/alekslesik/neuro-news/pkg/logger"
 )
@@ -8,12 +10,14 @@ import (
 type Services struct {
 	r *repository.MySQLRepository
 	l *logger.Logger
+	t *template.Template
 }
 
-func New(r *repository.MySQLRepository, l *logger.Logger) *Services {
+func New(r *repository.MySQLRepository, l *logger.Logger, t *template.Template) *Services {
 	return &Services{
 		r: r,
 		l: l,
+		t: t,
 	}
 }
 
