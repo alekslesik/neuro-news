@@ -25,7 +25,6 @@
       synchronize:
         src: "{{ website }}/"
         dest: "{{ app_host_path }}/{{ website }}/"
-        archive: yes
 
     # Copy systemd unit file to /etc/systemd/system/
     - name: Copy systemd unit file
