@@ -16,7 +16,7 @@
 
     # Copy website dir with content to the specified path on the remote host
     - name: Copy website dir with content
-      synchronize:
+      copy:
         src: "{{ website }}/"
         dest: "{{ app_host_path }}"
 
