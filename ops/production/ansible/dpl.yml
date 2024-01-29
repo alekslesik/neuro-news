@@ -14,11 +14,17 @@
         src: "{{ app_name }}"
         dest: "{{ app_host_path }}"
 
+    # Create website directory if it doesn't exist
+    - name: Create website directory
+      file:
+        path: "{{ app_host_path }}/{{ website }}"
+        state: directory
+
     # Copy website dir with content to the specified path on the remote host
     - name: Copy website dir with content
       copy:
         src: "{{ website }}"
-        dest: "{{ app_host_path }}"
+        dest: "{{ app_host_path }}/{{ website }}"
 
     # Copy systemd unit file to /etc/systemd/system/
     - name: Copy systemd unit file
