@@ -5,7 +5,7 @@
     - app_host_path: "/var/www"
     - app_name: "neuro-news"
     - app_service: "neuro-news.service"
-    - website: "testdir"
+    - website: "website"
 
   tasks:
     # Copy neuro-news binary to the specified path on the remote host
