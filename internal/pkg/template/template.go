@@ -122,7 +122,7 @@ func (t *Template) newCache(dir string) (Cache, error) {
 
 // Render add template data and render
 func (t *Template) Render(w http.ResponseWriter, r *http.Request, name string, td *TemplateData) {
-	const op = "helpers.Render()"
+	const op = "templates.Render()"
 
 	// extract pattern depending "name"
 	ts, ok := t.cache[name]

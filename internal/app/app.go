@@ -64,7 +64,7 @@ func New(context context.Context, cancel context.CancelFunc) (*Application, erro
 	services := service.New(repositories, logger, templates)
 
 	// handlers init
-	handler := handler.New(services, logger)
+	handler := handler.New(services, logger, templates)
 
 	// TODO Инициализация промежуточных обработчиков
 	// appMiddleware := middleware.New()

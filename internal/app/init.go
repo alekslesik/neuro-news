@@ -60,7 +60,14 @@ func dbInit(c *config.Config, l *logger.Logger) *sql.DB {
 
 // template init
 func templateInit(l *logger.Logger) *template.Template {
-	return template.New(l)
+	t := template.New(l)
+
+	// appPath := os.Getenv("APP_PATH")
+
+	// t.AddCache(appPath + "/website/content")
+	t.AddCache("./website/content")
+
+	return t
 }
 
 // router init

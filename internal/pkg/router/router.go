@@ -38,6 +38,10 @@ func (r *Router) Route() http.Handler {
 	// Если listDirectory установлено в true, то файлы директории будут отображаться, иначе - нет
 	// engine.StaticFS("/static", http.Dir("./"))
 
+	// file server for static files
+	fileServer := http.FileServer(http.Dir("./website/static/"))
+	mux.Handle("/static/", http.StripPrefix("/static", fileServer))
+
 	// for end-to-end testing
 	// mux.Get("/ping", http.HandlerFunc(ping))
 

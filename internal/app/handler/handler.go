@@ -1,8 +1,11 @@
 package handler
 
 import (
+
 	"github.com/alekslesik/neuro-news/internal/app/service"
 	"github.com/alekslesik/neuro-news/pkg/logger"
+	"github.com/alekslesik/neuro-news/internal/pkg/template"
+
 )
 
 type AppHandler struct {
@@ -10,13 +13,15 @@ type AppHandler struct {
 	userService    service.UserService
 	ArticleHandler ArticleHandler
 	UserHandler    UserHandler
+	templates      *template.Template
 }
 
-func New(services *service.Services, l *logger.Logger) *AppHandler {
+func New(services *service.Services, l *logger.Logger, templates *template.Template) *AppHandler {
 
 	appHandler := &AppHandler{
 		articleService: services.GetArticleService(),
 		userService:    services.GetUserService(),
+		templates: templates,
 	}
 
 	articleHandler := NewArticleHandler(appHandler, l)
