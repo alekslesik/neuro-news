@@ -21,39 +21,39 @@ jobs:
       # Checkout the code from the repository
       - uses: actions/checkout@v4
 
-      # # Set up Go environment with version 1.21
-      # - name: Set up Go
-      #   uses: actions/setup-go@v4
-      #   with:
-      #     go-version: 1.21
+      # Set up Go environment with version 1.21
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: 1.21
 
-      # # Verify Go module dependencies
-      # - name: Verify dependencies
-      #   run: go mod verify
+      # Verify Go module dependencies
+      - name: Verify dependencies
+        run: go mod verify
 
-      # # Run go vet to check for suspicious constructs in Go code
-      # - name: Run go vet
-      #   run: go vet ./...
+      # Run go vet to check for suspicious constructs in Go code
+      - name: Run go vet
+        run: go vet ./...
 
-      # # Install staticcheck tool
-      # - name: Install staticcheck
-      #   run: go install honnef.co/go/tools/cmd/staticcheck@latest
+      # Install staticcheck tool
+      - name: Install staticcheck
+        run: go install honnef.co/go/tools/cmd/staticcheck@latest
 
-      # # Run staticcheck to analyze Go code statically
-      # - name: Run staticcheck
-      #   run: staticcheck -checks=all,-ST1000,-U1000 ./...
+      # Run staticcheck to analyze Go code statically
+      - name: Run staticcheck
+        run: staticcheck -checks=all,-ST1000,-U1000 ./...
 
-      # # Install govulncheck
-      # - name: Install govulncheck
-      #   run: go install golang.org/x/vuln/cmd/govulncheck@latest
+      # Install govulncheck
+      - name: Install govulncheck
+        run: go install golang.org/x/vuln/cmd/govulncheck@latest
 
-      # # Run govulncheck
-      # - name: Run govulncheck
-      #   run: govulncheck ./...
+      # Run govulncheck
+      - name: Run govulncheck
+        run: govulncheck ./...
 
-      # # Run tests with race detection and vet disabled
-      # - name: Run tests
-      #   run: go test -race -vet=off ./...
+      # Run tests with race detection and vet disabled
+      - name: Run tests
+        run: go test -race -vet=off ./...
 
   # Deploy job
   deploy:
@@ -62,18 +62,18 @@ jobs:
     # the deploy job until after the audit job has completed successfully.
     needs: audit
     steps:
-      # # Checkout the code from the repository
-      # - uses: actions/checkout@v4
+      # Checkout the code from the repository
+      - uses: actions/checkout@v4
 
-      # # Set up Go environment with version 1.21
-      # - name: Set up Go
-      #   uses: actions/setup-go@v4
-      #   with:
-      #     go-version: 1.21
+      # Set up Go environment with version 1.21
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: 1.21
 
-      # # Build the binary for the neuro-news application
-      # - name: Build binary
-      #   run: go build -o ./ops/production/ansible/ ./cmd/neuro-news/
+      # Build the binary for the neuro-news application
+      - name: Build binary
+        run: go build -o ./ops/production/ansible/ ./cmd/neuro-news/
 
       # Run Ansible playbook located at ./ops/production/ansible/deploy.yml
       - name: Run Ansible playbook
