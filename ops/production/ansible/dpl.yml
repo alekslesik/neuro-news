@@ -10,20 +10,20 @@
   tasks:
     # Copy neuro-news binary to the specified path on the remote host
     - name: Copy neuro-news binary
-      synchronize:
+      copy:
         src: "{{ app_name }}"
         dest: "{{ app_host_path }}"
 
     # Copy website dir with content to the specified path on the remote host
     - name: Copy website dir with content
-      synchronize:
+      copy:
         src: "{{ website }}"
         dest: "{{ app_host_path }}"
 
     # Copy systemd unit file to /etc/systemd/system/
     - name: Copy systemd unit file
       become_user: root
-      synchronize:
+      copy:
         src: "{{ app_service }}"
         dest: /etc/systemd/system/{{ app_service }}
 
