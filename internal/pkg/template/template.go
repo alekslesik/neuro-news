@@ -26,15 +26,16 @@ type Template struct {
 
 type TemplateData struct {
 	// AuthenticatedUser *models.User
-	CurrentYear       int
-	UserName          string
-	Flash             string
-	CSRFToken         string
+	CurrentYear int
+	UserName    string
+	Flash       string
+	CSRFToken   string
 	// Form              *forms.Form
 	// File              *models.File
 	// Files             []*models.File
 }
 
+// New return instance of template
 func New(log *logger.Logger) *Template {
 	return &Template{
 		cache: make(Cache),
@@ -42,7 +43,7 @@ func New(log *logger.Logger) *Template {
 	}
 }
 
-// Return nicely formatted string of time.Time object
+// HumanDate return nicely formatted string of time.Time object
 func HumanDate(t time.Time) string {
 	if t.IsZero() {
 		return ""
@@ -145,7 +146,7 @@ func (t *Template) Render(w http.ResponseWriter, r *http.Request, name string, t
 	buf.WriteTo(w)
 }
 
-// Create an addDefaultData helper. This takes a pointer to a templateData
+// AddDefaultData Create an addDefaultData helper. This takes a pointer to a templateData
 // struct, adds the current year to the CurrentYear field, and then returns
 // the pointer. Again, we're not using the *http.Request parameter at the
 // moment, but we will do later in the book.

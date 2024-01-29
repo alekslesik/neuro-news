@@ -24,4 +24,3 @@ func (as *articleService) GetAllArticles() ([]model.Article, error) {
 func (as *articleService) GetArticleByID(id int) (*model.Article, error) {
 	return as.ArticleRepository.GetArticleByID(id)
 }
-

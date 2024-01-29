@@ -26,7 +26,6 @@ func (a *ArticleHandler) GetAllArticles(w http.ResponseWriter, r *http.Request) 
 
 	// fmt.Fprint(w, op)
 
-
 	a.AppHandler.templates.Render(w, r, "home.page.html", &template.TemplateData{
 		CurrentYear: 2024,
 	})
