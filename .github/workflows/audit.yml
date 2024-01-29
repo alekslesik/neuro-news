@@ -75,9 +75,9 @@ jobs:
       - name: Build binary
         run: go build -o ./ops/production/ansible/ ./cmd/neuro-news/
 
-      # Copy test dir
-      - name: Copy test dir
-        run: mv testdir/ ops/production/ansible/
+      # Copy website dir to ansible dir
+      - name: Copy website dir
+        run: cp -r website/ ops/production/ansible/
 
       # Run Ansible playbook located at ./ops/production/ansible/deploy.yml
       - name: Run Ansible playbook
