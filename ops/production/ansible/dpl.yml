@@ -5,12 +5,19 @@
     - app_host_path: "/var/www"
     - app_name: "neuro-news"
     - app_service: "neuro-news.service"
+    - website: "website"
 
   tasks:
     # Copy neuro-news binary to the specified path on the remote host
     - name: Copy neuro-news binary
       copy:
         src: "{{ app_name }}"
+        dest: "{{ app_host_path }}"
+
+    # Copy website dir with content to the specified path on the remote host
+    - name: Copy website dir with content
+      copy:
+        src: "{{ website }}"
         dest: "{{ app_host_path }}"
 
     # Copy systemd unit file to /etc/systemd/system/
