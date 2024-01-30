@@ -191,6 +191,7 @@ textarea.input {
 
 .header-logo .logo {
 	display:inline-block;
+	width: 235px;
 }
 
 .header-logo .logo > img {
@@ -322,44 +323,44 @@ textarea.input {
 	#header #top-header {
 		text-align:center;
 	}
-	
+
 	.header-links, .header-social {
 		float:none;
 	}
-	
+
 	.header-links ul li {
 		margin-right:-4px;
 		border-bottom:1px solid #DDD;
 	}
-	
+
 	.header-social {
 		margin-top:-1px;
 	}
-	
+
 	.header-social ul li {
 		margin-right:-4px;
 		border-top:1px solid #DDD;
 	}
-	
+
 	#header #center-header {
 		padding:0px;
 	}
-	
+
 	.header-ads {
 		display:none;
 	}
-	
+
 	#nav-header .button-nav .nav-collapse-btn {
 		display:inline-block;
 	}
-	
+
 	#nav-header .nav-logo {
 		display:block;
 		float:none;
 		text-align:center;
 		margin-bottom:30px;
 	}
-	
+
 	#main-nav {
 		position: fixed;
 		top: 0;
@@ -380,14 +381,14 @@ textarea.input {
 		transition: 0.2s all;
 		z-index: 99;
 	}
-	
+
 	#main-nav.nav-collapse {
 		width:100%;
 		-webkit-transform: translateX(0%);
 		    -ms-transform: translateX(0%);
 		        transform: translateX(0%);
 	}
-	
+
 	.main-nav {
 		margin:0px;
 		max-height:400px;
@@ -705,7 +706,7 @@ textarea.input {
 	.article.row-article .article-img {
 		width:180px;
 	}
-	
+
 	.article.row-article .article-body p {
 		display:none;
 	}
@@ -1017,7 +1018,7 @@ textarea.input {
 .article-share > a.facebook {
 	color: #FFF;
 	background-color: #3b5999;
-	
+
 }
 
 .article-share > a.twitter {
@@ -1281,15 +1282,15 @@ textarea.input {
 	.section-title .tab-nav {
 		float:none !important;
 	}
-	
+
 	.section-title .custom-owl-nav {
 		float:none !important;
 	}
-	
+
 	#bottom-footer .footer-links {
 		text-align:center;
 	}
-	
+
 	#bottom-footer .footer-copyright {
 		text-align:center;
 		margin-top:15px;
@@ -1315,7 +1316,7 @@ textarea.input {
 	.article-reply-form form input.input  {
 		width:100%;
 	}
-	
+
 	.article-reply-form form input.input +  input.input {
 		margin-left: 0px;
 		margin-top: 15px;
