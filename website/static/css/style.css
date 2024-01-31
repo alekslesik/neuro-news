@@ -82,6 +82,26 @@ ul,ol{
     list-style: none
 }
 
+.pt-15 {
+	padding-top: 15px;
+}
+
+.pt-35 {
+	padding-top: 35px;
+}
+
+.ta-center {
+	text-align: center;
+}
+
+.f-bold {
+	font-weight: bold;
+}
+
+.f-ital {
+	font-style: italic;
+}
+
 /*----------------------------*\
 	input
 \*----------------------------*/
