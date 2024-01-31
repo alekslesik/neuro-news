@@ -81,7 +81,7 @@ func (t *Template) newCache(dir string) (Cache, error) {
 	cache := map[string]*template.Template{}
 
 	// use func Glob to get all filepathes slice with '.page.html' ext
-	entries, err := filepath.Glob(filepath.Join(dir, "*.page.html"))
+	entries, err := filepath.Glob(filepath.Join(dir, "**/*.page.html"))
 	if err != nil {
 		t.log.Error().Msgf("%s: error glob *.page.html in dir %v > %s", op, dir, err)
 		return nil, err
