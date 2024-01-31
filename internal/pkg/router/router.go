@@ -33,8 +33,6 @@ func (r *Router) Route() http.Handler {
 	mux.HandleFunc("/advertisement", r.h.CommonHandler.GetAdvertisementPage)
 	mux.HandleFunc("/privacy", r.h.CommonHandler.GetPrivacyPage)
 
-
-
 	// router.POST("/somePost", posting)
 	// router.PUT("/somePut", putting)
 	// router.DELETE("/someDelete", deleting)

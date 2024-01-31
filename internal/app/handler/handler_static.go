@@ -24,31 +24,27 @@ func NewCommonHandler(appHandler *AppHandler, l *logger.Logger) *CommonHandler {
 func (a *CommonHandler) GetAboutPage(w http.ResponseWriter, r *http.Request) {
 	// const op = "GetAboutPage()"
 
-	a.AppHandler.templates.Render(w, r, "about.page.html", &template.TemplateData{
-	})
+	a.AppHandler.templates.Render(w, r, "about.page.html", &template.TemplateData{})
 
 }
 
 func (a *CommonHandler) GetContactPage(w http.ResponseWriter, r *http.Request) {
 	// const op = "GetContactPage()"
 
-	a.AppHandler.templates.Render(w, r, "contact.page.html", &template.TemplateData{
-	})
+	a.AppHandler.templates.Render(w, r, "contact.page.html", &template.TemplateData{})
 
 }
 
 func (a *CommonHandler) GetAdvertisementPage(w http.ResponseWriter, r *http.Request) {
 	// const op = "GetContactPage()"
 
-	a.AppHandler.templates.Render(w, r, "advertisement.page.html", &template.TemplateData{
-	})
+	a.AppHandler.templates.Render(w, r, "advertisement.page.html", &template.TemplateData{})
 
 }
 
 func (a *CommonHandler) GetPrivacyPage(w http.ResponseWriter, r *http.Request) {
 	// const op = "GetContactPage()"
 
-	a.AppHandler.templates.Render(w, r, "privacy.page.html", &template.TemplateData{
-	})
+	a.AppHandler.templates.Render(w, r, "privacy.page.html", &template.TemplateData{})
 
 }

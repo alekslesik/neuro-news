@@ -37,5 +37,3 @@ func (a *ArticleHandler) GetAllArticles(w http.ResponseWriter, r *http.Request) 
 	// 	return
 	// }
 }
-
-
