@@ -9,6 +9,7 @@ import (
 type AppHandler struct {
 	articleService service.ArticleService
 	userService    service.UserService
+	CommonHandler CommonHandler
 	ArticleHandler ArticleHandler
 	UserHandler    UserHandler
 	templates      *template.Template
@@ -22,9 +23,11 @@ func New(services *service.Services, l *logger.Logger, templates *template.Templ
 		templates:      templates,
 	}
 
+	commonHandler := NewCommonHandler(appHandler, l)
 	articleHandler := NewArticleHandler(appHandler, l)
 	userHandler := NewUserHandler(appHandler, l)
 
+	appHandler.CommonHandler = *commonHandler
 	appHandler.ArticleHandler = *articleHandler
 	appHandler.UserHandler = *userHandler
 

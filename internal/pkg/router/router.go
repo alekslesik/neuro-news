@@ -26,6 +26,15 @@ func (r *Router) Route() http.Handler {
 	// engine.GET("/", r.h.ArticleHandler.GetAllArticles)
 
 	mux.HandleFunc("/", r.h.ArticleHandler.GetAllArticles)
+
+	// static pages
+	mux.HandleFunc("/about", r.h.CommonHandler.GetAboutPage)
+	mux.HandleFunc("/contact", r.h.CommonHandler.GetContactPage)
+	mux.HandleFunc("/advertisement", r.h.CommonHandler.GetAdvertisementPage)
+	mux.HandleFunc("/privacy", r.h.CommonHandler.GetPrivacyPage)
+
+
+
 	// router.POST("/somePost", posting)
 	// router.PUT("/somePut", putting)
 	// router.DELETE("/someDelete", deleting)
