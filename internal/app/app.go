@@ -12,7 +12,7 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
-	"time"
+	// "time"
 
 	"github.com/alekslesik/neuro-news/internal/app/handler"
 	"github.com/alekslesik/neuro-news/internal/app/repository"
@@ -140,7 +140,8 @@ func (a *Application) Run() error {
 	case <-a.ctx.Done():
 		a.log.Warn().Msg("Context signal received, initiating shutdown")
 		a.srv.Shutdown(a.ctx)
-		time.Sleep(2 * time.Second)
+		// TODO temprorary
+		// time.Sleep(2 * time.Second)
 
 	case err := <-errChan:
 		a.log.Error().Msgf("%s: server failure > %s", op, err)
@@ -149,7 +150,7 @@ func (a *Application) Run() error {
 	case <-signals:
 		a.log.Warn().Msg("Signal received, initiating shutdown")
 		a.srv.Shutdown(a.ctx)
-		time.Sleep(2 * time.Second)
+		// time.Sleep(2 * time.Second)
 	}
 
 	return nil
