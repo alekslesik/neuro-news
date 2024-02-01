@@ -90,6 +90,14 @@ ul,ol{
 	padding-top: 35px;
 }
 
+.mt-15 {
+	margin-top: 15px;
+}
+
+.mb-50 {
+	margin-bottom: 50px;
+}
+
 .ta-center {
 	text-align: center;
 }
