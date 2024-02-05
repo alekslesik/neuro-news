@@ -21,8 +21,12 @@ func NewArticleHandler(appHandler *AppHandler, l *logger.Logger) *ArticleHandler
 	}
 }
 
-func (a *ArticleHandler) GetAllArticles(w http.ResponseWriter, r *http.Request) {
-	const op = "GetAllArticles()"
+func (a *ArticleHandler) GetHomeArticles(w http.ResponseWriter, r *http.Request) {
+	const op = "GetHomeArticles()"
+
+
+	// взять статьи для карусели (последние 4)
+	a.AppHandler.articleService.GetAllArticles()
 
 	// fmt.Fprint(w, op)
 

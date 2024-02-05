@@ -25,7 +25,7 @@ func (r *Router) Route() http.Handler {
 
 	// engine.GET("/", r.h.ArticleHandler.GetAllArticles)
 
-	mux.HandleFunc("/", r.h.ArticleHandler.GetAllArticles)
+	mux.HandleFunc("/", r.h.ArticleHandler.GetHomeArticles)
 
 	// static pages
 	mux.HandleFunc("/about", r.h.CommonHandler.GetAboutPage)
