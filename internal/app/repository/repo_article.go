@@ -11,11 +11,34 @@ type MySQLArticleRepository struct {
 }
 
 func (r *MySQLArticleRepository) GetAllArticles() ([]model.Article, error) {
-	articles := []model.Article{{ID: 1}, {ID: 2}}
+	articles := []model.Article{{Article_id: 1}, {Article_id: 2}}
 	return articles, nil
 }
 
+func (r *MySQLArticleRepository) GetHomeCarouselArticles() ([]model.Article, error) {
+	return nil, nil
+}
+
+func (r *MySQLArticleRepository) GetHomeTrendingArticles() ([]model.Article, error) {
+	return nil, nil
+}
+
+func (r *MySQLArticleRepository) GetHomeNewsArticles() ([]model.Article, error) {
+	return nil, nil
+}
+
+func (r *MySQLArticleRepository) GetHomeSportArticles() ([]model.Article, error) {
+	return nil, nil
+}
+
+func (r *MySQLArticleRepository) GetHomeVideoArticles() ([]model.Article, error) {
+	return nil, nil
+}
+
+func (r *MySQLArticleRepository) GetHomePopularArticles() ([]model.Article, error) {
+	return nil, nil
+}
+
 func (r *MySQLArticleRepository) GetArticleByID(id int) (*model.Article, error) {
-	// Реализация получения статьи по ID из базы данных
 	return nil, nil
 }

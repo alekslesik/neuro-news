@@ -8,6 +8,7 @@ import (
 	"path/filepath"
 	"time"
 
+	"github.com/alekslesik/neuro-news/internal/app/model"
 	"github.com/alekslesik/neuro-news/pkg/logger"
 	"github.com/justinas/nosurf"
 )
@@ -22,6 +23,7 @@ type Cache map[string]*template.Template
 type Template struct {
 	cache Cache
 	log   *logger.Logger
+	TemplateData TemplateData
 }
 
 type TemplateData struct {
@@ -30,9 +32,20 @@ type TemplateData struct {
 	UserName    string
 	Flash       string
 	CSRFToken   string
+	TemplateDataArticle TemplateDataArticle
+
 	// Form              *forms.Form
 	// File              *models.File
 	// Files             []*models.File
+}
+
+type TemplateDataArticle struct {
+	CarouselArticles []model.Article
+	TrendingArticles []model.Article
+	NewsArticles []model.Article
+	SportArticles []model.Article
+	VideoArticles []model.Article
+	PopularArticles []model.Article
 }
 
 // New return instance of template
@@ -40,6 +53,7 @@ func New(log *logger.Logger) *Template {
 	return &Template{
 		cache: make(Cache),
 		log:   log,
+		TemplateData: TemplateData{},
 	}
 }
 

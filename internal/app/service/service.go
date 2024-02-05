@@ -24,6 +24,7 @@ func New(r *repository.MySQLRepository, l *logger.Logger, t *template.Template) 
 func (s *Services) GetArticleService() ArticleService {
 	return &articleService{
 		ArticleRepository: s.r.GetArticleRepository(),
+		TemplateData: s.t.TemplateData,
 	}
 }
 
