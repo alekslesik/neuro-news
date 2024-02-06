@@ -3,13 +3,10 @@
 <!DOCTYPE html>
 <html lang='en'>
 
-{{with .CurrentYear}}
-{{ . }}
-{{end}}
-
 {{template "head" .}}
 
 <body>
+
   {{template "header" .}}
 
   {{template "main" .}}
