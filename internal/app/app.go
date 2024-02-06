@@ -58,7 +58,7 @@ func New(context context.Context, cancel context.CancelFunc) (*Application, erro
 	templates := templateInit(logger)
 
 	// repository init
-	repositories := repository.New(db)
+	repositories := repository.New(db, logger)
 
 	// services init
 	services := service.New(repositories, logger, templates)

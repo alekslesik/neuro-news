@@ -2,6 +2,23 @@
 
 <!-- Owl Carousel 1 -->
 <div id="owl-carousel-1" class="owl-carousel owl-theme center-owl-nav">
+
+  <!-- (*td).TemplateDataArticle.CarouselArticles[] -->
+
+  <!-- type Article struct {
+	Article_id  int
+	Title       string
+	PreviewText string
+	Image       string
+	Date        time.Time
+	Tag         string
+	DetailText  string
+} -->
+
+<div>{{ . }}</div>
+
+  {{range .TemplateDataArticle.CarouselArticles}}
+
   <!-- ARTICLE -->
   <article class="article thumb-article">
     <div class="article-img">
@@ -9,7 +26,7 @@
     </div>
     <div class="article-body">
       <ul class="article-info">
-        <li class="article-category"><a href="#">News</a></li>
+        <li class="article-category"><a href="#">{{.Tag}}</a></li>
         <li class="article-type"><i class="fa fa-camera"></i></li>
       </ul>
       <h2 class="article-title"><a href="#">Duis urbanitas eam in, tempor consequat.</a></h2>
@@ -21,8 +38,11 @@
   </article>
   <!-- /ARTICLE -->
 
+  {{end}}
+
+
   <!-- ARTICLE -->
-  <article class="article thumb-article">
+  <!-- <article class="article thumb-article">
     <div class="article-img">
       <img src="/static/img/img-lg-2.jpg" alt="">
     </div>
@@ -37,11 +57,11 @@
         <li><i class="fa fa-comments"></i> 33</li>
       </ul>
     </div>
-  </article>
+  </article> -->
   <!-- /ARTICLE -->
 
   <!-- ARTICLE -->
-  <article class="article thumb-article">
+  <!-- <article class="article thumb-article">
     <div class="article-img">
       <img src="/static/img/img-lg-3.jpg" alt="">
     </div>
@@ -56,7 +76,7 @@
         <li><i class="fa fa-comments"></i> 33</li>
       </ul>
     </div>
-  </article>
+  </article> -->
   <!-- /ARTICLE -->
 </div>
 <!-- /Owl Carousel 1 -->

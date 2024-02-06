@@ -3,7 +3,6 @@ package handler
 import (
 	"net/http"
 
-	"github.com/alekslesik/neuro-news/internal/pkg/template"
 	"github.com/alekslesik/neuro-news/pkg/logger"
 )
 
@@ -22,22 +21,18 @@ func NewArticleHandler(appHandler *AppHandler, l *logger.Logger) *ArticleHandler
 }
 
 func (a *ArticleHandler) GetHomeArticles(w http.ResponseWriter, r *http.Request) {
-	const op = "GetHomeArticles()"
+	const (
+		op = "GetHomeArticles()"
+		page = "home.page.html"
+	)
 
+	td, err := a.AppHandler.articleService.GetHomeTemplateData()
+	if err != nil {
+		a.l.Error().Msgf("%s: GetHomeTemplateData error > %s", op, err)
+	}
 
-	// взять статьи для карусели (последние 4)
-	a.AppHandler.articleService.GetAllArticles()
-
-	// fmt.Fprint(w, op)
-
-	a.AppHandler.templates.Render(w, r, "home.page.html", &template.TemplateData{
-		CurrentYear: 2024,
-	})
-
-	// _, err := a.AppHandler.articleService.GetAllArticles()
-	// if err != nil {
-	// 	a.l.Err(err).Msgf("%s > get all articles error", op)
-	// 	http.Error(w, "get all articles error", http.StatusInternalServerError)
-	// 	return
-	// }
+	err = a.AppHandler.articleService.RenderTemplate(w, r, page, td)
+	if err != nil {
+		a.l.Error().Msgf("%s: RenderTemplate error > %s", op, err)
+	}
 }

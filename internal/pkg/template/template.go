@@ -2,6 +2,7 @@ package template
 
 import (
 	"bytes"
+	"fmt"
 	"html/template"
 	"net/http"
 
@@ -136,14 +137,14 @@ func (t *Template) newCache(dir string) (Cache, error) {
 }
 
 // Render add template data and render
-func (t *Template) Render(w http.ResponseWriter, r *http.Request, name string, td *TemplateData) {
+func (t *Template) Render(w http.ResponseWriter, r *http.Request, name string, td *TemplateData) error {
 	const op = "templates.Render()"
 
 	// extract pattern depending "name"
 	ts, ok := t.cache[name]
 	if !ok {
 		t.log.Error().Msgf("%s: pattern %s not exist", op, name)
-		return
+		return fmt.Errorf("%s: pattern %s not exist", op, name)
 	}
 
 	// initialize a new buffer
@@ -153,11 +154,12 @@ func (t *Template) Render(w http.ResponseWriter, r *http.Request, name string, t
 	err := ts.Execute(buf, AddDefaultData(td, r))
 	if err != nil {
 		t.log.Error().Msgf("%s: template %v not executed > %s", op, ts, err)
-		return
+		return err
 	}
 
 	// write buffer to http.ResponseWriter
 	buf.WriteTo(w)
+	return nil
 }
 
 // AddDefaultData Create an addDefaultData helper. This takes a pointer to a templateData

@@ -16,15 +16,16 @@ type Services struct {
 func New(r *repository.MySQLRepository, l *logger.Logger, t *template.Template) *Services {
 	return &Services{
 		r: r,
-		l: l,
 		t: t,
+		l: l,
 	}
 }
 
 func (s *Services) GetArticleService() ArticleService {
 	return &articleService{
-		ArticleRepository: s.r.GetArticleRepository(),
-		TemplateData: s.t.TemplateData,
+		ar: s.r.GetArticleRepository(),
+		t:  s.t,
+		l:  s.l,
 	}
 }
 
