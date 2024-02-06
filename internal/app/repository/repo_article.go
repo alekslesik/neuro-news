@@ -23,9 +23,9 @@ func (r *MySQLArticleRepository) GetHomeCarouselArticles() ([]model.Article, err
 
 	var as []model.Article
 
-	q := `SELECT article_id, title, preview_text, image_id, date, tag, detail_text
+	q := `SELECT article_id, title, preview_text, image_id, article_time, tag, detail_text
 		FROM neuronews.article
-		ORDER BY date DESC
+		ORDER BY article_time DESC
 		LIMIT ?;`
 
 	rows, err := r.db.Query(q, 4)
@@ -36,7 +36,7 @@ func (r *MySQLArticleRepository) GetHomeCarouselArticles() ([]model.Article, err
 
 	for rows.Next() {
 		var a model.Article
-		err = rows.Scan(&a.ArticleID, &a.Title, &a.PreviewText, &a.Image, &a.Date, &a.Tag, &a.DetailText)
+		err = rows.Scan(&a.ArticleID, &a.Title, &a.PreviewText, &a.Image, &a.ArticleTime, &a.Tag, &a.DetailText)
 		if err != nil {
 			r.l.Error().Msgf("%s: query scan articles for carousel > %s", op, err)
 			return nil, err

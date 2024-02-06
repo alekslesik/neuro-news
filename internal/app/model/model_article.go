@@ -9,7 +9,7 @@ type Article struct {
 	Title       string
 	PreviewText string
 	Image       string
-	Date        time.Time
+	ArticleTime time.Time
 	Tag         string
 	DetailText  string
 }
