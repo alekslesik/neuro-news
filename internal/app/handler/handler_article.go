@@ -22,7 +22,7 @@ func NewArticleHandler(appHandler *AppHandler, l *logger.Logger) *ArticleHandler
 
 func (a *ArticleHandler) GetHomeArticles(w http.ResponseWriter, r *http.Request) {
 	const (
-		op = "GetHomeArticles()"
+		op   = "GetHomeArticles()"
 		page = "home.page.html"
 	)
 

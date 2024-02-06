@@ -5,7 +5,7 @@ import (
 )
 
 type Article struct {
-	Article_id  int
+	ArticleID   int
 	Title       string
 	PreviewText string
 	Image       string

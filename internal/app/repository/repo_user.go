@@ -9,7 +9,7 @@ import (
 
 type MySQLUserRepository struct {
 	db *sql.DB
-	l *logger.Logger
+	l  *logger.Logger
 }
 
 func (r *MySQLUserRepository) GetUserByID(id int) (*model.User, error) {

@@ -13,7 +13,7 @@ type MySQLArticleRepository struct {
 }
 
 func (r *MySQLArticleRepository) GetAllArticles() ([]model.Article, error) {
-	articles := []model.Article{{Article_id: 1}, {Article_id: 2}}
+	articles := []model.Article{{ArticleID: 1}, {ArticleID: 2}}
 	return articles, nil
 }
 
@@ -36,7 +36,7 @@ func (r *MySQLArticleRepository) GetHomeCarouselArticles() ([]model.Article, err
 
 	for rows.Next() {
 		var a model.Article
-		err = rows.Scan(&a.Article_id, &a.Title, &a.PreviewText, &a.Image, &a.Date, &a.Tag, &a.DetailText)
+		err = rows.Scan(&a.ArticleID, &a.Title, &a.PreviewText, &a.Image, &a.Date, &a.Tag, &a.DetailText)
 		if err != nil {
 			r.l.Error().Msgf("%s: query scan articles for carousel > %s", op, err)
 			return nil, err

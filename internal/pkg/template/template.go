@@ -22,17 +22,17 @@ const (
 type Cache map[string]*template.Template
 
 type Template struct {
-	cache Cache
-	log   *logger.Logger
+	cache        Cache
+	log          *logger.Logger
 	TemplateData TemplateData
 }
 
 type TemplateData struct {
 	// AuthenticatedUser *models.User
-	CurrentYear int
-	UserName    string
-	Flash       string
-	CSRFToken   string
+	CurrentYear         int
+	UserName            string
+	Flash               string
+	CSRFToken           string
 	TemplateDataArticle TemplateDataArticle
 
 	// Form              *forms.Form
@@ -43,17 +43,17 @@ type TemplateData struct {
 type TemplateDataArticle struct {
 	CarouselArticles []model.Article
 	TrendingArticles []model.Article
-	NewsArticles []model.Article
-	SportArticles []model.Article
-	VideoArticles []model.Article
-	PopularArticles []model.Article
+	NewsArticles     []model.Article
+	SportArticles    []model.Article
+	VideoArticles    []model.Article
+	PopularArticles  []model.Article
 }
 
 // New return instance of template
 func New(log *logger.Logger) *Template {
 	return &Template{
-		cache: make(Cache),
-		log:   log,
+		cache:        make(Cache),
+		log:          log,
 		TemplateData: TemplateData{},
 	}
 }

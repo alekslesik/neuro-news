@@ -9,13 +9,13 @@ import (
 
 type MySQLRepository struct {
 	db *sql.DB
-	l *logger.Logger
+	l  *logger.Logger
 }
 
 func New(db *sql.DB, l *logger.Logger) *MySQLRepository {
 	return &MySQLRepository{
 		db: db,
-		l: l,
+		l:  l,
 	}
 }
 
