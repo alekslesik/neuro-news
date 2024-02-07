@@ -54,17 +54,18 @@ CREATE TABLE
     article_time TIMESTAMP,
     tag VARCHAR(20),
     detail_text TEXT,
-    href VARCHAR(50),
-    comments INT
+    href VARCHAR(100),
+    comments INT,
+    category VARCHAR(100)
   );
 
 CREATE TABLE
   IF NOT EXISTS image (
     image_id INT PRIMARY KEY AUTO_INCREMENT,
-    path VARCHAR(50),
+    image_path VARCHAR(100),
     size INT,
-    name VARCHAR(50),
-    alt VARCHAR(50)
+    name VARCHAR(100),
+    alt VARCHAR(100)
   );
 
 ALTER TABLE article

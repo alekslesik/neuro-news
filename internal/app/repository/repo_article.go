@@ -17,7 +17,7 @@ type Queries struct {
 }
 
 var queries = Queries{
-	selectArticle: `SELECT article_id, title, preview_text, article_time, tag, detail_text, href, comments, category, image_path
+	selectArticle: `SELECT article_id, title, preview_text, article_time, tag, detail_text, href, comments, category, image_path, none
 		FROM
 		article INNER JOIN image
 		ON article.image_id = image.image_id
@@ -38,14 +38,16 @@ func (r *MySQLArticleRepository) GetHomeCarouselArticles() ([]model.Article, err
 
 	rows, err := r.db.Query(queries.selectArticle, 4)
 	if err != nil {
-		r.l.Error().Msgf("%s: query select articles for carousel > %s", op, err)
+		// r.l.Error().Msgf("%s: query select articles for carousel > %s", op, err)
+		r.l.Warn().Msgf("%s: query select articles for carousel > %s", op, err)
+
 	}
 	defer rows.Close()
 
 	for rows.Next() {
 		var a model.Article
 		err = rows.Scan(&a.ArticleID, &a.Title, &a.PreviewText,
-			&a.ArticleTime, &a.Tag, &a.DetailText, &a.Href, &a.Comments, &a.Category, &a.Image)
+			&a.ArticleTime, &a.Tag, &a.DetailText, &a.Href, &a.Comments, &a.Category, &a.Image, &a.None)
 		if err != nil {
 			r.l.Error().Msgf("%s: query scan articles for carousel > %s", op, err)
 			return nil, err
