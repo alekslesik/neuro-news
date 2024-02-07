@@ -205,6 +205,11 @@ textarea.input {
 	color:#EF233C;
 }
 
+
+#owl-carousel-1 > .owl-stage > .owl-item > .article > .article-img {
+	height: 720px;
+}
+
 /*----------------------------*\
 	Center Header
 \*----------------------------*/
@@ -657,6 +662,10 @@ textarea.input {
 
 .article.thumb-article .article-img {
 	margin-bottom:0px;
+}
+
+.owl-carousel-1 .article.thumb-article .article-img {
+	height: 630px;
 }
 
 .article.thumb-article .article-img:after {
