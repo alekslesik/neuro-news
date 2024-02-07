@@ -17,7 +17,7 @@ type Queries struct {
 }
 
 var queries = Queries{
-	selectArticle : `SELECT article_id, title, preview_text, article_time, tag, detail_text, href, comments, category, image_path
+	selectArticle: `SELECT article_id, title, preview_text, article_time, tag, detail_text, href, comments, category, image_path
 		FROM
 		article INNER JOIN image
 		ON article.image_id = image.image_id
@@ -84,7 +84,7 @@ func (r *MySQLArticleRepository) GetHomeTrendingArticlesTop() ([]model.Article, 
 	return as, nil
 }
 
-// GetHomeTrendingArticlesTop return last four articles with // TODO large number of comments
+// GetHomeTrendingArticlesBottom return last four articles with // TODO large number of comments
 func (r *MySQLArticleRepository) GetHomeTrendingArticlesBottom() ([]model.Article, error) {
 	return nil, nil
 }
