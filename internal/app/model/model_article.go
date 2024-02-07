@@ -12,12 +12,16 @@ type Article struct {
 	ArticleTime time.Time
 	Tag         string
 	DetailText  string
+	Href        string
+	Comments    int
+	Category    string
 }
 
 type ArticleModel interface {
 	GetAllArticles() ([]Article, error)
 	GetHomeCarouselArticles() ([]Article, error)
-	GetHomeTrendingArticles() ([]Article, error)
+	GetHomeTrendingArticlesTop() ([]Article, error)
+	GetHomeTrendingArticlesBottom() ([]Article, error)
 	GetHomeNewsArticles() ([]Article, error)
 	GetHomeSportArticles() ([]Article, error)
 	GetHomeVideoArticles() ([]Article, error)

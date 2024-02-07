@@ -41,12 +41,13 @@ type TemplateData struct {
 }
 
 type TemplateDataArticle struct {
-	CarouselArticles []model.Article
-	TrendingArticles []model.Article
-	NewsArticles     []model.Article
-	SportArticles    []model.Article
-	VideoArticles    []model.Article
-	PopularArticles  []model.Article
+	CarouselArticles       []model.Article
+	TrendingArticlesTop    []model.Article
+	TrendingArticlesBottom []model.Article
+	NewsArticles           []model.Article
+	SportArticles          []model.Article
+	VideoArticles          []model.Article
+	PopularArticles        []model.Article
 }
 
 // New return instance of template

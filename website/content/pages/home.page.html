@@ -6,126 +6,65 @@
 
 {{template "carousel" .}}
 
+<!-- type Article struct {
+	ArticleID   int
+	Title       string
+	PreviewText string
+	Image       string
+	ArticleTime time.Time
+	Tag         string
+	DetailText  string
+	Href        string
+  Comments    int
+	Category    string
+} -->
+
+<!-- Trending Posts -->
 <div class="section">
-	<!-- CONTAINER -->
 	<div class="container">
-		<!-- ROW -->
 		<div class="row">
-			<!-- Main Column -->
 			<div class="col-md-12">
-				<!-- section title -->
 				<div class="section-title">
-					<h2 class="title">Trending Posts</h2>
-					<!-- tab nav -->
+					<h2 class="title">В тренде</h2>
 					<ul class="tab-nav pull-right">
-						<li class="active"><a data-toggle="tab" href="#tab1">All</a></li>
-						<li><a data-toggle="tab" href="#tab1">News</a></li>
-						<li><a data-toggle="tab" href="#tab1">Sport</a></li>
-						<li><a data-toggle="tab" href="#tab1">Music</a></li>
-						<li><a data-toggle="tab" href="#tab1">Business</a></li>
-						<li><a data-toggle="tab" href="#tab1">Lifestyle</a></li>
+						<li class="active"><a data-toggle="tab" href="#tab1">Всё</a></li>
+						<li><a data-toggle="tab" href="#tab1">Новости</a></li>
+						<li><a data-toggle="tab" href="#tab1">Спорт</a></li>
+						<li><a data-toggle="tab" href="#tab1">Музыка</a></li>
+						<li><a data-toggle="tab" href="#tab1">Бизнес</a></li>
+						<li><a data-toggle="tab" href="#tab1">Стиль жизни</a></li>
 					</ul>
-					<!-- /tab nav -->
 				</div>
-				<!-- /section title -->
 				<!-- Tab content -->
 				<div class="tab-content">
-					<!-- tab1 -->
 					<div id="tab1" class="tab-pane fade in active">
-						<!-- row -->
+						<!-- Top big 4 articles -->
 						<div class="row">
-							<!-- Column 1 -->
+
+							<!-- ARTICLES -->
+							{{range .TemplateDataArticle.TrendingArticlesTop}}
 							<div class="col-md-3 col-sm-6">
-								<!-- ARTICLE -->
 								<article class="article">
 									<div class="article-img">
-										<a href="#">
-											<img src="/static/img/img-md-1.jpg" alt="">
+										<a href="{{.Href}}">
+											<img src="{{.Image}}" alt="">
 										</a>
 										<ul class="article-info">
 											<li class="article-type"><i class="fa fa-camera"></i></li>
 										</ul>
 									</div>
 									<div class="article-body">
-										<h4 class="article-title"><a href="#">Duis urbanitas eam in, tempor consequat.</a></h4>
+										<h4 class="article-title"><a href="{{.Href}}">{{ .Title }}</a></h4>
 										<ul class="article-meta">
-											<li><i class="fa fa-clock-o"></i> January 31, 2017</li>
+											<li><i class="fa fa-clock-o"></i> {{.ArticleTime}}</li>
 											<li><i class="fa fa-comments"></i> 33</li>
 										</ul>
 									</div>
 								</article>
-								<!-- /ARTICLE -->
 							</div>
-							<!-- /Column 1 -->
+							{{end}}
+							<!-- /ARTICLES -->
 
-							<!-- Column 2 -->
-							<div class="col-md-3 col-sm-6">
-								<!-- ARTICLE -->
-								<article class="article">
-									<div class="article-img">
-										<a href="#">
-											<img src="/static/img/img-md-2.jpg" alt="">
-										</a>
-									</div>
-									<div class="article-body">
-										<h4 class="article-title"><a href="#">Duis urbanitas eam in, tempor consequat.</a></h4>
-										<ul class="article-meta">
-											<li><i class="fa fa-clock-o"></i> January 31, 2017</li>
-											<li><i class="fa fa-comments"></i> 33</li>
-										</ul>
-									</div>
-								</article>
-								<!-- /ARTICLE -->
-							</div>
-							<!-- /Column 2 -->
-
-							<!-- Column 3 -->
-							<div class="col-md-3 col-sm-6">
-								<!-- ARTICLE -->
-								<article class="article">
-									<div class="article-img">
-										<a href="#">
-											<img src="/static/img/img-md-3.jpg" alt="">
-										</a>
-										<ul class="article-info">
-											<li class="article-type"><i class="fa fa-file-text"></i></li>
-										</ul>
-									</div>
-									<div class="article-body">
-										<h4 class="article-title"><a href="#">Duis urbanitas eam in, tempor consequat.</a></h4>
-										<ul class="article-meta">
-											<li><i class="fa fa-clock-o"></i> January 31, 2017</li>
-											<li><i class="fa fa-comments"></i> 33</li>
-										</ul>
-									</div>
-								</article>
-								<!-- /ARTICLE -->
-							</div>
-							<!-- /Column 3 -->
-
-							<!-- Column 4 -->
-							<div class="col-md-3 col-sm-6">
-								<!-- ARTICLE -->
-								<article class="article">
-									<div class="article-img">
-										<a href="#">
-											<img src="/static/img/img-md-4.jpg" alt="">
-										</a>
-										<ul class="article-info">
-											<li class="article-type"><i class="fa fa-file-text"></i></li>
-										</ul>
-									</div>
-									<div class="article-body">
-										<h4 class="article-title"><a href="#">Duis urbanitas eam in, tempor consequat.</a></h4>
-										<ul class="article-meta">
-											<li><i class="fa fa-clock-o"></i> January 31, 2017</li>
-											<li><i class="fa fa-comments"></i> 33</li>
-										</ul>
-									</div>
-								</article>
-								<!-- /ARTICLE -->
-							</div>
-							<!-- Column 4 -->
 						</div>
 						<!-- /row -->
 

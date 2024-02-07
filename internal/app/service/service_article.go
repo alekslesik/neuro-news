@@ -11,15 +11,16 @@ import (
 type ArticleService interface {
 	GetAllArticles() ([]model.Article, error)
 	GetHomeCarouselArticles() ([]model.Article, error)
-	GetHomeTrendingArticles() ([]model.Article, error)
+	GetHomeTrendingArticlesTop() ([]model.Article, error)
+	GetHomeTrendingArticlesBottom() ([]model.Article, error)
 	GetHomeNewsArticles() ([]model.Article, error)
 	GetHomeSportArticles() ([]model.Article, error)
 	GetHomeVideoArticles() ([]model.Article, error)
 	GetHomePopularArticles() ([]model.Article, error)
+	GetArticleByID(id int) (*model.Article, error)
+
 	GetHomeTemplateData() (*template.TemplateData, error)
 	RenderTemplate(w http.ResponseWriter, r *http.Request, name string, td *template.TemplateData) error
-
-	GetArticleByID(id int) (*model.Article, error)
 }
 
 type articleService struct {
@@ -42,8 +43,12 @@ func (as *articleService) GetHomeCarouselArticles() ([]model.Article, error) {
 	return as.ar.GetHomeCarouselArticles()
 }
 
-func (as *articleService) GetHomeTrendingArticles() ([]model.Article, error) {
-	return as.ar.GetHomeTrendingArticles()
+func (as *articleService) GetHomeTrendingArticlesTop() ([]model.Article, error) {
+	return as.ar.GetHomeTrendingArticlesTop()
+}
+
+func (as *articleService) GetHomeTrendingArticlesBottom() ([]model.Article, error) {
+	return as.ar.GetHomeTrendingArticlesBottom()
 }
 
 func (as *articleService) GetHomeNewsArticles() ([]model.Article, error) {
@@ -77,6 +82,11 @@ func (as *articleService) GetHomeTemplateData() (*template.TemplateData, error) 
 		return nil, err
 	}
 
+	as.t.TemplateData.TemplateDataArticle.TrendingArticlesTop, err = as.GetHomeTrendingArticlesTop()
+	if err != nil {
+		as.l.Error().Msgf("%s: get home trending articles top error > %s", op, err)
+		return nil, err
+	}
 	// as.t.TemplateData.CurrentYear = 2024
 
 	return &as.t.TemplateData, nil
