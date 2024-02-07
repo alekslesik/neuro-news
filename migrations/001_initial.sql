@@ -50,16 +50,22 @@ CREATE TABLE
     article_id INT PRIMARY KEY AUTO_INCREMENT,
     image_id INT FOREIGN KEY,
     title VARCHAR(100),
-    body TEXT,
-    img VARCHAR(100)
+    preview_text TEXT,
+    image_id INT,
+    article_time TIMESTAMP,
+    tag VARCHAR(20),
+    detail_text TEXT,
+    href VARCHAR(50),
+    comments INT
   );
 
 CREATE TABLE
   IF NOT EXISTS image (
     image_id INT PRIMARY KEY AUTO_INCREMENT,
-    path VARCHAR(100),
-    size VARCHAR(100),
-    name VARCHAR(100)
+    path VARCHAR(50),
+    size INT,
+    name VARCHAR(50),
+    alt VARCHAR(50)
   );
 
 ALTER TABLE article
