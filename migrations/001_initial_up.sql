@@ -51,7 +51,7 @@ CREATE TABLE
     title VARCHAR(100),
     preview_text TEXT,
     image_id INT,
-    article_time TIMESTAMP,
+    article_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     tag VARCHAR(20),
     detail_text TEXT,
     href VARCHAR(100),

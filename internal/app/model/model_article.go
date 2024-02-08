@@ -15,7 +15,6 @@ type Article struct {
 	Href        string
 	Comments    int
 	Category    string
-	None        string
 }
 
 type ArticleModel interface {
