@@ -86,9 +86,33 @@ func (r *MySQLArticleRepository) GetHomeTrendingArticlesTop() ([]model.Article, 
 	return as, nil
 }
 
-// GetHomeTrendingArticlesBottom return last four articles with // TODO large number of comments
+// GetHomeTrendingArticlesBottom return last six articles with // TODO large number of comments
 func (r *MySQLArticleRepository) GetHomeTrendingArticlesBottom() ([]model.Article, error) {
-	return nil, nil
+	const op = "repository.GetHomeTrendingArticlesBottom()"
+
+	var as []model.Article
+
+	rows, err := r.db.Query(queries.selectArticle, 11)
+	if err != nil {
+		r.l.Error().Msgf("%s: query select articles for carousel > %s", op, err)
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var a model.Article
+		err = rows.Scan(&a.ArticleID, &a.Title, &a.PreviewText,
+			&a.ArticleTime, &a.Tag, &a.DetailText, &a.Href, &a.Comments, &a.Category, &a.Image)
+		if err != nil {
+			r.l.Error().Msgf("%s: query scan articles for carousel > %s", op, err)
+			return nil, err
+		}
+
+		as = append(as, a)
+	}
+
+	as = as[4:]
+
+	return as, nil
 }
 
 func (r *MySQLArticleRepository) GetHomeNewsArticles() ([]model.Article, error) {

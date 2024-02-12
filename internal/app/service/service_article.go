@@ -87,7 +87,12 @@ func (as *articleService) GetHomeTemplateData() (*template.TemplateData, error) 
 		as.l.Error().Msgf("%s: get home trending articles top error > %s", op, err)
 		return nil, err
 	}
-	// as.t.TemplateData.CurrentYear = 2024
+
+	as.t.TemplateData.TemplateDataArticle.TrendingArticlesBottom, err = as.GetHomeTrendingArticlesBottom()
+	if err != nil {
+		as.l.Error().Msgf("%s: get home trending articles bottom error > %s", op, err)
+		return nil, err
+	}
 
 	return &as.t.TemplateData, nil
 }

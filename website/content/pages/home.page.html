@@ -40,14 +40,13 @@
 					<div id="tab1" class="tab-pane fade in active">
 						<!-- Top big 4 articles -->
 						<div class="row">
-
 							<!-- ARTICLES -->
 							{{range .TemplateDataArticle.TrendingArticlesTop}}
 							<div class="col-md-3 col-sm-6">
 								<article class="article">
 									<div class="article-img">
 										<a href="{{.Href}}">
-											<img src="{{.Image}}" alt="">
+											<img src="{{.Image}}" alt="{{.Title}}">
 										</a>
 										<ul class="article-info">
 											<li class="article-type"><i class="fa fa-camera"></i></li>
@@ -57,134 +56,87 @@
 										<h4 class="article-title"><a href="{{.Href}}">{{ .Title }}</a></h4>
 										<ul class="article-meta">
 											<li><i class="fa fa-clock-o"></i> {{.ArticleTime}}</li>
-											<li><i class="fa fa-comments"></i> 33</li>
+											<li><i class="fa fa-comments"></i> {{.Comments}}</li>
 										</ul>
 									</div>
 								</article>
 							</div>
 							{{end}}
 							<!-- /ARTICLES -->
-
 						</div>
-						<!-- /row -->
 
-						<!-- row -->
+						<!-- Bottom small 6 articles -->
 						<div class="row">
-							<!-- Column 1 -->
-							<div class="col-md-4 col-sm-6">
-								<!-- ARTICLE -->
-								<article class="article widget-article">
-									<div class="article-img">
-										<a href="#">
-											<img src="/static/img/img-widget-1.jpg" alt="">
-										</a>
-									</div>
-									<div class="article-body">
-										<h4 class="article-title"><a href="#">Duis urbanitas eam in, tempor consequat.</a></h4>
-										<ul class="article-meta">
-											<li><i class="fa fa-clock-o"></i> January 31, 2017</li>
-											<li><i class="fa fa-comments"></i> 33</li>
-										</ul>
-									</div>
-								</article>
-								<!-- /ARTICLE -->
 
+							<!-- First 2 articles -->
+							<div class="col-md-4 col-sm-6">
+								{{ $firstTwo := slice .TemplateDataArticle.TrendingArticlesBottom 0 2 }}
 								<!-- ARTICLE -->
+								{{ range $firstTwo}}
 								<article class="article widget-article">
 									<div class="article-img">
-										<a href="#">
-											<img src="/static/img/img-widget-2.jpg" alt="">
+										<a href="{{.Href}}">
+											<img src="{{.Image}}" alt="{{.Title}}">
 										</a>
 									</div>
 									<div class="article-body">
-										<h4 class="article-title"><a href="#">Duis urbanitas eam in, tempor consequat.</a></h4>
+										<h4 class="article-title"><a href="{{.Href}}">{{.Title}}</a></h4>
 										<ul class="article-meta">
-											<li><i class="fa fa-clock-o"></i> January 31, 2017</li>
-											<li><i class="fa fa-comments"></i> 33</li>
+											<li><i class="fa fa-clock-o"></i>{{.ArticleTime}}</li>
+											<li><i class="fa fa-comments"></i>{{.Comments}}</li>
 										</ul>
 									</div>
 								</article>
+								{{ end }}
 								<!-- /ARTICLE -->
 							</div>
-							<!-- /Column 1 -->
 
-							<!-- Column 2 -->
+							<!-- Second 2 articles -->
 							<div class="col-md-4 col-sm-6">
+								{{ $secondTwo := slice .TemplateDataArticle.TrendingArticlesBottom 3 5 }}
 								<!-- ARTICLE -->
+								{{ range $secondTwo}}
 								<article class="article widget-article">
 									<div class="article-img">
-										<a href="#">
-											<img src="/static/img/img-widget-3.jpg" alt="">
+										<a href="{{.Href}}">
+											<img src="{{.Image}}" alt="{{.Title}}">
 										</a>
 									</div>
 									<div class="article-body">
-										<h4 class="article-title"><a href="#">Duis urbanitas eam in, tempor consequat.</a></h4>
+										<h4 class="article-title"><a href="{{.Href}}">{{.Title}}</a></h4>
 										<ul class="article-meta">
-											<li><i class="fa fa-clock-o"></i> January 31, 2017</li>
-											<li><i class="fa fa-comments"></i> 33</li>
+											<li><i class="fa fa-clock-o"></i>{{.ArticleTime}}</li>
+											<li><i class="fa fa-comments"></i>{{.Comments}}</li>
 										</ul>
 									</div>
 								</article>
-								<!-- /ARTICLE -->
-
-								<!-- ARTICLE -->
-								<article class="article widget-article">
-									<div class="article-img">
-										<a href="#">
-											<img src="/static/img/img-widget-4.jpg" alt="">
-										</a>
-									</div>
-									<div class="article-body">
-										<h4 class="article-title"><a href="#">Duis urbanitas eam in, tempor consequat.</a></h4>
-										<ul class="article-meta">
-											<li><i class="fa fa-clock-o"></i> January 31, 2017</li>
-											<li><i class="fa fa-comments"></i> 33</li>
-										</ul>
-									</div>
-								</article>
+								{{ end }}
 								<!-- /ARTICLE -->
 							</div>
-							<!-- /Column 2 -->
 
-							<!-- /Column 3 -->
+							<!-- Third 2 articles -->
 							<div class="col-md-4 hidden-sm">
+								{{ $thirdTwo := slice .TemplateDataArticle.TrendingArticlesBottom 5 7 }}
 								<!-- ARTICLE -->
+								{{ range $thirdTwo}}
 								<article class="article widget-article">
 									<div class="article-img">
-										<a href="#">
-											<img src="/static/img/img-widget-5.jpg" alt="">
+										<a href="{{.Href}}">
+											<img src="{{.Image}}" alt="{{.Title}}">
 										</a>
 									</div>
 									<div class="article-body">
-										<h4 class="article-title"><a href="#">Duis urbanitas eam in, tempor consequat.</a></h4>
+										<h4 class="article-title"><a href="{{.Href}}">{{.Title}}</a></h4>
 										<ul class="article-meta">
-											<li><i class="fa fa-clock-o"></i> January 31, 2017</li>
-											<li><i class="fa fa-comments"></i> 33</li>
+											<li><i class="fa fa-clock-o"></i>{{.ArticleTime}}</li>
+											<li><i class="fa fa-comments"></i>{{.Comments}}</li>
 										</ul>
 									</div>
 								</article>
-								<!-- /ARTICLE -->
-
-								<!-- ARTICLE -->
-								<article class="article widget-article">
-									<div class="article-img">
-										<a href="#">
-											<img src="/static/img/img-widget-6.jpg" alt="">
-										</a>
-									</div>
-									<div class="article-body">
-										<h4 class="article-title"><a href="#">Duis urbanitas eam in, tempor consequat.</a></h4>
-										<ul class="article-meta">
-											<li><i class="fa fa-clock-o"></i> January 31, 2017</li>
-											<li><i class="fa fa-comments"></i> 33</li>
-										</ul>
-									</div>
-								</article>
+								{{ end }}
 								<!-- /ARTICLE -->
 							</div>
-							<!-- /Column 3 -->
 						</div>
-						<!-- /row -->
 					</div>
 					<!-- /tab1 -->
 				</div>
@@ -192,9 +144,7 @@
 			</div>
 			<!-- /Main Column -->
 		</div>
-		<!-- /ROW -->
 	</div>
-	<!-- /CONTAINER -->
 </div>
 <div class="section">
 	<div class="container">
