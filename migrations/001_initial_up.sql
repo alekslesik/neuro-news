@@ -56,7 +56,9 @@ CREATE TABLE
     detail_text TEXT,
     href VARCHAR(100),
     comments INT,
-    category VARCHAR(100)
+    category VARCHAR(100),
+    kind VARCHAR(10),
+    video_id INT,
   );
 
 CREATE TABLE
@@ -71,3 +73,16 @@ CREATE TABLE
 ALTER TABLE article
 MODIFY COLUMN image_id INT,
 ADD FOREIGN KEY (image_id) REFERENCES image (image_id);
+
+CREATE TABLE video (
+	video_id int auto_increment NOT NULL,
+	video_path varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+	`size` int NOT NULL,
+	name varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+	alt varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+	CONSTRAINT `PRIMARY` PRIMARY KEY (video_id)
+);
+
+ALTER TABLE article
+MODIFY COLUMN video_id INT,
+ADD FOREIGN KEY (video_id) REFERENCES video (video_id);

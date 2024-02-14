@@ -94,6 +94,18 @@ func (as *articleService) GetHomeTemplateData() (*template.TemplateData, error) 
 		return nil, err
 	}
 
+	as.t.TemplateData.TemplateDataArticle.NewsArticles, err = as.GetHomeNewsArticles()
+	if err != nil {
+		as.l.Error().Msgf("%s: get home news articles error > %s", op, err)
+		return nil, err
+	}
+
+	as.t.TemplateData.TemplateDataArticle.SportArticles, err = as.GetHomeSportArticles()
+	if err != nil {
+		as.l.Error().Msgf("%s: get home sport news articles error > %s", op, err)
+		return nil, err
+	}
+
 	return &as.t.TemplateData, nil
 }
 

@@ -19,7 +19,7 @@
 	Category    string
 } -->
 
-<!-- Trending Posts -->
+<!-- Trending Articles -->
 <div class="section">
 	<div class="container">
 		<div class="row">
@@ -35,10 +35,9 @@
 						<li><a data-toggle="tab" href="#tab1">Стиль жизни</a></li>
 					</ul>
 				</div>
-				<!-- Tab content -->
 				<div class="tab-content">
 					<div id="tab1" class="tab-pane fade in active">
-						<!-- Top big 4 articles -->
+						<!-- Trending Articles Top big 4 articles -->
 						<div class="row">
 							<!-- ARTICLES -->
 							{{range .TemplateDataArticle.TrendingArticlesTop}}
@@ -65,14 +64,36 @@
 							<!-- /ARTICLES -->
 						</div>
 
-						<!-- Bottom small 6 articles -->
+						<!-- Trending Articles Bottom small 6 articles -->
 						<div class="row">
-
-							<!-- First 2 articles -->
+							<!-- First column -->
 							<div class="col-md-4 col-sm-6">
-								{{ $firstTwo := slice .TemplateDataArticle.TrendingArticlesBottom 0 2 }}
+								{{ $firstColumn := slice .TemplateDataArticle.TrendingArticlesBottom 0 2 }}
+								<!-- ARTICLES -->
+								{{ range $firstColumn}}
+								<article class="article widget-article">
+									<div class="article-img">
+										<a href="{{.Href}}">
+											<img src="{{.Image}}" alt="{{.Title}}">
+										</a>
+									</div>
+									<div class="article-body">
+										<h4 class="article-title"><a href="{{.Href}}">{{.Title}}</a></h4>
+										<ul class="article-meta">
+											<li><i class="fa fa-clock-o"></i>{{.ArticleTime}}</li>
+											<li><i class="fa fa-comments"></i>{{.Comments}}</li>
+										</ul>
+									</div>
+								</article>
+								{{ end }}
+								<!-- /ARTICLES -->
+							</div>
+
+							<!-- Second column -->
+							<div class="col-md-4 col-sm-6">
+								{{ $secondColumn := slice .TemplateDataArticle.TrendingArticlesBottom 3 5 }}
 								<!-- ARTICLE -->
-								{{ range $firstTwo}}
+								{{ range $secondColumn}}
 								<article class="article widget-article">
 									<div class="article-img">
 										<a href="{{.Href}}">
@@ -91,34 +112,11 @@
 								<!-- /ARTICLE -->
 							</div>
 
-							<!-- Second 2 articles -->
-							<div class="col-md-4 col-sm-6">
-								{{ $secondTwo := slice .TemplateDataArticle.TrendingArticlesBottom 3 5 }}
-								<!-- ARTICLE -->
-								{{ range $secondTwo}}
-								<article class="article widget-article">
-									<div class="article-img">
-										<a href="{{.Href}}">
-											<img src="{{.Image}}" alt="{{.Title}}">
-										</a>
-									</div>
-									<div class="article-body">
-										<h4 class="article-title"><a href="{{.Href}}">{{.Title}}</a></h4>
-										<ul class="article-meta">
-											<li><i class="fa fa-clock-o"></i>{{.ArticleTime}}</li>
-											<li><i class="fa fa-comments"></i>{{.Comments}}</li>
-										</ul>
-									</div>
-								</article>
-								{{ end }}
-								<!-- /ARTICLE -->
-							</div>
-
-							<!-- Third 2 articles -->
+							<!-- Third column -->
 							<div class="col-md-4 hidden-sm">
-								{{ $thirdTwo := slice .TemplateDataArticle.TrendingArticlesBottom 5 7 }}
+								{{ $thirdColumn := slice .TemplateDataArticle.TrendingArticlesBottom 5 7 }}
 								<!-- ARTICLE -->
-								{{ range $thirdTwo}}
+								{{ range $thirdColumn}}
 								<article class="article widget-article">
 									<div class="article-img">
 										<a href="{{.Href}}">
@@ -138,152 +136,122 @@
 							</div>
 						</div>
 					</div>
-					<!-- /tab1 -->
 				</div>
-				<!-- /tab content -->
 			</div>
-			<!-- /Main Column -->
 		</div>
 	</div>
 </div>
+<!-- /Trending Articles -->
+
+<!-- News Sport Articles -->
 <div class="section">
 	<div class="container">
 		<div class="row">
 			<div class="col-md-8">
 				<div class="row">
-					<!-- Column 1 -->
+					<!-- NEWS -->
 					<div class="col-md-6 col-sm-6">
-						<!-- section title -->
 						<div class="section-title">
 							<h2 class="title">News</h2>
 						</div>
-						<!-- /section title -->
-
-						<!-- ARTICLE -->
+						<!-- FIRST ARTICLE -->
+						{{with $firstNewsArticle := index .TemplateDataArticle.NewsArticles 0}}
 						<article class="article">
 							<div class="article-img">
-								<a href="#">
-									<img src="/static/img/img-sm-1.jpg" alt="">
+								<a href="{{$firstNewsArticle.Href}}">
+									<img src="{{$firstNewsArticle.Image}}" alt="{{$firstNewsArticle.Title}}">
 								</a>
 								<ul class="article-info">
 									<li class="article-type"><i class="fa fa-camera"></i></li>
 								</ul>
 							</div>
 							<div class="article-body">
-								<h3 class="article-title"><a href="#">Duis urbanitas eam in, tempor consequat.</a></h3>
+								<h3 class="article-title"><a href="{{$firstNewsArticle.Href}}"></a>{{.Title}}"</h3>
 								<ul class="article-meta">
-									<li><i class="fa fa-clock-o"></i> January 31, 2017</li>
-									<li><i class="fa fa-comments"></i> 33</li>
+									<li><i class="fa fa-clock-o"></i>{{$firstNewsArticle.ArticleTime}}</li>
+									<li><i class="fa fa-comments"></i>{{$firstNewsArticle.Comments}}</li>
 								</ul>
-								<p>Populo tritani laboramus ex mei, no eum iuvaret ceteros euripidis, ne alia sadipscing mei. Te
-									inciderint cotidieque pro, ei iisque docendi qui, ne accommodare theophrastus reprehendunt vel. Et
-									commodo menandri eam.</p>
+								<p>{{$firstNewsArticle.PreviewText}}</p>
 							</div>
 						</article>
-						<!-- /ARTICLE -->
+						{{end}}
+						<!-- /FIRST ARTICLE -->
 
-						<!-- ARTICLE -->
+						<!-- ARTICLES -->
+						{{range $index, $element := .TemplateDataArticle.NewsArticles}}
+						{{if gt $index 0}}
 						<article class="article widget-article">
 							<div class="article-img">
-								<a href="#">
-									<img src="/static/img/img-widget-7.jpg" alt="">
+								<a href="{{.Href}}">
+									<img src="{{.Image}}" alt="{{.Title}}">
 								</a>
 							</div>
 							<div class="article-body">
-								<h4 class="article-title"><a href="#">Duis urbanitas eam in, tempor consequat.</a></h4>
+								<h4 class="article-title"><a href="{{.Href}}">{{.Title}}</a></h4>
 								<ul class="article-meta">
-									<li><i class="fa fa-clock-o"></i> January 31, 2017</li>
-									<li><i class="fa fa-comments"></i> 33</li>
+									<li><i class="fa fa-clock-o"></i>{{.ArticleTime}}</li>
+									<li><i class="fa fa-comments"></i>{{.Comments}}</li>
 								</ul>
 							</div>
 						</article>
-						<!-- /ARTICLE -->
+						{{end}}
+						{{end}}
+						<!-- /ARTICLES -->
 
-						<!-- ARTICLE -->
-						<article class="article widget-article">
-							<div class="article-img">
-								<a href="#">
-									<img src="/static/img/img-widget-8.jpg" alt="">
-								</a>
-							</div>
-							<div class="article-body">
-								<h4 class="article-title"><a href="#">Duis urbanitas eam in, tempor consequat.</a></h4>
-								<ul class="article-meta">
-									<li><i class="fa fa-clock-o"></i> January 31, 2017</li>
-									<li><i class="fa fa-comments"></i> 33</li>
-								</ul>
-							</div>
-						</article>
-						<!-- /ARTICLE -->
 					</div>
-					<!-- /Column 1 -->
+					<!-- /NEWS -->
 
-					<!-- Column 2 -->
+					<!-- SPORT -->
 					<div class="col-md-6 col-sm-6">
-						<!-- section title -->
 						<div class="section-title">
 							<h2 class="title">Sport</h2>
 						</div>
-						<!-- /section title -->
 
-						<!-- ARTICLE -->
+						<!-- FIRST ARTICLE -->
+						{{with $firstSportArticle := index .TemplateDataArticle.SportArticles 0}}
 						<article class="article">
 							<div class="article-img">
-								<a href="#">
-									<img src="/static/img/img-sm-2.jpg" alt="">
+								<a href="{{$firstSportArticle.Href}}">
+									<img src="{{$firstSportArticle.Image}}" alt="{{$firstSportArticle.Title}}">
 								</a>
 								<ul class="article-info">
-									<li class="article-type"><i class="fa fa-file-text"></i></li>
+									<li class="article-type"><i class="fa fa-camera"></i></li>
 								</ul>
 							</div>
 							<div class="article-body">
-								<h3 class="article-title"><a href="#">Duis urbanitas eam in, tempor consequat.</a></h3>
+								<h3 class="article-title"><a href="{{$firstSportArticle.Href}}"></a>{{.Title}}"</h3>
 								<ul class="article-meta">
-									<li><i class="fa fa-clock-o"></i> January 31, 2017</li>
-									<li><i class="fa fa-comments"></i> 33</li>
+									<li><i class="fa fa-clock-o"></i>{{$firstSportArticle.ArticleTime}}</li>
+									<li><i class="fa fa-comments"></i>{{$firstSportArticle.Comments}}</li>
 								</ul>
-								<p>Populo tritani laboramus ex mei, no eum iuvaret ceteros euripidis, ne alia sadipscing mei. Te
-									inciderint cotidieque pro, ei iisque docendi qui, ne accommodare theophrastus reprehendunt vel. Et
-									commodo menandri eam.</p>
+								<p>{{$firstSportArticle.PreviewText}}</p>
 							</div>
 						</article>
-						<!-- /ARTICLE -->
+						{{end}}
+						<!-- /FIRST ARTICLE -->
 
-						<!-- ARTICLE -->
+						<!-- ARTICLES -->
+						{{range $index, $element := .TemplateDataArticle.SportArticles}}
+						{{if gt $index 0}}
 						<article class="article widget-article">
 							<div class="article-img">
-								<a href="#">
-									<img src="/static/img/img-widget-9.jpg" alt="">
+								<a href="{{.Href}}">
+									<img src="{{.Image}}" alt="{{.Title}}">
 								</a>
 							</div>
 							<div class="article-body">
-								<h4 class="article-title"><a href="#">Duis urbanitas eam in, tempor consequat.</a></h4>
+								<h4 class="article-title"><a href="{{.Href}}">{{.Title}}</a></h4>
 								<ul class="article-meta">
-									<li><i class="fa fa-clock-o"></i> January 31, 2017</li>
-									<li><i class="fa fa-comments"></i> 33</li>
+									<li><i class="fa fa-clock-o"></i>{{.ArticleTime}}</li>
+									<li><i class="fa fa-comments"></i>{{.Comments}}</li>
 								</ul>
 							</div>
 						</article>
-						<!-- /ARTICLE -->
-
-						<!-- ARTICLE -->
-						<article class="article widget-article">
-							<div class="article-img">
-								<a href="#">
-									<img src="/static/img/img-widget-10.jpg" alt="">
-								</a>
-							</div>
-							<div class="article-body">
-								<h4 class="article-title"><a href="#">Duis urbanitas eam in, tempor consequat.</a></h4>
-								<ul class="article-meta">
-									<li><i class="fa fa-clock-o"></i> January 31, 2017</li>
-									<li><i class="fa fa-comments"></i> 33</li>
-								</ul>
-							</div>
-						</article>
-						<!-- /ARTICLE -->
+						{{end}}
+						{{end}}
+						<!-- /ARTICLES -->
 					</div>
-					<!-- /Column 2 -->
+					<!-- /SPORT -->
 				</div>
 			</div>
 			<!-- /Main Column -->
@@ -323,15 +291,12 @@
 					</form>
 				</div>
 				<!-- /subscribe widget -->
-
 			</div>
 			<!-- /Aside Column -->
 		</div>
-		<!-- /ROW -->
 	</div>
-	<!-- /CONTAINER -->
 </div>
-<!-- /SECTION -->
+<!-- /News Sport Articles -->
 
 <!-- AD SECTION -->
 <div class="visible-lg visible-md">
@@ -452,7 +417,7 @@
 			<div class="col-md-8">
 				<!-- section title -->
 				<div class="section-title">
-					<h2 class="title">Popular Posts</h2>
+					<h2 class="title">Popular Articles</h2>
 				</div>
 				<!-- /section title -->
 
@@ -566,7 +531,7 @@
 				<!-- article widget -->
 				<div class="widget">
 					<div class="widget-title">
-						<h2 class="title">Featured Posts</h2>
+						<h2 class="title">Featured Articles</h2>
 					</div>
 
 					<!-- owl carousel 4 -->
