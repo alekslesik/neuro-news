@@ -48,17 +48,17 @@ GRANT Grant option ON neuronews.* TO 'neuronews'@'localhost';
 CREATE TABLE
   IF NOT EXISTS article (
     article_id INT PRIMARY KEY AUTO_INCREMENT,
-    title VARCHAR(100),
+    title VARCHAR(200),
     preview_text TEXT,
     image_id INT,
     article_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     tag VARCHAR(20),
     detail_text TEXT,
-    href VARCHAR(100),
+    href VARCHAR(200),
     comments INT,
     category VARCHAR(100),
     kind VARCHAR(10),
-    video_id INT,
+    video_id INT
   );
 
 CREATE TABLE
@@ -67,7 +67,7 @@ CREATE TABLE
     image_path VARCHAR(100),
     size INT,
     name VARCHAR(100),
-    alt VARCHAR(100)
+    alt VARCHAR(200)
   );
 
 ALTER TABLE article
@@ -76,10 +76,10 @@ ADD FOREIGN KEY (image_id) REFERENCES image (image_id);
 
 CREATE TABLE video (
 	video_id int auto_increment NOT NULL,
-	video_path varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+	video_path VARCHAR(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
 	`size` int NOT NULL,
-	name varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-	alt varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+	name VARCHAR(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+	alt VARCHAR(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
 	CONSTRAINT `PRIMARY` PRIMARY KEY (video_id)
 );
 
