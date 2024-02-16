@@ -13,8 +13,8 @@ type MySQLArticleRepository struct {
 }
 
 type Queries struct {
-	selectAllArticle string
-	selectArticleLimit    string
+	selectAllArticle   string
+	selectArticleLimit string
 	// WHERE category  = ?
 	selectArticleWhereLimit string
 	selectVideoLimit        string
