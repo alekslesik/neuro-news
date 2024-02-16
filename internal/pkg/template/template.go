@@ -47,7 +47,7 @@ type TemplateDataArticle struct {
 	NewsArticles           []model.Article
 	SportArticles          []model.Article
 	VideoArticles          []model.Article
-	PopularArticles        []model.Article
+	AllArticles            []model.Article
 }
 
 // New return instance of template

@@ -15,6 +15,7 @@ type Article struct {
 	Href        string
 	Comments    int
 	Category    string
+	Video       string
 }
 
 type ArticleModel interface {
@@ -25,7 +26,7 @@ type ArticleModel interface {
 	GetHomeNewsArticles() ([]Article, error)
 	GetHomeSportArticles() ([]Article, error)
 	GetHomeVideoArticles() ([]Article, error)
-	GetHomePopularArticles() ([]Article, error)
+	GetHomeAllArticles() ([]Article, error)
 
 	GetArticleByID(id int) (*Article, error)
 }

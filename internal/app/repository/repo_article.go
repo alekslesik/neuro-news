@@ -13,11 +13,21 @@ type MySQLArticleRepository struct {
 }
 
 type Queries struct {
-	selectArticleLimit      string
+	selectAllArticle string
+	selectArticleLimit    string
+	// WHERE category  = ?
 	selectArticleWhereLimit string
+	selectVideoLimit        string
 }
 
 var queries = Queries{
+	selectAllArticle: `SELECT article_id, title, preview_text, article_time, tag, detail_text, href, comments, category, image_path
+	FROM
+	article INNER JOIN image
+	ON article.image_id = image.image_id
+	WHERE kind = 'article'
+	ORDER BY article_time DESC;`,
+
 	selectArticleLimit: `SELECT article_id, title, preview_text, article_time, tag, detail_text, href, comments, category, image_path
 	FROM
 	article INNER JOIN image
@@ -31,6 +41,14 @@ var queries = Queries{
 	article INNER JOIN image
 	ON article.image_id = image.image_id
 	WHERE kind = 'article' AND category  = ?
+	ORDER BY article_time DESC
+	LIMIT ?;`,
+
+	selectVideoLimit: `SELECT article_id, title, preview_text, article_time, tag, detail_text, href, comments, category, video_path
+	FROM
+	article INNER JOIN video
+	ON article.video_id = video.video_id
+	WHERE kind = 'video'
 	ORDER BY article_time DESC
 	LIMIT ?;`,
 }
@@ -48,9 +66,7 @@ func (r *MySQLArticleRepository) GetHomeCarouselArticles() ([]model.Article, err
 
 	rows, err := r.db.Query(queries.selectArticleLimit, 4)
 	if err != nil {
-		// r.l.Error().Msgf("%s: query select articles for carousel > %s", op, err)
 		r.l.Warn().Msgf("%s: query select articles for carousel > %s", op, err)
-
 	}
 	defer rows.Close()
 
@@ -179,12 +195,59 @@ func (r *MySQLArticleRepository) GetHomeSportArticles() ([]model.Article, error)
 	return as, nil
 }
 
+// GetHomeVideoArticles return 3 video for video block
 func (r *MySQLArticleRepository) GetHomeVideoArticles() ([]model.Article, error) {
-	return nil, nil
+	const op = "repository.GetHomeVideoArticles()"
+
+	var as []model.Article
+
+	rows, err := r.db.Query(queries.selectVideoLimit, 3)
+	if err != nil {
+		r.l.Warn().Msgf("%s: query select videos for video block > %s", op, err)
+	}
+
+	defer rows.Close()
+
+	for rows.Next() {
+		var a model.Article
+		err = rows.Scan(&a.ArticleID, &a.Title, &a.PreviewText,
+			&a.ArticleTime, &a.Tag, &a.DetailText, &a.Href, &a.Comments, &a.Category, &a.Video)
+		if err != nil {
+			r.l.Error().Msgf("%s: query scan videos for video block > %s", op, err)
+			return nil, err
+		}
+
+		as = append(as, a)
+	}
+
+	return as, nil
 }
 
-func (r *MySQLArticleRepository) GetHomePopularArticles() ([]model.Article, error) {
-	return nil, nil
+// GetHomeAllArticles return all articles except video
+func (r *MySQLArticleRepository) GetHomeAllArticles() ([]model.Article, error) {
+	const op = "repository.GetHomeAllArticles()"
+
+	var as []model.Article
+
+	rows, err := r.db.Query(queries.selectAllArticle)
+	if err != nil {
+		r.l.Error().Msgf("%s: query select all articles > %s", op, err)
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var a model.Article
+		err = rows.Scan(&a.ArticleID, &a.Title, &a.PreviewText,
+			&a.ArticleTime, &a.Tag, &a.DetailText, &a.Href, &a.Comments, &a.Category, &a.Image)
+		if err != nil {
+			r.l.Error().Msgf("%s: query scan all articles > %s", op, err)
+			return nil, err
+		}
+
+		as = append(as, a)
+	}
+
+	return as, nil
 }
 
 func (r *MySQLArticleRepository) GetArticleByID(id int) (*model.Article, error) {

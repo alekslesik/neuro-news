@@ -16,7 +16,7 @@ type ArticleService interface {
 	GetHomeNewsArticles() ([]model.Article, error)
 	GetHomeSportArticles() ([]model.Article, error)
 	GetHomeVideoArticles() ([]model.Article, error)
-	GetHomePopularArticles() ([]model.Article, error)
+	GetHomeAllArticles() ([]model.Article, error)
 	GetArticleByID(id int) (*model.Article, error)
 
 	GetHomeTemplateData() (*template.TemplateData, error)
@@ -63,8 +63,8 @@ func (as *articleService) GetHomeVideoArticles() ([]model.Article, error) {
 	return as.ar.GetHomeVideoArticles()
 }
 
-func (as *articleService) GetHomePopularArticles() ([]model.Article, error) {
-	return as.ar.GetHomePopularArticles()
+func (as *articleService) GetHomeAllArticles() ([]model.Article, error) {
+	return as.ar.GetHomeAllArticles()
 }
 
 func (as *articleService) GetArticleByID(id int) (*model.Article, error) {
@@ -103,6 +103,18 @@ func (as *articleService) GetHomeTemplateData() (*template.TemplateData, error) 
 	as.t.TemplateData.TemplateDataArticle.SportArticles, err = as.GetHomeSportArticles()
 	if err != nil {
 		as.l.Error().Msgf("%s: get home sport news articles error > %s", op, err)
+		return nil, err
+	}
+
+	as.t.TemplateData.TemplateDataArticle.VideoArticles, err = as.GetHomeVideoArticles()
+	if err != nil {
+		as.l.Error().Msgf("%s: get home video articles error > %s", op, err)
+		return nil, err
+	}
+
+	as.t.TemplateData.TemplateDataArticle.AllArticles, err = as.GetHomeAllArticles()
+	if err != nil {
+		as.l.Error().Msgf("%s: get all home articles error > %s", op, err)
 		return nil, err
 	}
 
