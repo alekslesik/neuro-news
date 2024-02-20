@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/alekslesik/neuro-news/internal/app/model"
+	"github.com/alekslesik/neuro-news/internal/pkg/grabber"
 	"github.com/alekslesik/neuro-news/internal/pkg/template"
 	"github.com/alekslesik/neuro-news/pkg/logger"
 )
@@ -25,15 +26,11 @@ type ArticleService interface {
 
 type articleService struct {
 	ar model.ArticleModel
+	ir model.ImageModel
 	t  *template.Template
 	l  *logger.Logger
+	g  *grabber.Grabber
 }
-
-// func NewArticleService(articleRepository model.ArticleModel) ArticleService {
-// 	return &articleService{
-// 		ArticleRepository: articleRepository,
-// 	}
-// }
 
 func (as *articleService) GetAllArticles() ([]model.Article, error) {
 	return as.ar.GetAllArticles()
@@ -132,4 +129,32 @@ func (as *articleService) RenderTemplate(w http.ResponseWriter, r *http.Request,
 	}
 
 	return nil
+}
+
+// GetNewArticle get new article from site
+func (as *articleService) GetNewArticle() error {
+	const op = "service.GetNewArticle()"
+
+	// get article without image
+	article, err := as.g.GrabArticle()
+	if err != nil {
+		as.l.Error().Msgf("%s: grab article error > %s", op, err)
+		return err
+	}
+
+	// get image model
+	image, err := as.g.GetGeneratedImage(article.Title)
+	if err != nil {
+		as.l.Error().Msgf("%s: get generated image error > %s", op, err)
+		return err
+	}
+	// записать изображение в базу данных
+	err = as.ir.SaveImageToDB(image)
+	if err != nil {
+		as.l.Error().Msgf("%s: save generated image to db error > %s", op, err)
+		return err
+	}
+
+
+		return err
 }
