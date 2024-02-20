@@ -26,3 +26,7 @@ func (r *MySQLRepository) GetArticleRepository() model.ArticleModel {
 func (r *MySQLRepository) GetUserRepository() model.UserModel {
 	return &MySQLUserRepository{db: r.db, l: r.l}
 }
+
+func (r *MySQLRepository) GetImageRepository() model.ImageModel {
+	return &MySQLImageRepository{db: r.db, l: r.l}
+}
