@@ -65,9 +65,9 @@ CREATE TABLE
   IF NOT EXISTS image (
     image_id INT PRIMARY KEY AUTO_INCREMENT,
     image_path VARCHAR(100),
-    size INT,
-    name VARCHAR(100),
-    alt VARCHAR(200)
+    image_size INT,
+    image_name VARCHAR(100),
+    image_alt VARCHAR(200)
   );
 
 ALTER TABLE article

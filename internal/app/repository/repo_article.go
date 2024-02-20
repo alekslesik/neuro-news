@@ -12,7 +12,7 @@ type MySQLArticleRepository struct {
 	l  *logger.Logger
 }
 
-type Queries struct {
+type ArticleQueries struct {
 	selectAllArticle   string
 	selectArticleLimit string
 	// WHERE category  = ?
@@ -20,7 +20,7 @@ type Queries struct {
 	selectVideoLimit        string
 }
 
-var queries = Queries{
+var articleQueries = ArticleQueries{
 	selectAllArticle: `SELECT article_id, title, preview_text, article_time, tag, detail_text, href, comments, category, image_path
 	FROM
 	article INNER JOIN image
@@ -64,7 +64,7 @@ func (r *MySQLArticleRepository) GetHomeCarouselArticles() ([]model.Article, err
 
 	var as []model.Article
 
-	rows, err := r.db.Query(queries.selectArticleLimit, 4)
+	rows, err := r.db.Query(articleQueries.selectArticleLimit, 4)
 	if err != nil {
 		r.l.Warn().Msgf("%s: query select articles for carousel > %s", op, err)
 	}
@@ -91,7 +91,7 @@ func (r *MySQLArticleRepository) GetHomeTrendingArticlesTop() ([]model.Article, 
 
 	var as []model.Article
 
-	rows, err := r.db.Query(queries.selectArticleLimit, 4)
+	rows, err := r.db.Query(articleQueries.selectArticleLimit, 4)
 	if err != nil {
 		r.l.Error().Msgf("%s: query select trending articles top > %s", op, err)
 	}
@@ -118,7 +118,7 @@ func (r *MySQLArticleRepository) GetHomeTrendingArticlesBottom() ([]model.Articl
 
 	var as []model.Article
 
-	rows, err := r.db.Query(queries.selectArticleLimit, 11)
+	rows, err := r.db.Query(articleQueries.selectArticleLimit, 11)
 	if err != nil {
 		r.l.Error().Msgf("%s: query select trending articles bottom > %s", op, err)
 	}
@@ -147,7 +147,7 @@ func (r *MySQLArticleRepository) GetHomeNewsArticles() ([]model.Article, error) 
 
 	var as []model.Article
 
-	rows, err := r.db.Query(queries.selectArticleLimit, 3)
+	rows, err := r.db.Query(articleQueries.selectArticleLimit, 3)
 	if err != nil {
 		r.l.Error().Msgf("%s: query select home news articles > %s", op, err)
 	}
@@ -174,7 +174,7 @@ func (r *MySQLArticleRepository) GetHomeSportArticles() ([]model.Article, error)
 
 	var as []model.Article
 
-	rows, err := r.db.Query(queries.selectArticleWhereLimit, "sport", 3)
+	rows, err := r.db.Query(articleQueries.selectArticleWhereLimit, "sport", 3)
 	if err != nil {
 		r.l.Error().Msgf("%s: query select home sport articles > %s", op, err)
 	}
@@ -201,7 +201,7 @@ func (r *MySQLArticleRepository) GetHomeVideoArticles() ([]model.Article, error)
 
 	var as []model.Article
 
-	rows, err := r.db.Query(queries.selectVideoLimit, 3)
+	rows, err := r.db.Query(articleQueries.selectVideoLimit, 3)
 	if err != nil {
 		r.l.Warn().Msgf("%s: query select videos for video block > %s", op, err)
 	}
@@ -229,7 +229,7 @@ func (r *MySQLArticleRepository) GetHomeAllArticles() ([]model.Article, error) {
 
 	var as []model.Article
 
-	rows, err := r.db.Query(queries.selectAllArticle)
+	rows, err := r.db.Query(articleQueries.selectAllArticle)
 	if err != nil {
 		r.l.Error().Msgf("%s: query select all articles > %s", op, err)
 	}
