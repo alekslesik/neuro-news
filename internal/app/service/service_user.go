@@ -7,15 +7,15 @@ type UserService interface {
 }
 
 type userService struct {
-	UserRepository model.UserModel
+	ur model.UserModel
 }
 
 func NewUserService(userRepository model.UserModel) UserService {
 	return &userService{
-		UserRepository: userRepository,
+		ur: userRepository,
 	}
 }
 
 func (us *userService) GetUserByID(id int) (*model.User, error) {
-	return us.UserRepository.GetUserByID(id)
+	return us.ur.GetUserByID(id)
 }

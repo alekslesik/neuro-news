@@ -6,6 +6,7 @@ import (
 	"github.com/alekslesik/neuro-news/internal/app/handler"
 	"github.com/alekslesik/neuro-news/internal/pkg/db"
 	"github.com/alekslesik/neuro-news/internal/pkg/flag"
+	"github.com/alekslesik/neuro-news/internal/pkg/grabber"
 	"github.com/alekslesik/neuro-news/internal/pkg/router"
 	"github.com/alekslesik/neuro-news/internal/pkg/server"
 	"github.com/alekslesik/neuro-news/internal/pkg/template"
@@ -68,6 +69,11 @@ func templateInit(l *logger.Logger) *template.Template {
 	t.AddCache("./website/content")
 
 	return t
+}
+
+// grabber init
+func grabberInit(l *logger.Logger) *grabber.Grabber {
+	return grabber.New(l)
 }
 
 // router init

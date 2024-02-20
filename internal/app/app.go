@@ -12,11 +12,13 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
+
 	// "time"
 
 	"github.com/alekslesik/neuro-news/internal/app/handler"
 	"github.com/alekslesik/neuro-news/internal/app/repository"
 	"github.com/alekslesik/neuro-news/internal/app/service"
+	"github.com/alekslesik/neuro-news/internal/pkg/grabber"
 	"github.com/alekslesik/neuro-news/internal/pkg/router"
 	"github.com/alekslesik/neuro-news/internal/pkg/server"
 	"github.com/alekslesik/neuro-news/internal/pkg/template"
@@ -32,6 +34,7 @@ type Application struct {
 	log *logger.Logger
 	db  *sql.DB
 	tp  *template.Template
+	grb *grabber.Grabber
 	rtr *router.Router
 	srv *server.Server
 	// middleware *middleware.Middleware
@@ -60,8 +63,11 @@ func New(context context.Context, cancel context.CancelFunc) (*Application, erro
 	// repository init
 	repositories := repository.New(db, logger)
 
+	// grabber init
+	grabber := grabberInit(logger)
+
 	// services init
-	services := service.New(repositories, logger, templates)
+	services := service.New(repositories, logger, templates, grabber)
 
 	// handlers init
 	handler := handler.New(services, logger, templates)
@@ -91,6 +97,7 @@ func New(context context.Context, cancel context.CancelFunc) (*Application, erro
 		rtr: router,
 		db:  db,
 		tp:  templates,
+		grb: grabber,
 		srv: server,
 		// middleware: appMiddleware,
 		// session:    appSession,
