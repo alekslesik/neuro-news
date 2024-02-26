@@ -155,6 +155,5 @@ func (as *articleService) GetNewArticle() error {
 		return err
 	}
 
-
-		return err
+	return err
 }

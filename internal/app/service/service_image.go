@@ -13,4 +13,3 @@ type imageService struct {
 func (is *imageService) SaveImageToDB(model.Image) error {
 	return nil
 }
-

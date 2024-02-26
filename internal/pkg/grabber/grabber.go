@@ -15,7 +15,7 @@ func New(l *logger.Logger) *Grabber {
 	return &Grabber{l: l}
 }
 
-// GrabArticle
+// GrabArticle grab article from
 func (g *Grabber) GrabArticle() (*model.Article, error) {
 	// type Article struct {
 	// 	ArticleID   int

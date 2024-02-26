@@ -3,7 +3,7 @@ package model
 import ()
 
 type Image struct {
-	ImageId   int
+	ImageID   int
 	ImagePath string
 	Size      string
 	Name      string
