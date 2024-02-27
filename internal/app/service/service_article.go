@@ -20,6 +20,8 @@ type ArticleService interface {
 	GetHomeAllArticles() ([]model.Article, error)
 	GetArticleByID(id int) (*model.Article, error)
 
+	GetNewArticle() error
+
 	GetHomeTemplateData() (*template.TemplateData, error)
 	RenderTemplate(w http.ResponseWriter, r *http.Request, name string, td *template.TemplateData) error
 }
@@ -136,25 +138,24 @@ func (as *articleService) GetNewArticle() error {
 	const op = "service.GetNewArticle()"
 
 	// get article without image
-	article, err := as.g.GrabArticle()
+	_, err := as.g.GrabArticle()
 	if err != nil {
 		as.l.Error().Msgf("%s: grab article error > %s", op, err)
 		return err
 	}
 
-	// get image model
-	image, err := as.g.GetGeneratedImage(article.Title)
-	if err != nil {
-		as.l.Error().Msgf("%s: get generated image error > %s", op, err)
-		return err
-	}
-	// записать изображение в базу данных
-	err = as.ir.SaveImageToDB(image)
-	if err != nil {
-		as.l.Error().Msgf("%s: save generated image to db error > %s", op, err)
-		return err
-	}
+	// // get image model
+	// image, err := as.g.GetGeneratedImage(article.Title)
+	// if err != nil {
+	// 	as.l.Error().Msgf("%s: get generated image error > %s", op, err)
+	// 	return err
+	// }
+	// // записать изображение в базу данных
+	// err = as.ir.SaveImageToDB(image)
+	// if err != nil {
+	// 	as.l.Error().Msgf("%s: save generated image to db error > %s", op, err)
+	// 	return err
+	// }
 
-
-		return err
+	return err
 }
