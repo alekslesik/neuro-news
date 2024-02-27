@@ -1,9 +1,9 @@
 package app
 
-// 		log.Info().Msgf("Server started on %s/", a.srv.Addr)
-// 		log.Warn().Msg("Signal received, initiating shutdown")
-// 		log.Error().Msgf("%s: address or port are not exists > %s", op, a.srv.Addr)
-// 		log.Fatal().Msgf("%s: server initialization error > %s", op, err)
+// 		log.Info().Msgf(")
+// 		log.Warn().Msg("")
+// 		log.Error().Msgf("%s:  > %s", op, err)
+// 		log.Fatal().Msgf("%s:  > %s", op, err)
 
 import (
 	"context"
@@ -34,6 +34,7 @@ type Application struct {
 	log *logger.Logger
 	db  *sql.DB
 	tp  *template.Template
+	svs  *service.Services
 	grb *grabber.Grabber
 	rtr *router.Router
 	srv *server.Server
@@ -97,6 +98,7 @@ func New(context context.Context, cancel context.CancelFunc) (*Application, erro
 		rtr: router,
 		db:  db,
 		tp:  templates,
+		svs: services,
 		grb: grabber,
 		srv: server,
 		// middleware: appMiddleware,
@@ -110,6 +112,14 @@ func New(context context.Context, cancel context.CancelFunc) (*Application, erro
 func (a *Application) Run() error {
 	const op = "app.Run()"
 
+	var err error
+
+	err = a.svs.GetArticleService().GetNewArticle()
+	if err != nil {
+		a.log.Error().Msgf("%s: get new article error  > %s", op, err)
+		return err
+	}
+
 	// db close
 	defer a.closeDB()
 	// logfile close
@@ -121,7 +131,6 @@ func (a *Application) Run() error {
 	signals := make(chan os.Signal, 1)
 	signal.Notify(signals, syscall.SIGINT, syscall.SIGTERM)
 
-	var err error
 	switch a.srv.Addr {
 	case "localhost:80", "localhost:8080", ":80", ":8080":
 		go func() {
