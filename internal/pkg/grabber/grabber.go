@@ -104,14 +104,14 @@ func (g *Grabber) GrabArticle() (*model.Article, error) {
 		ArticleTime: articleTime,
 		Tag:         tag,
 		DetailText:  detailText,
-		Href: href,
-		Category: category,
+		Href:        href,
+		Category:    category,
 	}
 
 	return article, nil
 }
 
-// GetLastГКД return last element url from list
+// LastArticle return last element url from list
 func (g *Grabber) LastArticle(url string, tag Tag) (string, error) {
 	const op = "grabber.GetLast()"
 

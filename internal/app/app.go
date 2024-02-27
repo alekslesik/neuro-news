@@ -34,7 +34,7 @@ type Application struct {
 	log *logger.Logger
 	db  *sql.DB
 	tp  *template.Template
-	svs  *service.Services
+	svs *service.Services
 	grb *grabber.Grabber
 	rtr *router.Router
 	srv *server.Server
