@@ -73,7 +73,8 @@ func templateInit(l *logger.Logger) *template.Template {
 
 // grabber init
 func grabberInit(l *logger.Logger) *grabber.Grabber {
-	return grabber.New(l)
+	home := "https://lenta.ru/"
+	return grabber.New(l, home)
 }
 
 // router init
