@@ -1,6 +1,7 @@
 package service
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/alekslesik/neuro-news/internal/app/model"
@@ -137,19 +138,22 @@ func (as *articleService) RenderTemplate(w http.ResponseWriter, r *http.Request,
 func (as *articleService) GetNewArticle() error {
 	const op = "service.GetNewArticle()"
 
-	// get article without image
-	_, err := as.g.GrabArticle()
+	// get article model without image
+	article, err := as.g.GrabArticle()
 	if err != nil {
 		as.l.Error().Msgf("%s: grab article error > %s", op, err)
 		return err
 	}
 
-	// // get image model
-	// image, err := as.g.GetGeneratedImage(article.Title)
-	// if err != nil {
-	// 	as.l.Error().Msgf("%s: get generated image error > %s", op, err)
-	// 	return err
-	// }
+	// get image model
+	imageModel, err := as.g.GetGeneratedImage(article.Title)
+	if err != nil {
+		as.l.Error().Msgf("%s: get generated image error > %s", op, err)
+		return err
+	}
+
+	fmt.Println(imageModel)
+
 	// // записать изображение в базу данных
 	// err = as.ir.SaveImageToDB(image)
 	// if err != nil {

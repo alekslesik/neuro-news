@@ -72,9 +72,9 @@ func templateInit(l *logger.Logger) *template.Template {
 }
 
 // grabber init
-func grabberInit(l *logger.Logger) *grabber.Grabber {
+func grabberInit(l *logger.Logger, c *config.Config) *grabber.Grabber {
 	home := "https://lenta.ru/"
-	return grabber.New(l, home)
+	return grabber.New(l, c, home)
 }
 
 // router init

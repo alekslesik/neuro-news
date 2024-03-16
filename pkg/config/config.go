@@ -25,6 +25,15 @@ type AppConfig struct {
 	}
 }
 
+// KandinskyConfig is config for Kandinsky API
+type KandinskyConfig struct {
+	Key     string `env:"KAND_API_KEY"`
+	Secret  string `env:"KAND_API_SECRET"`
+	URL     string `env:"KAND_API_URL"`
+	AuthURL string `env:"KAND_API_AUTH_URL"`
+	GenURL  string `env:"KAND_API_GEN_URL"`
+}
+
 // LoggerConfig is config for logging part
 type LoggerConfig struct {
 	LogLevel    string `env:"LOG_LEVEL" env-default:"development"`
@@ -64,11 +73,12 @@ type SMTPConfig struct {
 // Config fo application
 type Config struct {
 	App     AppConfig
+	Kand    KandinskyConfig
 	Logger  LoggerConfig
 	MySQL   MySQLConfig
 	Session SessionConfig
-	TLS     TLSConfig
 	SMTP    SMTPConfig
+	TLS     TLSConfig
 }
 
 var (

@@ -7,26 +7,65 @@ import (
 	"time"
 
 	"github.com/alekslesik/neuro-news/internal/app/model"
+	"github.com/alekslesik/neuro-news/pkg/config"
+	"github.com/alekslesik/kandinsky"
 	"github.com/alekslesik/neuro-news/pkg/logger"
 
 	"golang.org/x/net/html"
 )
 
+var pathToSave = "website/static/upload/"
+
 // Grabber struct
 type Grabber struct {
 	log  *logger.Logger
+	cfg  *config.Config
 	home string
 }
 
-// New return new instance of Grabber struct
-func New(log *logger.Logger, home string) *Grabber {
-	return &Grabber{log: log, home: home}
-}
-
+// Tag struct
 type Tag struct {
 	Name string
 	Key  string
 	Val  string
+}
+
+// New return new instance of Grabber struct
+func New(log *logger.Logger, cfg *config.Config, home string) *Grabber {
+	return &Grabber{log: log, cfg: cfg, home: home}
+}
+
+// GetGeneratedImage generate, save and return image model
+func (g *Grabber) GetGeneratedImage(title string) (*model.Image, error) {
+	const op = "grabber.GetGeneratedImage()"
+
+	params := kandinsky.Params{
+		Width: 1024,
+		Height: 680,
+		Style: "UHD",
+		GenerateParams: struct{Query string "json:\"query\""}{title},
+	}
+
+	image, err := kandinsky.GetImage(g.cfg.Kand.Key, g.cfg.Kand.Secret, params)
+	if err != nil {
+		g.log.Error().Msgf("%s: get image from Kandinsky API error > %s", op, err)
+		return nil, err
+	}
+
+	transTitle := translit(title)
+	err = image.SavePNGTo(transTitle, pathToSave)
+	if err != nil {
+		g.log.Error().Msgf("%s: save image generated from Kandinsky error > %s", op, err)
+		return nil, err
+	}
+
+	model := &model.Image{
+		ImagePath: pathToSave + transTitle,
+		Name: title,
+		Alt: title,
+	}
+
+	return model, nil
 }
 
 // GrabArticle grab article from
@@ -255,7 +294,7 @@ func getNodePage(url string) (*html.Node, error) {
 }
 
 // getTagHref return tag href with attr from url
-func getTagHref(url, tag, atr, atrVal string) (string, error) {
+func getTagHref(url string) (string, error) {
 	// get node from url
 	node, err := getNodePage(url)
 	if err != nil {
@@ -288,19 +327,6 @@ func getTagHref(url, tag, atr, atrVal string) (string, error) {
 	f(node)
 
 	return href, nil
-}
-
-// GetGeneratedImage generate, save image and return image model
-func (g *Grabber) GetGeneratedImage(title string) (model.Image, error) {
-	// send news title to API and take generated image link
-
-	// download image to website/static/img
-
-	// create and fill image model
-	imgModel := model.Image{}
-
-	// return file
-	return imgModel, nil
 }
 
 // translit

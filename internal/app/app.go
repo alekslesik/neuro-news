@@ -65,7 +65,7 @@ func New(context context.Context, cancel context.CancelFunc) (*Application, erro
 	repositories := repository.New(db, logger)
 
 	// grabber init
-	grabber := grabberInit(logger)
+	grabber := grabberInit(logger, config)
 
 	// services init
 	services := service.New(repositories, logger, templates, grabber)
