@@ -1,7 +1,6 @@
 package service
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/alekslesik/neuro-news/internal/app/model"
@@ -152,14 +151,12 @@ func (as *articleService) GetNewArticle() error {
 		return err
 	}
 
-	fmt.Println(imageModel)
-
-	// // записать изображение в базу данных
-	// err = as.ir.SaveImageToDB(image)
-	// if err != nil {
-	// 	as.l.Error().Msgf("%s: save generated image to db error > %s", op, err)
-	// 	return err
-	// }
+	// write image to db
+	err = as.ir.SaveImageToDB(imageModel)
+	if err != nil {
+		as.l.Error().Msgf("%s: save generated image to db error > %s", op, err)
+		return err
+	}
 
 	return err
 }

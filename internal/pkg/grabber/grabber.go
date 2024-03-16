@@ -3,18 +3,17 @@ package grabber
 import (
 	"io"
 	"net/http"
+	"os"
 	"strings"
 	"time"
 
+	"github.com/alekslesik/kandinsky"
 	"github.com/alekslesik/neuro-news/internal/app/model"
 	"github.com/alekslesik/neuro-news/pkg/config"
-	"github.com/alekslesik/kandinsky"
 	"github.com/alekslesik/neuro-news/pkg/logger"
 
 	"golang.org/x/net/html"
 )
-
-var pathToSave = "website/static/upload/"
 
 // Grabber struct
 type Grabber struct {
@@ -38,6 +37,7 @@ func New(log *logger.Logger, cfg *config.Config, home string) *Grabber {
 // GetGeneratedImage generate, save and return image model
 func (g *Grabber) GetGeneratedImage(title string) (*model.Image, error) {
 	const op = "grabber.GetGeneratedImage()"
+	var imagePath = "website/static/upload/"
 
 	params := kandinsky.Params{
 		Width: 1024,
@@ -52,16 +52,31 @@ func (g *Grabber) GetGeneratedImage(title string) (*model.Image, error) {
 		return nil, err
 	}
 
-	transTitle := translit(title)
-	err = image.SavePNGTo(transTitle, pathToSave)
+	fImage, err := image.ToFile()
+	if err != nil {
+		g.log.Error().Msgf("%s: convert image generated from Kandinsky to os.File error > %s", op, err)
+		return nil, err
+	}
+
+	size, err := getFileSize(*fImage)
+	if err != nil {
+		g.log.Error().Msgf("%s: get Kandinsky image size error > %s", op, err)
+		return nil, err
+	}
+
+	imageName := translit(title)
+	err = image.SavePNGTo(imageName, imagePath)
 	if err != nil {
 		g.log.Error().Msgf("%s: save image generated from Kandinsky error > %s", op, err)
 		return nil, err
 	}
 
+	preparedPath := prepareImagePath(imagePath, imageName)
+
 	model := &model.Image{
-		ImagePath: pathToSave + transTitle,
-		Name: title,
+		ImagePath: preparedPath,
+		Size: size,
+		Name: imageName,
 		Alt: title,
 	}
 
@@ -382,4 +397,21 @@ func translit(src string) string {
 	result = strings.Join(resArr, "")
 
 	return result
+}
+
+func getFileSize(f os.File) (int64, error) {
+	fInfo, err := f.Stat()
+	if err != nil {
+		return 0, err
+	}
+
+	return fInfo.Size(), nil
+}
+
+func prepareImagePath(path, name string) string  {
+	name = name + ".png"
+
+	path = strings.Replace(path, "website", "", 1)
+
+	return path + name
 }

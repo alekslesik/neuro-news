@@ -12,6 +12,7 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
+	"time"
 
 	// "time"
 
@@ -113,19 +114,23 @@ func (a *Application) Run() error {
 	const op = "app.Run()"
 
 	var err error
+	errChan := make(chan error)
 
-	err = a.svs.GetArticleService().GetNewArticle()
-	if err != nil {
-		a.log.Error().Msgf("%s: get new article error  > %s", op, err)
-		return err
-	}
+	go func() {
+		for {
+			err = a.svs.GetArticleService().GetNewArticle()
+			if err != nil {
+				a.log.Error().Msgf("%s: get new article error > %s", op, err)
+			}
+
+			time.Sleep(time.Minute * 10)
+		}
+	}()
 
 	// db close
 	defer a.closeDB()
 	// logfile close
 	defer a.log.LogFile.Close()
-
-	errChan := make(chan error)
 
 	// Set signals handler
 	signals := make(chan os.Signal, 1)
