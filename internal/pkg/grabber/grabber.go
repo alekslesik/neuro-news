@@ -35,15 +35,19 @@ func New(log *logger.Logger, cfg *config.Config, home string) *Grabber {
 }
 
 // GetGeneratedImage generate, save and return image model
-func (g *Grabber) GetGeneratedImage(title string) (*model.Image, error) {
+func (g *Grabber) GetGeneratedImage(a *model.Article) (*model.Image, error) {
 	const op = "grabber.GetGeneratedImage()"
 	var imagePath = "website/static/upload/"
 
+	title := a.Title
+
 	params := kandinsky.Params{
-		Width: 1024,
+		Width:  1024,
 		Height: 680,
-		Style: "UHD",
-		GenerateParams: struct{Query string "json:\"query\""}{title},
+		Style:  "UHD",
+		GenerateParams: struct {
+			Query string "json:\"query\""
+		}{title},
 	}
 
 	image, err := kandinsky.GetImage(g.cfg.Kand.Key, g.cfg.Kand.Secret, params)
@@ -75,9 +79,9 @@ func (g *Grabber) GetGeneratedImage(title string) (*model.Image, error) {
 
 	model := &model.Image{
 		ImagePath: preparedPath,
-		Size: size,
-		Name: imageName,
-		Alt: title,
+		Size:      size,
+		Name:      imageName,
+		Alt:       title,
 	}
 
 	return model, nil
@@ -147,6 +151,9 @@ func (g *Grabber) GrabArticle() (*model.Article, error) {
 	// Get article href (translit from title)
 	href := translit(title)
 
+	// Get article kind (article)
+	kind := "article"
+
 	// TODO Извлечь Comments
 	// Get category (translit from tag)
 	category := translit(tag)
@@ -160,6 +167,8 @@ func (g *Grabber) GrabArticle() (*model.Article, error) {
 		DetailText:  detailText,
 		Href:        href,
 		Category:    category,
+		Kind:        kind,
+		VideoID:     "",
 	}
 
 	return article, nil
@@ -408,7 +417,7 @@ func getFileSize(f os.File) (int64, error) {
 	return fInfo.Size(), nil
 }
 
-func prepareImagePath(path, name string) string  {
+func prepareImagePath(path, name string) string {
 	name = name + ".png"
 
 	path = strings.Replace(path, "website", "", 1)

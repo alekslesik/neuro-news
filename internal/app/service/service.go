@@ -27,7 +27,6 @@ func New(r *repository.MySQLRepository, l *logger.Logger, t *template.Template, 
 func (s *Services) GetArticleService() ArticleService {
 	return &articleService{
 		ar: s.r.GetArticleRepository(),
-		ir: s.r.GetImageRepository(),
 		t:  s.t,
 		l:  s.l,
 		g:  s.g,
@@ -43,5 +42,6 @@ func (s *Services) GetUserService() UserService {
 func (s *Services) GetImageService() ImageService {
 	return &imageService{
 		ir: s.r.GetImageRepository(),
+		g:  s.g,
 	}
 }

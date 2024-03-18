@@ -25,19 +25,30 @@ var imageQueries = ImageQueries{
 func (ir *MySQLImageRepository) SaveImageToDB(image *model.Image) error {
 	const op = "repository.SaveImageToDB()"
 
-	result, err :=  ir.db.Exec(imageQueries.insert, image.ImagePath, image.Size, image.Name, image.Alt)
+	result, err := ir.db.Exec(imageQueries.insert, image.ImagePath, image.Size, image.Name, image.Alt)
 	if err != nil {
 		ir.l.Warn().Msgf("%s: query exec save image error > %s", op, err)
+		return err
 	}
 
 	rows, err := result.RowsAffected()
 	if err != nil {
 		ir.l.Warn().Msgf("%s: query exec save image row affected error > %s", op, err)
+		return err
 	}
 
 	if rows != 1 {
 		ir.l.Warn().Msgf("%s: query exec save image number affected rows is > %d", op, rows)
+		return err
 	}
+
+	id, err := result.LastInsertId()
+	if err != nil {
+		ir.l.Warn().Msgf("%s: query exec save image get id error > %d", op, rows)
+		return err
+	}
+
+	image.ImageID = id
 
 	return nil
 }

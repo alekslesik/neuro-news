@@ -118,9 +118,19 @@ func (a *Application) Run() error {
 
 	go func() {
 		for {
-			err = a.svs.GetArticleService().GetNewArticle()
+			article, err := a.svs.GetArticleService().GetNewArticle()
 			if err != nil {
 				a.log.Error().Msgf("%s: get new article error > %s", op, err)
+			}
+
+			image, err := a.svs.GetImageService().GenerateImage(article)
+			if err != nil {
+				a.log.Error().Msgf("%s: generate new image error > %s", op, err)
+			}
+
+			err = a.svs.GetImageService().SaveImageToDB(image)
+			if err != nil {
+				a.log.Error().Msgf("%s: save generated to DB error > %s", op, err)
 			}
 
 			time.Sleep(time.Minute * 10)
