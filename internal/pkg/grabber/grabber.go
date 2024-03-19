@@ -168,7 +168,7 @@ func (g *Grabber) GrabArticle() (*model.Article, error) {
 		Href:        href,
 		Category:    category,
 		Kind:        kind,
-		VideoID:     "",
+		VideoID:     0,
 	}
 
 	return article, nil

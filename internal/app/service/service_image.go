@@ -7,7 +7,7 @@ import (
 )
 
 type ImageService interface {
-	SaveImageToDB(*model.Image) error
+	InsertImage(*model.Image) error
 	GenerateImage(*model.Article) (*model.Image, error)
 }
 
@@ -17,10 +17,11 @@ type imageService struct {
 	g  *grabber.Grabber
 }
 
-func (is *imageService) SaveImageToDB(i *model.Image) error {
+// InsertImage insert image to DB
+func (is *imageService) InsertImage(i *model.Image) error {
 	const op = "service.SaveImageToDB()"
 
-	err := is.ir.SaveImageToDB(i)
+	err := is.ir.InsertImage(i)
 	if err != nil {
 		is.l.Error().Msgf("%s: save image to DB error > %s", op, err)
 		return err
@@ -28,6 +29,7 @@ func (is *imageService) SaveImageToDB(i *model.Image) error {
 	return nil
 }
 
+// GenerateImage generate image through Kandinsky API
 func (is *imageService) GenerateImage(a *model.Article) (*model.Image, error) {
 	const op = "service.GenerateImage()"
 	// get image model

@@ -12,7 +12,7 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
-	"time"
+	// "time"
 
 	// "time"
 
@@ -116,26 +116,31 @@ func (a *Application) Run() error {
 	var err error
 	errChan := make(chan error)
 
-	go func() {
-		for {
-			article, err := a.svs.GetArticleService().GetNewArticle()
-			if err != nil {
-				a.log.Error().Msgf("%s: get new article error > %s", op, err)
-			}
+	// go func() {
+	// 	for {
+	// 		article, err := a.svs.GetArticleService().GetNewArticle()
+	// 		if err != nil {
+	// 			a.log.Error().Msgf("%s: get new article error > %s", op, err)
+	// 		}
 
-			image, err := a.svs.GetImageService().GenerateImage(article)
-			if err != nil {
-				a.log.Error().Msgf("%s: generate new image error > %s", op, err)
-			}
+	// 		image, err := a.svs.GetImageService().GenerateImage(article)
+	// 		if err != nil {
+	// 			a.log.Error().Msgf("%s: generate new image error > %s", op, err)
+	// 		}
 
-			err = a.svs.GetImageService().SaveImageToDB(image)
-			if err != nil {
-				a.log.Error().Msgf("%s: save generated to DB error > %s", op, err)
-			}
+	// 		err = a.svs.GetImageService().InsertImage(image)
+	// 		if err != nil {
+	// 			a.log.Error().Msgf("%s: insert generated image to DB error > %s", op, err)
+	// 		}
 
-			time.Sleep(time.Minute * 10)
-		}
-	}()
+	// 		err = a.svs.GetArticleService().InsertArticleImage(image, article)
+	// 		if err != nil {
+	// 			a.log.Error().Msgf("%s: insert article to DB error > %s", op, err)
+	// 		}
+
+	// 		time.Sleep(time.Minute * 10)
+	// 	}
+	// }()
 
 	// db close
 	defer a.closeDB()

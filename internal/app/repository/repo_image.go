@@ -22,29 +22,30 @@ var imageQueries = ImageQueries{
 	VALUES(?, ?, ?, ?);`,
 }
 
-func (ir *MySQLImageRepository) SaveImageToDB(image *model.Image) error {
-	const op = "repository.SaveImageToDB()"
+// InsertImage insert image to DB
+func (r *MySQLImageRepository) InsertImage(image *model.Image) error {
+	const op = "repository.InsertImage()"
 
-	result, err := ir.db.Exec(imageQueries.insert, image.ImagePath, image.Size, image.Name, image.Alt)
+	result, err := r.db.Exec(imageQueries.insert, image.ImagePath, image.Size, image.Name, image.Alt)
 	if err != nil {
-		ir.l.Warn().Msgf("%s: query exec save image error > %s", op, err)
+		r.l.Warn().Msgf("%s: query exec insert image error > %s", op, err)
 		return err
 	}
 
 	rows, err := result.RowsAffected()
 	if err != nil {
-		ir.l.Warn().Msgf("%s: query exec save image row affected error > %s", op, err)
+		r.l.Warn().Msgf("%s: query exec insert image row affected error > %s", op, err)
 		return err
 	}
 
 	if rows != 1 {
-		ir.l.Warn().Msgf("%s: query exec save image number affected rows is > %d", op, rows)
+		r.l.Warn().Msgf("%s: query exec insert image number affected rows is > %d", op, rows)
 		return err
 	}
 
 	id, err := result.LastInsertId()
 	if err != nil {
-		ir.l.Warn().Msgf("%s: query exec save image get id error > %d", op, rows)
+		r.l.Warn().Msgf("%s: query exec insert image get id error > %d", op, rows)
 		return err
 	}
 

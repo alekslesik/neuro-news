@@ -16,7 +16,7 @@ type Article struct {
 	Comments    int
 	Category    string
 	Kind        string
-	VideoID     string
+	VideoID     int64
 }
 
 type ArticleModel interface {
@@ -28,7 +28,7 @@ type ArticleModel interface {
 	GetHomeSportArticles() ([]Article, error)
 	GetHomeVideoArticles() ([]Article, error)
 	GetHomeAllArticles() ([]Article, error)
-	InsertArticle(ImageModel) (*Article, error)
+	InsertArticleImage(*Image, *Article) error
 
 	GetArticleByID(id int) (*Article, error)
 }

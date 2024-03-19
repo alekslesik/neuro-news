@@ -17,7 +17,7 @@ type ArticleQueries struct {
 	selectArticleLimit      string
 	selectArticleWhereLimit string
 	selectVideoLimit        string
-	insertArticle           string
+	insertImageArticle      string
 }
 
 var articleQueries = ArticleQueries{
@@ -52,9 +52,42 @@ var articleQueries = ArticleQueries{
 	ORDER BY article_time DESC
 	LIMIT ?;`,
 
-	insertArticle: `INSERT INTO article
-	(title, preview_text, image_id, article_time, tag, detail_text, href, comments, category, kind, video_id)
-	VALUES(?, ?, ?, ?, ?, ?, ?, 0, ?, ?, ?);`,
+	insertImageArticle: `INSERT INTO article
+	(title, preview_text, image_id, article_time, tag, detail_text, href, comments, category, kind)
+	VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`,
+}
+
+// InsertArticleImage insert article to DB
+func (r *MySQLArticleRepository) InsertArticleImage(image *model.Image, article *model.Article) error {
+	const op = "repository.InsertArticleImage()"
+
+	result, err := r.db.Exec(articleQueries.insertImageArticle, article.Title, article.PreviewText, image.ImageID,
+		article.ArticleTime, article.Tag, article.DetailText, article.Href, article.Comments, article.Category, article.Kind)
+	if err != nil {
+		r.l.Warn().Msgf("%s: query exec insert article error > %s", op, err)
+		return err
+	}
+
+	rows, err := result.RowsAffected()
+	if err != nil {
+		r.l.Warn().Msgf("%s: query exec insert article row affected error > %s", op, err)
+		return err
+	}
+
+	if rows != 1 {
+		r.l.Warn().Msgf("%s: query exec insert article number affected rows is > %d", op, rows)
+		return err
+	}
+
+	id, err := result.LastInsertId()
+	if err != nil {
+		r.l.Warn().Msgf("%s: query exec insert article get id error > %d", op, rows)
+		return err
+	}
+
+	image.ImageID = id
+
+	return nil
 }
 
 func (r *MySQLArticleRepository) GetAllArticles() ([]model.Article, error) {
@@ -255,10 +288,5 @@ func (r *MySQLArticleRepository) GetHomeAllArticles() ([]model.Article, error) {
 }
 
 func (r *MySQLArticleRepository) GetArticleByID(id int) (*model.Article, error) {
-	return nil, nil
-}
-
-func (r *MySQLArticleRepository) InsertArticle(model.ImageModel) (*model.Article, error) {
-
 	return nil, nil
 }

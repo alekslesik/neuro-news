@@ -19,7 +19,7 @@ type ArticleService interface {
 	GetHomeVideoArticles() ([]model.Article, error)
 	GetHomeAllArticles() ([]model.Article, error)
 	GetArticleByID(id int) (*model.Article, error)
-	InsertArticle(model.ImageModel) error
+	InsertArticleImage(*model.Image, *model.Article) error
 
 	GetNewArticle() (*model.Article, error)
 
@@ -133,7 +133,7 @@ func (as *articleService) RenderTemplate(w http.ResponseWriter, r *http.Request,
 	return nil
 }
 
-// GetNewArticle get new article from site
+// GetNewArticle grab new article from news site
 func (as *articleService) GetNewArticle() (*model.Article, error) {
 	const op = "service.GetNewArticle()"
 
@@ -147,6 +147,14 @@ func (as *articleService) GetNewArticle() (*model.Article, error) {
 	return a, err
 }
 
-func (as *articleService) InsertArticle(model.ImageModel) error {
+// InsertArticleImage insert article to DB
+func (as *articleService) InsertArticleImage(image *model.Image, article *model.Article) error {
+	const op = "service.InsertArticleImage()"
+
+	err := as.ar.InsertArticleImage(image, article)
+	if err != nil {
+		as.l.Error().Msgf("%s: insert article error > %s", op, err)
+		return err
+	}
 	return nil
 }

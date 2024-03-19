@@ -1,7 +1,5 @@
 package model
 
-import ()
-
 type Image struct {
 	ImageID   int64
 	ImagePath string
@@ -11,5 +9,5 @@ type Image struct {
 }
 
 type ImageModel interface {
-	SaveImageToDB(*Image) error
+	InsertImage(*Image) error
 }
