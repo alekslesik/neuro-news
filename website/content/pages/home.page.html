@@ -10,14 +10,14 @@
 	ArticleID   int
 	Title       string
 	PreviewText string
-	Image       string
+	ImagePath       string
 	ArticleTime time.Time
 	Tag         string
 	DetailText  string
 	Href        string
   Comments    int
 	Category    string
-	Video				string
+	VideoPath				string
 } -->
 
 <!-- TRENDING ARTICLES -->
@@ -46,7 +46,7 @@
 								<article class="article">
 									<div class="article-img">
 										<a href="{{.Href}}">
-											<img src="{{.Image}}" alt="{{.Title}}">
+											<img src="{{.ImagePath}}" alt="{{.Title}}">
 										</a>
 										<ul class="article-info">
 											<li class="article-type"><i class="fa fa-camera"></i></li>
@@ -75,7 +75,7 @@
 								<article class="article widget-article">
 									<div class="article-img">
 										<a href="{{.Href}}">
-											<img src="{{.Image}}" alt="{{.Title}}">
+											<img src="{{.ImagePath}}" alt="{{.Title}}">
 										</a>
 									</div>
 									<div class="article-body">
@@ -98,7 +98,7 @@
 								<article class="article widget-article">
 									<div class="article-img">
 										<a href="{{.Href}}">
-											<img src="{{.Image}}" alt="{{.Title}}">
+											<img src="{{.ImagePath}}" alt="{{.Title}}">
 										</a>
 									</div>
 									<div class="article-body">
@@ -121,7 +121,7 @@
 								<article class="article widget-article">
 									<div class="article-img">
 										<a href="{{.Href}}">
-											<img src="{{.Image}}" alt="{{.Title}}">
+											<img src="{{.ImagePath}}" alt="{{.Title}}">
 										</a>
 									</div>
 									<div class="article-body">
@@ -160,7 +160,7 @@
 						<article class="article">
 							<div class="article-img">
 								<a href="{{$firstNewsArticle.Href}}">
-									<img src="{{$firstNewsArticle.Image}}" alt="{{$firstNewsArticle.Title}}">
+									<img src="{{$firstNewsArticle.ImagePath}}" alt="{{$firstNewsArticle.Title}}">
 								</a>
 								<ul class="article-info">
 									<li class="article-type"><i class="fa fa-camera"></i></li>
@@ -184,7 +184,7 @@
 						<article class="article widget-article">
 							<div class="article-img">
 								<a href="{{.Href}}">
-									<img src="{{.Image}}" alt="{{.Title}}">
+									<img src="{{.ImagePath}}" alt="{{.Title}}">
 								</a>
 							</div>
 							<div class="article-body">
@@ -213,7 +213,7 @@
 						<article class="article">
 							<div class="article-img">
 								<a href="{{$firstSportArticle.Href}}">
-									<img src="{{$firstSportArticle.Image}}" alt="{{$firstSportArticle.Title}}">
+									<img src="{{$firstSportArticle.ImagePath}}" alt="{{$firstSportArticle.Title}}">
 								</a>
 								<ul class="article-info">
 									<li class="article-type"><i class="fa fa-camera"></i></li>
@@ -237,7 +237,7 @@
 						<article class="article widget-article">
 							<div class="article-img">
 								<a href="{{.Href}}">
-									<img src="{{.Image}}" alt="{{.Title}}">
+									<img src="{{.ImagePath}}" alt="{{.Title}}">
 								</a>
 							</div>
 							<div class="article-body">
@@ -304,7 +304,7 @@
 	<img class="center-block" src="/static/img/ad-3.jpg" alt="">
 </div>
 <!-- /AD ARTICLES -->
- 
+
 <!-- VIDEO ARTICLES -->
 <div class="section">
 	<div class="container">
@@ -323,7 +323,7 @@
 					<article class="article thumb-article">
 						<div class="article-img">
 							<video width="370" height="370" autoplay muted loop>
-								<source src="{{.Video}}" type="video/mp4">
+								<source src="{{.VideoPath}}" type="video/mp4">
 								Ваш браузер не поддерживает видео тег.
 						</video>
 						</div>
@@ -362,7 +362,7 @@
 				<article class="article row-article">
 					<div class="article-img">
 						<a href="{{.Href}}">
-							<img src="{{.Image}}" alt="">
+							<img src="{{.ImagePath}}" alt="">
 						</a>
 					</div>
 					<div class="article-body">

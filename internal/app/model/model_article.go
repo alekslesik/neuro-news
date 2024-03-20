@@ -9,6 +9,7 @@ type Article struct {
 	Title       string
 	PreviewText string
 	ImageID     int64
+	ImagePath   string
 	ArticleTime time.Time
 	Tag         string
 	DetailText  string
@@ -17,6 +18,7 @@ type Article struct {
 	Category    string
 	Kind        string
 	VideoID     int64
+	VideoPath   string
 }
 
 type ArticleModel interface {
