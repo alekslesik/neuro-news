@@ -3,10 +3,13 @@ package grabber
 import (
 	"io"
 	"net/http"
+	"os"
 	"strings"
 	"time"
 
+	"github.com/alekslesik/kandinsky"
 	"github.com/alekslesik/neuro-news/internal/app/model"
+	"github.com/alekslesik/neuro-news/pkg/config"
 	"github.com/alekslesik/neuro-news/pkg/logger"
 
 	"golang.org/x/net/html"
@@ -15,18 +18,73 @@ import (
 // Grabber struct
 type Grabber struct {
 	log  *logger.Logger
+	cfg  *config.Config
 	home string
 }
 
-// New return new instance of Grabber struct
-func New(log *logger.Logger, home string) *Grabber {
-	return &Grabber{log: log, home: home}
-}
-
+// Tag struct
 type Tag struct {
 	Name string
 	Key  string
 	Val  string
+}
+
+// New return new instance of Grabber struct
+func New(log *logger.Logger, cfg *config.Config, home string) *Grabber {
+	return &Grabber{log: log, cfg: cfg, home: home}
+}
+
+// GetGeneratedImage generate, save and return image model
+func (g *Grabber) GetGeneratedImage(a *model.Article) (*model.Image, error) {
+	const op = "grabber.GetGeneratedImage()"
+	var imagePath = "website/static/upload/"
+
+	title := a.Title
+
+	params := kandinsky.Params{
+		Width:  1024,
+		Height: 680,
+		Style:  "UHD",
+		GenerateParams: struct {
+			Query string "json:\"query\""
+		}{title},
+	}
+
+	image, err := kandinsky.GetImage(g.cfg.Kand.Key, g.cfg.Kand.Secret, params)
+	if err != nil {
+		g.log.Error().Msgf("%s: get image from Kandinsky API error > %s", op, err)
+		return nil, err
+	}
+
+	fImage, err := image.ToFile()
+	if err != nil {
+		g.log.Error().Msgf("%s: convert image generated from Kandinsky to os.File error > %s", op, err)
+		return nil, err
+	}
+
+	size, err := getFileSize(*fImage)
+	if err != nil {
+		g.log.Error().Msgf("%s: get Kandinsky image size error > %s", op, err)
+		return nil, err
+	}
+
+	imageName := translit(title)
+	err = image.SavePNGTo(imageName, imagePath)
+	if err != nil {
+		g.log.Error().Msgf("%s: save image generated from Kandinsky error > %s", op, err)
+		return nil, err
+	}
+
+	preparedPath := prepareImagePath(imagePath, imageName)
+
+	model := &model.Image{
+		ImagePath: preparedPath,
+		Size:      size,
+		Name:      imageName,
+		Alt:       title,
+	}
+
+	return model, nil
 }
 
 // GrabArticle grab article from
@@ -93,6 +151,9 @@ func (g *Grabber) GrabArticle() (*model.Article, error) {
 	// Get article href (translit from title)
 	href := translit(title)
 
+	// Get article kind (article)
+	kind := "article"
+
 	// TODO Извлечь Comments
 	// Get category (translit from tag)
 	category := translit(tag)
@@ -106,6 +167,8 @@ func (g *Grabber) GrabArticle() (*model.Article, error) {
 		DetailText:  detailText,
 		Href:        href,
 		Category:    category,
+		Kind:        kind,
+		VideoID:     0,
 	}
 
 	return article, nil
@@ -255,7 +318,7 @@ func getNodePage(url string) (*html.Node, error) {
 }
 
 // getTagHref return tag href with attr from url
-func getTagHref(url, tag, atr, atrVal string) (string, error) {
+func getTagHref(url string) (string, error) {
 	// get node from url
 	node, err := getNodePage(url)
 	if err != nil {
@@ -288,19 +351,6 @@ func getTagHref(url, tag, atr, atrVal string) (string, error) {
 	f(node)
 
 	return href, nil
-}
-
-// GetGeneratedImage generate, save image and return image model
-func (g *Grabber) GetGeneratedImage(title string) (model.Image, error) {
-	// send news title to API and take generated image link
-
-	// download image to website/static/img
-
-	// create and fill image model
-	imgModel := model.Image{}
-
-	// return file
-	return imgModel, nil
 }
 
 // translit
@@ -356,4 +406,21 @@ func translit(src string) string {
 	result = strings.Join(resArr, "")
 
 	return result
+}
+
+func getFileSize(f os.File) (int64, error) {
+	fInfo, err := f.Stat()
+	if err != nil {
+		return 0, err
+	}
+
+	return fInfo.Size(), nil
+}
+
+func prepareImagePath(path, name string) string {
+	name = name + ".png"
+
+	path = strings.Replace(path, "website", "", 1)
+
+	return path + name
 }

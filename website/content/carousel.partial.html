@@ -4,7 +4,7 @@
 	ArticleID   int
 	Title       string
 	PreviewText string
-	Image       string
+	ImagePath       string
 	ArticleTime time.Time
 	Tag         string
 	DetailText  string
@@ -20,7 +20,7 @@
   {{range .TemplateDataArticle.CarouselArticles}}
   <article class="article thumb-article">
     <div class="article-img">
-      <img src="{{.Image}}" alt="{{.Title}}">
+      <img src="{{.ImagePath}}" alt="{{.Title}}">
     </div>
     <div class="article-body">
       <ul class="article-info">

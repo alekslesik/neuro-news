@@ -19,8 +19,9 @@ type ArticleService interface {
 	GetHomeVideoArticles() ([]model.Article, error)
 	GetHomeAllArticles() ([]model.Article, error)
 	GetArticleByID(id int) (*model.Article, error)
+	InsertArticleImage(*model.Image, *model.Article) error
 
-	GetNewArticle() error
+	GetNewArticle() (*model.Article, error)
 
 	GetHomeTemplateData() (*template.TemplateData, error)
 	RenderTemplate(w http.ResponseWriter, r *http.Request, name string, td *template.TemplateData) error
@@ -28,7 +29,6 @@ type ArticleService interface {
 
 type articleService struct {
 	ar model.ArticleModel
-	ir model.ImageModel
 	t  *template.Template
 	l  *logger.Logger
 	g  *grabber.Grabber
@@ -133,29 +133,28 @@ func (as *articleService) RenderTemplate(w http.ResponseWriter, r *http.Request,
 	return nil
 }
 
-// GetNewArticle get new article from site
-func (as *articleService) GetNewArticle() error {
+// GetNewArticle grab new article from news site
+func (as *articleService) GetNewArticle() (*model.Article, error) {
 	const op = "service.GetNewArticle()"
 
-	// get article without image
-	_, err := as.g.GrabArticle()
+	// get article model without image
+	a, err := as.g.GrabArticle()
 	if err != nil {
 		as.l.Error().Msgf("%s: grab article error > %s", op, err)
-		return err
+		return nil, err
 	}
 
-	// // get image model
-	// image, err := as.g.GetGeneratedImage(article.Title)
-	// if err != nil {
-	// 	as.l.Error().Msgf("%s: get generated image error > %s", op, err)
-	// 	return err
-	// }
-	// // записать изображение в базу данных
-	// err = as.ir.SaveImageToDB(image)
-	// if err != nil {
-	// 	as.l.Error().Msgf("%s: save generated image to db error > %s", op, err)
-	// 	return err
-	// }
+	return a, err
+}
 
-	return err
+// InsertArticleImage insert article to DB
+func (as *articleService) InsertArticleImage(image *model.Image, article *model.Article) error {
+	const op = "service.InsertArticleImage()"
+
+	err := as.ar.InsertArticleImage(image, article)
+	if err != nil {
+		as.l.Error().Msgf("%s: insert article error > %s", op, err)
+		return err
+	}
+	return nil
 }

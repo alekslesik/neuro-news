@@ -12,6 +12,9 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
+	"time"
+
+	// "time"
 
 	// "time"
 
@@ -65,7 +68,7 @@ func New(context context.Context, cancel context.CancelFunc) (*Application, erro
 	repositories := repository.New(db, logger)
 
 	// grabber init
-	grabber := grabberInit(logger)
+	grabber := grabberInit(logger, config)
 
 	// services init
 	services := service.New(repositories, logger, templates, grabber)
@@ -113,19 +116,38 @@ func (a *Application) Run() error {
 	const op = "app.Run()"
 
 	var err error
+	errChan := make(chan error)
 
-	err = a.svs.GetArticleService().GetNewArticle()
-	if err != nil {
-		a.log.Error().Msgf("%s: get new article error  > %s", op, err)
-		return err
-	}
+	go func() {
+		for {
+			article, err := a.svs.GetArticleService().GetNewArticle()
+			if err != nil {
+				a.log.Error().Msgf("%s: get new article error > %s", op, err)
+			}
+
+			image, err := a.svs.GetImageService().GenerateImage(article)
+			if err != nil {
+				a.log.Error().Msgf("%s: generate new image error > %s", op, err)
+			}
+
+			err = a.svs.GetImageService().InsertImage(image)
+			if err != nil {
+				a.log.Error().Msgf("%s: insert generated image to DB error > %s", op, err)
+			}
+
+			err = a.svs.GetArticleService().InsertArticleImage(image, article)
+			if err != nil {
+				a.log.Error().Msgf("%s: insert article to DB error > %s", op, err)
+			}
+
+			time.Sleep(time.Minute * 10)
+		}
+	}()
 
 	// db close
 	defer a.closeDB()
 	// logfile close
 	defer a.log.LogFile.Close()
-
-	errChan := make(chan error)
 
 	// Set signals handler
 	signals := make(chan os.Signal, 1)
@@ -142,7 +164,7 @@ func (a *Application) Run() error {
 		go func() {
 			err = a.srv.ListenAndServeTLS(a.cfg.TLS.CertPath, a.cfg.TLS.KeyPath)
 		}()
-		a.log.Info().Msgf("Server started on %s/", a.srv.Addr)
+		a.log.Info().Msgf("Server started on https://localhost:%s/", a.srv.Addr)
 
 	default:
 		a.log.Error().Msgf("%s: address or port are not exists > %s", op, a.srv.Addr)

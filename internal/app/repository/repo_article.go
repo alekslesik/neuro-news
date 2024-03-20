@@ -13,11 +13,11 @@ type MySQLArticleRepository struct {
 }
 
 type ArticleQueries struct {
-	selectAllArticle   string
-	selectArticleLimit string
-	// WHERE category  = ?
+	selectAllArticle        string
+	selectArticleLimit      string
 	selectArticleWhereLimit string
 	selectVideoLimit        string
+	insertImageArticle      string
 }
 
 var articleQueries = ArticleQueries{
@@ -51,6 +51,43 @@ var articleQueries = ArticleQueries{
 	WHERE kind = 'video'
 	ORDER BY article_time DESC
 	LIMIT ?;`,
+
+	insertImageArticle: `INSERT INTO article
+	(title, preview_text, image_id, article_time, tag, detail_text, href, comments, category, kind)
+	VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`,
+}
+
+// InsertArticleImage insert article to DB
+func (r *MySQLArticleRepository) InsertArticleImage(image *model.Image, article *model.Article) error {
+	const op = "repository.InsertArticleImage()"
+
+	result, err := r.db.Exec(articleQueries.insertImageArticle, article.Title, article.PreviewText, image.ImageID,
+		article.ArticleTime, article.Tag, article.DetailText, article.Href, article.Comments, article.Category, article.Kind)
+	if err != nil {
+		r.l.Warn().Msgf("%s: query exec insert article error > %s", op, err)
+		return err
+	}
+
+	rows, err := result.RowsAffected()
+	if err != nil {
+		r.l.Warn().Msgf("%s: query exec insert article row affected error > %s", op, err)
+		return err
+	}
+
+	if rows != 1 {
+		r.l.Warn().Msgf("%s: query exec insert article number affected rows is > %d", op, rows)
+		return err
+	}
+
+	id, err := result.LastInsertId()
+	if err != nil {
+		r.l.Warn().Msgf("%s: query exec insert article get id error > %d", op, rows)
+		return err
+	}
+
+	image.ImageID = id
+
+	return nil
 }
 
 func (r *MySQLArticleRepository) GetAllArticles() ([]model.Article, error) {
@@ -73,7 +110,7 @@ func (r *MySQLArticleRepository) GetHomeCarouselArticles() ([]model.Article, err
 	for rows.Next() {
 		var a model.Article
 		err = rows.Scan(&a.ArticleID, &a.Title, &a.PreviewText,
-			&a.ArticleTime, &a.Tag, &a.DetailText, &a.Href, &a.Comments, &a.Category, &a.Image)
+			&a.ArticleTime, &a.Tag, &a.DetailText, &a.Href, &a.Comments, &a.Category, &a.ImagePath)
 		if err != nil {
 			r.l.Error().Msgf("%s: query scan articles for carousel > %s", op, err)
 			return nil, err
@@ -100,7 +137,7 @@ func (r *MySQLArticleRepository) GetHomeTrendingArticlesTop() ([]model.Article, 
 	for rows.Next() {
 		var a model.Article
 		err = rows.Scan(&a.ArticleID, &a.Title, &a.PreviewText,
-			&a.ArticleTime, &a.Tag, &a.DetailText, &a.Href, &a.Comments, &a.Category, &a.Image)
+			&a.ArticleTime, &a.Tag, &a.DetailText, &a.Href, &a.Comments, &a.Category, &a.ImagePath)
 		if err != nil {
 			r.l.Error().Msgf("%s: query scan trending articles top > %s", op, err)
 			return nil, err
@@ -127,7 +164,7 @@ func (r *MySQLArticleRepository) GetHomeTrendingArticlesBottom() ([]model.Articl
 	for rows.Next() {
 		var a model.Article
 		err = rows.Scan(&a.ArticleID, &a.Title, &a.PreviewText,
-			&a.ArticleTime, &a.Tag, &a.DetailText, &a.Href, &a.Comments, &a.Category, &a.Image)
+			&a.ArticleTime, &a.Tag, &a.DetailText, &a.Href, &a.Comments, &a.Category, &a.ImagePath)
 		if err != nil {
 			r.l.Error().Msgf("%s: query scan trending articles bottom > %s", op, err)
 			return nil, err
@@ -156,7 +193,7 @@ func (r *MySQLArticleRepository) GetHomeNewsArticles() ([]model.Article, error) 
 	for rows.Next() {
 		var a model.Article
 		err = rows.Scan(&a.ArticleID, &a.Title, &a.PreviewText,
-			&a.ArticleTime, &a.Tag, &a.DetailText, &a.Href, &a.Comments, &a.Category, &a.Image)
+			&a.ArticleTime, &a.Tag, &a.DetailText, &a.Href, &a.Comments, &a.Category, &a.ImagePath)
 		if err != nil {
 			r.l.Error().Msgf("%s: query scan home news articles > %s", op, err)
 			return nil, err
@@ -183,7 +220,7 @@ func (r *MySQLArticleRepository) GetHomeSportArticles() ([]model.Article, error)
 	for rows.Next() {
 		var a model.Article
 		err = rows.Scan(&a.ArticleID, &a.Title, &a.PreviewText,
-			&a.ArticleTime, &a.Tag, &a.DetailText, &a.Href, &a.Comments, &a.Category, &a.Image)
+			&a.ArticleTime, &a.Tag, &a.DetailText, &a.Href, &a.Comments, &a.Category, &a.ImagePath)
 		if err != nil {
 			r.l.Error().Msgf("%s: query scan home sport articles > %s", op, err)
 			return nil, err
@@ -211,7 +248,7 @@ func (r *MySQLArticleRepository) GetHomeVideoArticles() ([]model.Article, error)
 	for rows.Next() {
 		var a model.Article
 		err = rows.Scan(&a.ArticleID, &a.Title, &a.PreviewText,
-			&a.ArticleTime, &a.Tag, &a.DetailText, &a.Href, &a.Comments, &a.Category, &a.Video)
+			&a.ArticleTime, &a.Tag, &a.DetailText, &a.Href, &a.Comments, &a.Category, &a.VideoPath)
 		if err != nil {
 			r.l.Error().Msgf("%s: query scan videos for video block > %s", op, err)
 			return nil, err
@@ -238,7 +275,7 @@ func (r *MySQLArticleRepository) GetHomeAllArticles() ([]model.Article, error) {
 	for rows.Next() {
 		var a model.Article
 		err = rows.Scan(&a.ArticleID, &a.Title, &a.PreviewText,
-			&a.ArticleTime, &a.Tag, &a.DetailText, &a.Href, &a.Comments, &a.Category, &a.Image)
+			&a.ArticleTime, &a.Tag, &a.DetailText, &a.Href, &a.Comments, &a.Category, &a.ImagePath)
 		if err != nil {
 			r.l.Error().Msgf("%s: query scan all articles > %s", op, err)
 			return nil, err

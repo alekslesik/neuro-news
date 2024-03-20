@@ -8,14 +8,17 @@ type Article struct {
 	ArticleID   int
 	Title       string
 	PreviewText string
-	Image       string
+	ImageID     int64
+	ImagePath   string
 	ArticleTime time.Time
 	Tag         string
 	DetailText  string
 	Href        string
 	Comments    int
 	Category    string
-	Video       string
+	Kind        string
+	VideoID     int64
+	VideoPath   string
 }
 
 type ArticleModel interface {
@@ -27,6 +30,7 @@ type ArticleModel interface {
 	GetHomeSportArticles() ([]Article, error)
 	GetHomeVideoArticles() ([]Article, error)
 	GetHomeAllArticles() ([]Article, error)
+	InsertArticleImage(*Image, *Article) error
 
 	GetArticleByID(id int) (*Article, error)
 }

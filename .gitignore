@@ -29,3 +29,4 @@ tests/coverage.html
 tls/
 tls/cert.pem
 tls/key.pem
+.temp.png
