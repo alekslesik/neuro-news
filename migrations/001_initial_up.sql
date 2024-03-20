@@ -1,3 +1,5 @@
+CREATE DATABASE `neuronews` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci */ /*!80016 DEFAULT ENCRYPTION='N' */
+
 CREATE USER 'neuronews'@'localhost' IDENTIFIED BY '486464';
 
 GRANT Alter ON neuronews.* TO 'neuronews'@'localhost';
@@ -45,44 +47,42 @@ GRANT Lock tables ON neuronews.* TO 'neuronews'@'localhost';
 
 GRANT Grant option ON neuronews.* TO 'neuronews'@'localhost';
 
-CREATE TABLE
-  IF NOT EXISTS article (
-    article_id INT PRIMARY KEY AUTO_INCREMENT,
-    title VARCHAR(200),
-    preview_text TEXT,
-    image_id INT,
-    article_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    tag VARCHAR(20),
-    detail_text TEXT,
-    href VARCHAR(200),
-    comments INT,
-    category VARCHAR(100),
-    kind VARCHAR(10),
-    video_id INT
-  );
 
-CREATE TABLE
-  IF NOT EXISTS image (
-    image_id INT PRIMARY KEY AUTO_INCREMENT,
-    image_path VARCHAR(100),
-    image_size INT,
-    image_name VARCHAR(100),
-    image_alt VARCHAR(200)
-  );
 
-ALTER TABLE article
-MODIFY COLUMN image_id INT,
-ADD FOREIGN KEY (image_id) REFERENCES image (image_id);
+CREATE TABLE `image` (
+  `image_id` int NOT NULL AUTO_INCREMENT,
+  `image_path` varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `image_size` int DEFAULT NULL,
+  `image_name` varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `image_alt` varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  PRIMARY KEY (`image_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-CREATE TABLE video (
-	video_id int auto_increment NOT NULL,
-	video_path VARCHAR(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-	`size` int NOT NULL,
-	name VARCHAR(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-	alt VARCHAR(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-	CONSTRAINT `PRIMARY` PRIMARY KEY (video_id)
-);
+CREATE TABLE `video` (
+  `video_id` int NOT NULL AUTO_INCREMENT,
+  `video_path` varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `video_size` int NOT NULL,
+  `video_name` varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `video_alt` varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  PRIMARY KEY (`video_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-ALTER TABLE article
-MODIFY COLUMN video_id INT,
-ADD FOREIGN KEY (video_id) REFERENCES video (video_id);
+CREATE TABLE `article` (
+  `article_id` int NOT NULL AUTO_INCREMENT,
+  `title` varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `preview_text` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `image_id` int DEFAULT NULL,
+  `article_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `tag` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `detail_text` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `href` varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `comments` int NOT NULL,
+  `category` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `kind` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `video_id` int DEFAULT NULL,
+  PRIMARY KEY (`article_id`),
+  KEY `image_id` (`image_id`),
+  KEY `video_id` (`video_id`),
+  CONSTRAINT `article_ibfk_1` FOREIGN KEY (`image_id`) REFERENCES `image` (`image_id`),
+  CONSTRAINT `article_ibfk_2` FOREIGN KEY (`video_id`) REFERENCES `video` (`video_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
