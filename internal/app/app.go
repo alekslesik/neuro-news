@@ -122,28 +122,28 @@ func (a *Application) Run() error {
 		for {
 			article, err := a.svs.GetArticleService().GetNewArticle()
 			if err != nil {
-				a.log.Error().Msgf("%s: get new article error > %s", op, err)
+				a.log.Warn().Msgf("%s: get new article error > %s", op, err)
 				time.Sleep(time.Minute * 10)
 				continue
 			}
 
 			image, err := a.svs.GetImageService().GenerateImage(article)
 			if err != nil {
-				a.log.Error().Msgf("%s: generate new image error > %s", op, err)
+				a.log.Warn().Msgf("%s: generate new image error > %s", op, err)
 				time.Sleep(time.Minute * 10)
 				continue
 			}
 
 			err = a.svs.GetImageService().InsertImage(image)
 			if err != nil {
-				a.log.Error().Msgf("%s: insert generated image to DB error > %s", op, err)
+				a.log.Warn().Msgf("%s: insert generated image to DB error > %s", op, err)
 				time.Sleep(time.Minute * 10)
 				continue
 			}
 
 			err = a.svs.GetArticleService().InsertArticleImage(image, article)
 			if err != nil {
-				a.log.Error().Msgf("%s: insert article to DB error > %s", op, err)
+				a.log.Warn().Msgf("%s: insert article to DB error > %s", op, err)
 				time.Sleep(time.Minute * 10)
 				continue
 			}

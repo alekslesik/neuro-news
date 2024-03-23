@@ -18,6 +18,7 @@ type ArticleQueries struct {
 	selectArticleWhereLimit string
 	selectVideoLimit        string
 	insertImageArticle      string
+	selectArticleByHref     string
 }
 
 var articleQueries = ArticleQueries{
@@ -55,6 +56,12 @@ var articleQueries = ArticleQueries{
 	insertImageArticle: `INSERT INTO article
 	(title, preview_text, image_id, article_time, tag, detail_text, href, comments, category, kind)
 	VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`,
+
+	selectArticleByHref: `SELECT article_id, title, preview_text, article_time, tag, detail_text, comments, category, image_path
+	FROM
+	article INNER JOIN image
+	ON article.image_id = image.image_id
+	WHERE kind = 'article' AND href = ?;`,
 }
 
 // InsertArticleImage insert article to DB
@@ -287,6 +294,26 @@ func (r *MySQLArticleRepository) GetHomeAllArticles() ([]model.Article, error) {
 	return as, nil
 }
 
-func (r *MySQLArticleRepository) GetArticleByID(id int) (*model.Article, error) {
-	return nil, nil
+// GetArticleByURL return article by URL
+func (r *MySQLArticleRepository) GetArticleByURL(url string) (model.Article, error) {
+	const op = "repository.GetArticleByURL()"
+
+	var a model.Article
+
+	rows, err := r.db.Query(articleQueries.selectArticleByHref, url)
+	if err != nil {
+		r.l.Warn().Msgf("%s: query select article by href > %s", op, err)
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		err = rows.Scan(&a.ArticleID, &a.Title, &a.PreviewText,
+			&a.ArticleTime, &a.Tag, &a.DetailText, &a.Comments, &a.Category, &a.ImagePath)
+		if err != nil {
+			r.l.Error().Msgf("%s: query select article by href > %s", op, err)
+			return a, err
+		}
+	}
+
+	return a, nil
 }

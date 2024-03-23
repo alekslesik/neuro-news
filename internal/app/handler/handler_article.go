@@ -2,6 +2,7 @@ package handler
 
 import (
 	"net/http"
+	"strings"
 
 	"github.com/alekslesik/neuro-news/pkg/logger"
 )
@@ -43,7 +44,16 @@ func (a *ArticleHandler) GetArticle(w http.ResponseWriter, r *http.Request) {
 		page = "article.page.html"
 	)
 
-	td, err := a.AppHandler.articleService.GetHomeTemplateData()
+	// get article URL
+	urlParts := strings.Split(r.URL.Path, "/")
+	if len(urlParts) < 2 {
+		http.NotFound(w, r)
+		return
+	}
+
+	url := urlParts[len(urlParts)-1]
+
+	td, err := a.AppHandler.articleService.GetArticleTemplateData(url)
 	if err != nil {
 		a.l.Error().Msgf("%s: GetArticle error > %s", op, err)
 	}

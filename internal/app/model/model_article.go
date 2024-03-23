@@ -32,5 +32,5 @@ type ArticleModel interface {
 	GetHomeAllArticles() ([]Article, error)
 	InsertArticleImage(*Image, *Article) error
 
-	GetArticleByID(id int) (*Article, error)
+	GetArticleByURL(string) (Article, error)
 }
