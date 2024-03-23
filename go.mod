@@ -3,7 +3,6 @@ module github.com/alekslesik/neuro-news
 go 1.21.6
 
 require (
-	github.com/alekslesik/kandinsky v0.1.2
 	github.com/go-mail/mail/v2 v2.3.0
 	github.com/go-sql-driver/mysql v1.7.1
 	github.com/golangcollege/sessions v1.2.0
@@ -21,6 +20,7 @@ require (
 
 require (
 	github.com/BurntSushi/toml v1.3.2 // indirect
+	github.com/alekslesik/kandinsky v0.1.3
 	github.com/ilyakaznacheev/cleanenv v1.5.0
 	github.com/joho/godotenv v1.5.1
 	github.com/justinas/nosurf v1.1.1
