@@ -36,3 +36,20 @@ func (a *ArticleHandler) GetHomeArticles(w http.ResponseWriter, r *http.Request)
 		a.l.Error().Msgf("%s: RenderTemplate error > %s", op, err)
 	}
 }
+
+func (a *ArticleHandler) GetArticle(w http.ResponseWriter, r *http.Request) {
+	const (
+		op   = "GetArticle()"
+		page = "article.page.html"
+	)
+
+	td, err := a.AppHandler.articleService.GetHomeTemplateData()
+	if err != nil {
+		a.l.Error().Msgf("%s: GetArticle error > %s", op, err)
+	}
+
+	err = a.AppHandler.articleService.RenderTemplate(w, r, page, td)
+	if err != nil {
+		a.l.Error().Msgf("%s: RenderTemplate error > %s", op, err)
+	}
+}

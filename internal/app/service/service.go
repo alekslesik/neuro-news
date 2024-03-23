@@ -42,6 +42,7 @@ func (s *Services) GetUserService() UserService {
 func (s *Services) GetImageService() ImageService {
 	return &imageService{
 		ir: s.r.GetImageRepository(),
+		l: s.l,
 		g:  s.g,
 	}
 }
