@@ -18,12 +18,13 @@ type ArticleService interface {
 	GetHomeSportArticles() ([]model.Article, error)
 	GetHomeVideoArticles() ([]model.Article, error)
 	GetHomeAllArticles() ([]model.Article, error)
-	GetArticleByID(id int) (*model.Article, error)
+	GetArticleByURL(string) (model.Article, error)
 	InsertArticleImage(*model.Image, *model.Article) error
 
 	GetNewArticle() (*model.Article, error)
 
 	GetHomeTemplateData() (*template.TemplateData, error)
+	GetArticleTemplateData(string) (*template.TemplateData, error)
 	RenderTemplate(w http.ResponseWriter, r *http.Request, name string, td *template.TemplateData) error
 }
 
@@ -66,8 +67,8 @@ func (as *articleService) GetHomeAllArticles() ([]model.Article, error) {
 	return as.ar.GetHomeAllArticles()
 }
 
-func (as *articleService) GetArticleByID(id int) (*model.Article, error) {
-	return as.ar.GetArticleByID(id)
+func (as *articleService) GetArticleByURL(url string) (model.Article, error) {
+	return as.ar.GetArticleByURL(url)
 }
 
 // GetHomeTemplateData return template data for home page
@@ -114,6 +115,20 @@ func (as *articleService) GetHomeTemplateData() (*template.TemplateData, error) 
 	as.t.TemplateData.TemplateDataArticle.AllArticles, err = as.GetHomeAllArticles()
 	if err != nil {
 		as.l.Error().Msgf("%s: get all home articles error > %s", op, err)
+		return nil, err
+	}
+
+	return &as.t.TemplateData, nil
+}
+
+// GetHomeTemplateData return template data for article page by article URL
+func (as *articleService) GetArticleTemplateData(url string) (*template.TemplateData, error) {
+	const op = "service.GetArticleByURL()"
+	var err error
+
+	as.t.TemplateData.TemplateDataArticle.Article, err = as.GetArticleByURL(url)
+	if err != nil {
+		as.l.Error().Msgf("%s: get article template data error > %s", op, err)
 		return nil, err
 	}
 
