@@ -83,6 +83,6 @@ CREATE TABLE `article` (
   PRIMARY KEY (`article_id`),
   KEY `image_id` (`image_id`),
   KEY `video_id` (`video_id`),
-  CONSTRAINT `article_ibfk_1` FOREIGN KEY (`image_id`) REFERENCES `image` (`image_id`),
-  CONSTRAINT `article_ibfk_2` FOREIGN KEY (`video_id`) REFERENCES `video` (`video_id`)
+  CONSTRAINT `article_ibfk_1` FOREIGN KEY (`image_id`) REFERENCES `image` (`image_id`) ON DELETE CASCADE,
+  CONSTRAINT `article_ibfk_2` FOREIGN KEY (`video_id`) REFERENCES `video` (`video_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;

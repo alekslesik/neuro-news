@@ -8,7 +8,8 @@ import (
 
 type ImageService interface {
 	InsertImage(*model.Image) error
-	GenerateImage(*model.Article) (*model.Image, error)
+	GenerateImageKand(*model.Article) (*model.Image, error)
+	GenerateImageFruity(*model.Article) (*model.Image, error)
 }
 
 type imageService struct {
@@ -29,13 +30,25 @@ func (is *imageService) InsertImage(i *model.Image) error {
 	return nil
 }
 
-// GenerateImage generate image through Kandinsky API
-func (is *imageService) GenerateImage(a *model.Article) (*model.Image, error) {
+// GenerateImageKand generate image through Kandinsky API
+func (is *imageService) GenerateImageKand(a *model.Article) (*model.Image, error) {
 	const op = "service.GenerateImage()"
 	// get image model
 	image, err := is.g.GetGeneratedImage(a)
 	if err != nil {
-		is.l.Error().Msgf("%s: get generated image error > %s", op, err)
+		is.l.Error().Msgf("%s: get generated image through Kandinsky error > %s", op, err)
+		return nil, err
+	}
+	return image, nil
+}
+
+// GenerateImageFruity generate image through FruityBang/neuro-gen
+func (is *imageService) GenerateImageFruity(a *model.Article) (*model.Image, error) {
+	const op = "service.GenerateImageFruity()"
+	// get image model
+	image, err := is.g.GenerateImageFruity(a)
+	if err != nil {
+		is.l.Error().Msgf("%s: get generated image through FruityBang error > %s", op, err)
 		return nil, err
 	}
 	return image, nil

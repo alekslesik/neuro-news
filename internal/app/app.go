@@ -14,10 +14,6 @@ import (
 	"syscall"
 	"time"
 
-	// "time"
-
-	// "time"
-
 	"github.com/alekslesik/neuro-news/internal/app/handler"
 	"github.com/alekslesik/neuro-news/internal/app/repository"
 	"github.com/alekslesik/neuro-news/internal/app/service"
@@ -118,6 +114,40 @@ func (a *Application) Run() error {
 	var err error
 	errChan := make(chan error)
 
+	// go func() {
+	// 	for {
+	// 		article, err := a.svs.GetArticleService().GetNewArticle()
+	// 		if err != nil {
+	// 			a.log.Warn().Msgf("%s: get new article error > %s", op, err)
+	// 			time.Sleep(time.Minute * 10)
+	// 			continue
+	// 		}
+
+	// 		image, err := a.svs.GetImageService().GenerateImageKand(article)
+	// 		if err != nil {
+	// 			a.log.Warn().Msgf("%s: generate new image error > %s", op, err)
+	// 			time.Sleep(time.Minute * 10)
+	// 			continue
+	// 		}
+
+	// 		err = a.svs.GetImageService().InsertImage(image)
+	// 		if err != nil {
+	// 			a.log.Warn().Msgf("%s: insert generated image to DB error > %s", op, err)
+	// 			time.Sleep(time.Minute * 10)
+	// 			continue
+	// 		}
+
+	// 		err = a.svs.GetArticleService().InsertArticleImage(image, article)
+	// 		if err != nil {
+	// 			a.log.Warn().Msgf("%s: insert article to DB error > %s", op, err)
+	// 			time.Sleep(time.Minute * 10)
+	// 			continue
+	// 		}
+
+	// 		time.Sleep(time.Minute * 10)
+	// 	}
+	// }()
+
 	go func() {
 		for {
 			article, err := a.svs.GetArticleService().GetNewArticle()
@@ -127,7 +157,7 @@ func (a *Application) Run() error {
 				continue
 			}
 
-			image, err := a.svs.GetImageService().GenerateImage(article)
+			image, err := a.svs.GetImageService().GenerateImageFruity(article)
 			if err != nil {
 				a.log.Warn().Msgf("%s: generate new image error > %s", op, err)
 				time.Sleep(time.Minute * 10)

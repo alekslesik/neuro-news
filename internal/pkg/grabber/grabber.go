@@ -1,6 +1,9 @@
 package grabber
 
 import (
+	"bytes"
+	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
 	"os"
@@ -85,6 +88,101 @@ func (g *Grabber) GetGeneratedImage(a *model.Article) (*model.Image, error) {
 	}
 
 	return model, nil
+}
+
+// GetGeneratedImage generate, save and return image model
+func (g *Grabber) GenerateImageFruity(a *model.Article) (*model.Image, error) {
+	const op = "grabber.GenerateImageFruity()"
+	var imagePath = "website/static/upload/"
+
+	title := a.Title
+
+
+	image, err := getFruityImage(title)
+	if err != nil {
+		g.log.Error().Msgf("%s: get image through FruityBang error > %s", op, err)
+		return nil, err
+	}
+
+	fImage, err := image.ToFile()
+	if err != nil {
+		g.log.Error().Msgf("%s: convert image generated from Kandinsky to os.File error > %s", op, err)
+		return nil, err
+	}
+
+	size, err := getFileSize(*fImage)
+	if err != nil {
+		g.log.Error().Msgf("%s: get Kandinsky image size error > %s", op, err)
+		return nil, err
+	}
+
+	imageName := translit(title)
+	err = image.SavePNGTo(imageName, imagePath)
+	if err != nil {
+		g.log.Error().Msgf("%s: save image generated from Kandinsky error > %s", op, err)
+		return nil, err
+	}
+
+	preparedPath := prepareImagePath(imagePath, imageName)
+
+	model := &model.Image{
+		ImagePath: preparedPath,
+		Size:      size,
+		Name:      imageName,
+		Alt:       title,
+	}
+
+	return model, nil
+}
+
+
+func getFruityImage(title string) (*kandinsky.Image, error) {
+	url := "http://alekslesik1.fvds.ru:8008/v1/image"
+
+	image := &kandinsky.Image{}
+
+	imageName := translit(title)
+
+	type params struct{
+		Title string `json:"title"`
+		Name string `json:"name"`
+	}
+
+	p := params{
+		Title: title,
+		Name: imageName,
+	}
+
+	b, err := json.Marshal(&p)
+	if err != nil {
+		return nil, err
+	}
+
+	body := bytes.NewBuffer(b)
+
+	req, err := http.NewRequest(http.MethodPost, url, body)
+	if err != nil {
+		return nil, err
+	}
+	req.Header.Add("Content-Type", "application/json")
+
+	client := http.Client{}
+
+	res, err := client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+
+	defer res.Body.Close()
+
+	result, err := io.ReadAll(res.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	fmt.Println(string(result))
+
+	return image, nil
 }
 
 // GrabArticle grab article from
