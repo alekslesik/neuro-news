@@ -60,7 +60,6 @@ func New(log *logger.Logger) *Template {
 	}
 }
 
-
 // AddCache add new cache of files in dir to template cache
 func (t *Template) AddCache(dir string) (*Template, error) {
 	const op = "template.AddCache()"
