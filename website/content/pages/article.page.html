@@ -1,6 +1,6 @@
 {{template "base" .}}
 
-{{define "title"}}NeuroNews - About{{end}}
+{{define "title"}}NeuroNews - .TemplateDataArticle.Article.Title{{end}}
 
 {{define "main"}}
 
@@ -9,10 +9,7 @@
     <div class="row">
       <!-- Main Column -->
       <div class="col-md-8">
-
-
         {{ $article := .TemplateDataArticle.Article }}
-
         <!-- breadcrumb -->
         <ul class="article-breadcrumb">
           <li><a href="#">Главная</a></li>
@@ -38,7 +35,7 @@
             </ul>
             <h1 class="article-title">{{$article.Title}}</h1>
             <ul class="article-meta">
-              <li><i class="fa fa-clock-o"></i> {{$article.ArticleTime}}</li>
+              <li><i class="fa fa-clock-o"></i> {{humanDate $article.ArticleTime}}</li>
               <li><i class="fa fa-comments"></i> {{$article.Comments}}</li>
             </ul>
 
@@ -46,7 +43,7 @@
               {{$article.DetailText}}
             </div>
 
-            </div>
+          </div>
         </article>
         <!-- /ARTICLE POST -->
 
@@ -54,12 +51,12 @@
         <!-- widget tags -->
         <div class="widget-tags">
           <ul>
-            <li><a href="#">News</a></li>
-            <li><a href="#">Sport</a></li>
+            <li><a href="#">{{$article.Tag}}</a></li>
+            <!-- <li><a href="#">Sport</a></li>
             <li><a href="#">Lifestyle</a></li>
             <li><a href="#">Fashion</a></li>
             <li><a href="#">Music</a></li>
-            <li><a href="#">Business</a></li>
+            <li><a href="#">Business</a></li> -->
           </ul>
         </div>
         <!-- /widget tags -->
@@ -79,7 +76,8 @@
               <div class="media-heading">
                 <h5>John Doe <span class="reply-time">April 04, 2017 At 9:30 AM</span></h5>
               </div>
-              <p>Eu usu aliquip vivendo. Impedit suscipit invidunt te vel, sale periculis id mea. Ne nec atqui paulo,</p>
+              <p>Eu usu aliquip vivendo. Impedit suscipit invidunt te vel, sale periculis id mea. Ne nec atqui paulo,
+              </p>
               <a href="#" class="reply-btn">Reply</a>
             </div>
 
@@ -92,7 +90,8 @@
                 <div class="media-heading">
                   <h5>John Doe <span class="reply-time">April 04, 2017 At 9:30 AM</span></h5>
                 </div>
-                <p>Eu usu aliquip vivendo. Impedit suscipit invidunt te vel, sale periculis id mea. Ne nec atqui paulo,</p>
+                <p>Eu usu aliquip vivendo. Impedit suscipit invidunt te vel, sale periculis id mea. Ne nec atqui paulo,
+                </p>
                 <a href="#" class="reply-btn">Reply</a>
               </div>
 
@@ -105,7 +104,8 @@
                   <div class="media-heading">
                     <h5>John Doe <span class="reply-time">April 04, 2017 At 9:30 AM</span></h5>
                   </div>
-                  <p>Eu usu aliquip vivendo. Impedit suscipit invidunt te vel, sale periculis id mea. Ne nec atqui paulo,</p>
+                  <p>Eu usu aliquip vivendo. Impedit suscipit invidunt te vel, sale periculis id mea. Ne nec atqui
+                    paulo,</p>
                   <a href="#" class="reply-btn">Reply</a>
                 </div>
               </div>
@@ -124,7 +124,8 @@
               <div class="media-heading">
                 <h5>John Doe <span class="reply-time">April 04, 2017 At 9:30 AM</span></h5>
               </div>
-              <p>Eu usu aliquip vivendo. Impedit suscipit invidunt te vel, sale periculis id mea. Ne nec atqui paulo,</p>
+              <p>Eu usu aliquip vivendo. Impedit suscipit invidunt te vel, sale periculis id mea. Ne nec atqui paulo,
+              </p>
               <a href="#" class="reply-btn">Reply</a>
             </div>
           </div>
