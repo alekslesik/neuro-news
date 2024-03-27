@@ -273,7 +273,7 @@ func (r *MySQLArticleRepository) GetHomeAllArticles() ([]model.Article, error) {
 
 	var as []model.Article
 
-	rows, err := r.db.Query(articleQueries.selectAllArticle)
+	rows, err := r.db.Query(articleQueries.selectArticleLimit, 15)
 	if err != nil {
 		r.l.Error().Msgf("%s: query select all articles > %s", op, err)
 	}
