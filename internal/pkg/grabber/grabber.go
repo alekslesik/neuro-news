@@ -3,7 +3,6 @@ package grabber
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
 	"io"
 	"net/http"
 	"os"
@@ -97,7 +96,6 @@ func (g *Grabber) GenerateImageFruity(a *model.Article) (*model.Image, error) {
 
 	title := a.Title
 
-
 	image, err := getFruityImage(title)
 	if err != nil {
 		g.log.Error().Msgf("%s: get image through FruityBang error > %s", op, err)
@@ -139,7 +137,7 @@ func (g *Grabber) GenerateImageFruity(a *model.Article) (*model.Image, error) {
 func getFruityImage(title string) (*kandinsky.Image, error) {
 	url := "http://alekslesik1.fvds.ru:8008/v1/image"
 
-	image := &kandinsky.Image{}
+	image := &kandinsky.Image{Images: make([]string, 1)}
 
 	imageName := translit(title)
 
@@ -180,7 +178,18 @@ func getFruityImage(title string) (*kandinsky.Image, error) {
 		return nil, err
 	}
 
-	fmt.Println(string(result))
+	type temp struct {
+		Image string `json:"image"`
+	}
+
+	t := temp{}
+
+	err = json.Unmarshal(result, &t)
+	if err != nil {
+		return nil, err
+	}
+
+	image.Images[0] = t.Image
 
 	return image, nil
 }
