@@ -89,22 +89,7 @@ func (g *Grabber) GetGeneratedImage(a *model.Article) (*model.Image, error) {
 
 // GrabArticle grab article from
 func (g *Grabber) GrabArticle() (*model.Article, error) {
-	// type Article struct {
-	// 	ArticleID   int
-	// 	Title       string
-	// 	PreviewText string
-	// 	Image       string
-	// 	ArticleTime time.Time
-	// 	Tag         string
-	// 	DetailText  string
-	// 	Href        string
-	// 	Comments    int
-	// 	Category    string
-	// 	Video       string
-	// }
 	const op = "grabber.GrabArticle()"
-
-	// Написать код для извлечения списка новостей с сайта
 
 	// Get last article from list
 	last, err := g.LastArticle("parts/news/", Tag{
@@ -154,7 +139,7 @@ func (g *Grabber) GrabArticle() (*model.Article, error) {
 	// Get article kind (article)
 	kind := "article"
 
-	// TODO Извлечь Comments
+	// TODO extract Comments
 	// Get category (translit from tag)
 	category := translit(tag)
 

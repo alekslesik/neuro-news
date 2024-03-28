@@ -44,14 +44,14 @@ func TestTranslit(t *testing.T) {
 			want: "primer-stroki-dlia-testirovaniia-funkcii-transliteracii-zdes-est-i-russkie-bukvi-ee-i-angliiskie-abcd-i-znaki-prepinaniia",
 		},
 		{
-			desc: "trimm - ",
+			desc:  "trimm - ",
 			input: "-----input----вход-----",
-			want: "input-vhod",
+			want:  "input-vhod",
 		},
 		{
-			desc: "trimm space",
+			desc:  "trimm space",
 			input: "   input    ",
-			want: "input",
+			want:  "input",
 		},
 	}
 	for _, tC := range testCases {
@@ -63,3 +63,11 @@ func TestTranslit(t *testing.T) {
 		})
 	}
 }
+
+// func TestDetailText(t *testing.T) {
+// 	g := Grabber{}
+
+// 	testCases := []struct {
+// 		desc string
+// 		url  string
+// 		want string//_}{_//_{_//_desc:_"succesfuul_get_detail_text",_//_url:_"https://lenta.ru/news/2024/03/28/putin_poobeschal_sozdat_infrastrukturu_dlya_turizma_vo_vseh_natsparkah_k_2030_godu/",_//_want:_"",_//_},_//_}_//_for_,_t_c_:=_range_test_cases_{_//_t._run(t_c.desc,_func(t_*testing._t)_{_//_res,_err_:=_g._detail_text(t_c.url,_tag{_name:_"p",_key:_"class",_val:_"topic_body_content_text"})_//_if_err_!=_nil_{_//_t._errorf("error_from_detail_text():_%s",_err)_//_}_//_if_res_!=_t_c.want_{_//_t._errorf("\n%s:_\n\twant:\n\t\"%s\"_\n\tget:_\n\t\"%s\"",_t_c.desc,_t_c.want,_res)_//_}_//_})_//_}_//_}
