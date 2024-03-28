@@ -79,7 +79,9 @@ func getProdLogger(file *os.File) *Logger {
 	z := zerolog.New(file).
 		Level(zerolog.WarnLevel).
 		With().
+		Stack().
 		Timestamp().
+		Caller().
 		Logger()
 
 	return &Logger{z, file}
