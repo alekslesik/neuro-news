@@ -2,20 +2,49 @@ package template
 
 import (
 	"html/template"
+	"strings"
 	"time"
 )
 
-// HumanDate return nicely formatted string of time.Time object
-func HumanDate(t time.Time) string {
+// change utc time to human tim
+func humanDate(t time.Time) string {
 	if t.IsZero() {
 		return ""
 	}
 
-	// Convert the time to UTC before formatting it.
-	return t.UTC().Format("02 Янв 2006 в 15:04")
+	// create Location object for Moscow time
+	loc, err := time.LoadLocation("Europe/Moscow")
+	if err != nil {
+		return ""
+	}
+
+	t = t.In(loc)
+
+	monthNames := map[string]string{
+		"Jan": "Янв",
+		"Feb": "Фев",
+		"Mar": "Мар",
+		"Apr": "Апр",
+		"May": "Май",
+		"Jun": "Июн",
+		"Jul": "Июл",
+		"Aug": "Авг",
+		"Sep": "Сен",
+		"Oct": "Окт",
+		"Nov": "Ноя",
+		"Dec": "Дек",
+	}
+
+	formatted := t.Format("02 Jan 2006 в 15:04")
+
+	for eng, rus := range monthNames {
+		formatted = strings.Replace(formatted, eng, rus, 1)
+	}
+
+	return formatted
 }
 
-// Функция для декодирования HTML
+// decode html tags
 func decodeHTML(s string) template.HTML {
 	return template.HTML(s)
 }
@@ -24,6 +53,6 @@ func decodeHTML(s string) template.HTML {
 // essentially a string-keyed map which acts as a lookup between the names of o
 // custom template functions and the functions themselves.
 var functions = template.FuncMap{
-	"humanDate":  HumanDate,
+	"humanDate":  humanDate,
 	"decodeHTML": decodeHTML,
 }
