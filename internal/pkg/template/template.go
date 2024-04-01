@@ -60,23 +60,6 @@ func New(log *logger.Logger) *Template {
 	}
 }
 
-// HumanDate return nicely formatted string of time.Time object
-func HumanDate(t time.Time) string {
-	if t.IsZero() {
-		return ""
-	}
-
-	// Convert the time to UTC before formatting it.
-	return t.UTC().Format("02 Jan 2006 at 15:04")
-}
-
-// Initialize a template.FuncMap object and store it in a global variable. This
-// essentially a string-keyed map which acts as a lookup between the names of o
-// custom template functions and the functions themselves.
-var functions = template.FuncMap{
-	"humanDate": HumanDate,
-}
-
 // AddCache add new cache of files in dir to template cache
 func (t *Template) AddCache(dir string) (*Template, error) {
 	const op = "template.AddCache()"

@@ -1,9 +1,12 @@
 package app
 
-// 		log.Info().Msgf(")
-// 		log.Warn().Msg("")
-// 		log.Error().Msgf("%s:  > %s", op, err)
-// 		log.Fatal().Msgf("%s:  > %s", op, err)
+//log.Info().Msgf(")
+//log.Warn().Msg("")
+//log.Error().Msgf("%s:  > %s", op, err)
+//log.Fatal().Msgf("%s:  > %s", op, err)
+
+//tests
+//t.Errorf("\n%s: \n\twant:\n\t\"%s\" \n\tget: \n\t\"%s\"", tC.desc, tC.want, res)
 
 import (
 	"context"
@@ -44,7 +47,7 @@ type Application struct {
 }
 
 func New(context context.Context, cancel context.CancelFunc) (*Application, error) {
-	const op = "app.New()"
+	// const op = "app.New()"
 
 	config := configInit()
 
@@ -72,7 +75,7 @@ func New(context context.Context, cancel context.CancelFunc) (*Application, erro
 	// handlers init
 	handler := handler.New(services, logger, templates)
 
-	// TODO Инициализация промежуточных обработчиков
+	// TODO add todo init
 	// appMiddleware := middleware.New()
 
 	// router init
@@ -80,13 +83,13 @@ func New(context context.Context, cancel context.CancelFunc) (*Application, erro
 
 	server := serverInit(config, logger, router)
 
-	// Инициализация почтового сервиса
+	// mail service init
 	// appMailer := mailer.New(appConfig.SMTPConfig)
 
-	// Инициализация сессий
+	// session init
 	// appSession := session.New()
 
-	// Инициализация шаблонов
+	// template init
 	// appTemplate := template.New()
 
 	return &Application{

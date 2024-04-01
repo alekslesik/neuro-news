@@ -30,3 +30,4 @@ tls/
 tls/cert.pem
 tls/key.pem
 .temp.png
+website/static/upload

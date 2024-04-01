@@ -210,22 +210,7 @@ func getFruityImage(title string) (*kandinsky.Image, error) {
 
 // GrabArticle grab article from
 func (g *Grabber) GrabArticle() (*model.Article, error) {
-	// type Article struct {
-	// 	ArticleID   int
-	// 	Title       string
-	// 	PreviewText string
-	// 	Image       string
-	// 	ArticleTime time.Time
-	// 	Tag         string
-	// 	DetailText  string
-	// 	Href        string
-	// 	Comments    int
-	// 	Category    string
-	// 	Video       string
-	// }
 	const op = "grabber.GrabArticle()"
-
-	// Написать код для извлечения списка новостей с сайта
 
 	// Get last article from list
 	last, err := g.LastArticle("parts/news/", Tag{
@@ -275,7 +260,7 @@ func (g *Grabber) GrabArticle() (*model.Article, error) {
 	// Get article kind (article)
 	kind := "article"
 
-	// TODO Извлечь Comments
+	// TODO extract Comments
 	// Get category (translit from tag)
 	category := translit(tag)
 
@@ -476,55 +461,48 @@ func getTagHref(url string) (string, error) {
 
 // translit
 func translit(src string) string {
+	if src == "" {
+		return ""
+	}
+
 	var result string
 	var resArr []string
 
 	var dictionary = map[string]string{
-		"А": "a", "а": "a",
-		"Б": "b", "б": "b",
-		"В": "v", "в": "v",
-		"Г": "g", "г": "g",
-		"Д": "d", "д": "d",
-		"Е": "e", "е": "e",
-		"Ё": "e", "ё": "e",
-		"Ж": "zh", "ж": "zh",
-		"З": "z", "з": "z",
-		"И": "i", "и": "i",
-		"Й": "i", "й": "i",
-		"К": "k", "к": "k",
-		"Л": "l", "л": "l",
-		"М": "m", "м": "m",
-		"Н": "n", "н": "n",
-		"О": "o", "о": "o",
-		"П": "p", "п": "p",
-		"Р": "r", "р": "r",
-		"С": "s", "с": "s",
-		"Т": "t", "т": "t",
-		"У": "u", "у": "u",
-		"Ф": "f", "ф": "f",
-		"Х": "h", "х": "h",
-		"Ц": "c", "ц": "c",
-		"Ч": "ch", "ч": "ch",
-		"Ш": "sh", "ш": "sh",
-		"Щ": "sh'", "щ": "sh'",
-		"Ъ": "", "ъ": "",
-		"Ы": "y", "ы": "y",
-		"Ь": "", "ь": "",
-		"Э": "e", "э": "e",
-		"Ю": "yu", "ю": "yu",
-		"Я": "ya", "я": "ya",
-		" ": "-",
-		"0": "0", "1": "1", "2": "2", "3": "3", "4": "4",
-		"5": "5", "6": "6", "7": "7", "8": "8", "9": "9",
+		"А": "a", "а": "a", "Б": "b", "б": "b", "В": "v", "в": "v", "Г": "g", "г": "g", "Д": "d",
+		"д": "d", "Е": "e", "е": "e", "Ё": "e", "ё": "e", "Ж": "zh", "ж": "zh", "З": "z", "з": "z",
+		"И": "i", "и": "i", "Й": "i", "й": "i", "К": "k", "к": "k", "Л": "l", "л": "l", "М": "m",
+		"м": "m", "Н": "n", "н": "n", "О": "o", "о": "o", "П": "p", "п": "p", "Р": "r", "р": "r",
+		"С": "s", "с": "s", "Т": "t", "т": "t", "У": "u", "у": "u", "Ф": "f", "ф": "f", "Х": "h",
+		"х": "h", "Ц": "c", "ц": "c", "Ч": "ch", "ч": "ch", "Ш": "sh", "ш": "sh", "Щ": "sh", "щ": "sh",
+		"Ъ": "", "ъ": "", "Ы": "y", "ы": "i", "Ь": "", "ь": "", "Э": "e", "э": "e", "Ю": "iu", "ю": "iu",
+		"Я": "ia", "я": "ia", " ": "-", "0": "0", "1": "1", "2": "2", "3": "3", "4": "4", "5": "5", "6": "6",
+		"7": "7", "8": "8", "9": "9", "a": "a", "b": "b", "c": "c", "d": "d", "e": "e", "f": "f", "g": "g",
+		"h": "h", "i": "i", "j": "j", "k": "k", "l": "l", "m": "m", "n": "n", "o": "o", "p": "p", "q": "q",
+		"r": "r", "s": "s", "t": "t", "u": "u", "v": "v", "w": "w", "x": "x", "y": "y", "z": "z", "A": "a",
+		"B": "b", "C": "c", "D": "d", "E": "e", "F": "f", "G": "g", "H": "h", "I": "i", "J": "j", "K": "k",
+		"L": "l", "M": "m", "N": "n", "O": "o", "P": "p", "Q": "q", "R": "r", "S": "s", "T": "t", "U": "u",
+		"V": "v", "W": "w", "X": "x", "Y": "y", "Z": "z", ".": "-", ",": "-", "!": "-", "?": "-", ";": "-", ":": "-",
+		"'": "-", "\"": "-", "`": "-", "~": "-", "@": "-", "#": "-", "$": "-", "%": "-", "^": "-", "&": "-", "*": "-",
+		"(": "-", ")": "-", "_": "-", "+": "-", "=": "-", "[": "-", "]": "-", "{": "-", "}": "-", "\\": "-", "|": "-",
+		"/": "-", "<": "-", ">": "-", "\n": "-", "\t": "-", "-": "-",
 	}
 
 	split := strings.Split(src, "")
 
-	for _, s := range split {
+	for k, s := range split {
+		if k != 0 {
+			if dictionary[split[k-1]] == "-" && dictionary[s] == "-" {
+				continue
+			}
+		}
+
 		resArr = append(resArr, dictionary[s])
 	}
 
 	result = strings.Join(resArr, "")
+	// result = strings.Trim(result, " ")
+	result = strings.Trim(result, "-")
 
 	return result
 }
