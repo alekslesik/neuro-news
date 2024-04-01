@@ -144,9 +144,7 @@ func (a *Application) Run() error {
 				continue
 			}
 
-			a.log.Info().Msgf("%s: article insert through kandinsky package > %s", op, err)
-
-
+			a.log.Info().Msgf("%s: article insert to DB through kandinsky package > %s", op, err)
 			time.Sleep(time.Minute * 80)
 		}
 	}()
@@ -183,7 +181,7 @@ func (a *Application) Run() error {
 				continue
 			}
 
-			a.log.Info().Msgf("%s: article insert through fruity api > %s", op, err)
+			a.log.Info().Msgf("%s: article insert to DB through Fruity API > %s", op, err)
 		}
 	}()
 

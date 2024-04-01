@@ -3,6 +3,7 @@ package grabber
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"io"
 	"net/http"
 	"os"
@@ -89,7 +90,7 @@ func (g *Grabber) GetGeneratedImage(a *model.Article) (*model.Image, error) {
 	return model, nil
 }
 
-// GetGeneratedImage generate, save and return image model
+// GenerateImageFruity generate, save and return image model trough Fruity API
 func (g *Grabber) GenerateImageFruity(a *model.Article) (*model.Image, error) {
 	const op = "grabber.GenerateImageFruity()"
 	var imagePath = "website/static/upload/"
@@ -133,22 +134,19 @@ func (g *Grabber) GenerateImageFruity(a *model.Article) (*model.Image, error) {
 	return model, nil
 }
 
-
 func getFruityImage(title string) (*kandinsky.Image, error) {
-	url := "http://alekslesik1.fvds.ru:8008/v1/image"
-
-	image := &kandinsky.Image{Images: make([]string, 1)}
+	url := "http://alekslesik1.fvds.ru:8008/v2/images"
 
 	imageName := translit(title)
 
-	type params struct{
+	type params struct {
 		Title string `json:"title"`
-		Name string `json:"name"`
+		Name  string `json:"name"`
 	}
 
 	p := params{
 		Title: title,
-		Name: imageName,
+		Name:  imageName,
 	}
 
 	b, err := json.Marshal(&p)
@@ -178,18 +176,34 @@ func getFruityImage(title string) (*kandinsky.Image, error) {
 		return nil, err
 	}
 
-	type temp struct {
-		Image string `json:"image"`
+	type FruityResponse struct {
+		Title           string   `json:"title"`
+		Name            string   `json:"name"`
+		ID              int      `json:"id"`
+		Images          []string `json:"images"`
+		ByteImageSizeKB float64  `json:"byte_image_size_kB"`
+		Width           int      `json:"width"`
+		Height          int      `json:"height"`
+		Error           string   `json:"error"`
 	}
 
-	t := temp{}
+	var fRes FruityResponse
 
-	err = json.Unmarshal(result, &t)
+	err = json.Unmarshal(result, &fRes)
 	if err != nil {
 		return nil, err
 	}
 
-	image.Images[0] = t.Image
+	if fRes.Error != "" {
+		return nil, errors.New("error from Fruity API: " + fRes.Error)
+	}
+
+	image := &kandinsky.Image{Images: make([]string, 1)}
+
+	err = image.AddBase64(fRes.Images[0])
+	if err != nil {
+		return nil, err
+	}
 
 	return image, nil
 }
