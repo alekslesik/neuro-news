@@ -22,15 +22,16 @@ type Article struct {
 }
 
 type ArticleModel interface {
-	GetAllArticles() ([]Article, error)
-	GetHomeCarouselArticles() ([]Article, error)
-	GetHomeTrendingArticlesTop() ([]Article, error)
-	GetHomeTrendingArticlesBottom() ([]Article, error)
-	GetHomeNewsArticles() ([]Article, error)
-	GetHomeSportArticles() ([]Article, error)
-	GetHomeVideoArticles() ([]Article, error)
-	GetHomeAllArticles() ([]Article, error)
-	InsertArticleImage(*Image, *Article) error
+	SelectAllArticles() ([]Article, error)
+	SelectHomeCarouselArticles() ([]Article, error)
+	SelectHomeTrendingArticlesTop() ([]Article, error)
+	SelectHomeTrendingArticlesBottom() ([]Article, error)
+	SelectHomeNewsArticles() ([]Article, error)
+	SelectHomeSportArticles() ([]Article, error)
+	SelectHomeVideoArticles() ([]Article, error)
+	SelectHomeAllArticles() ([]Article, error)
+	SelectHomePaginationArticles(limit, offset int) ([]Article, error)
 
-	GetArticleByURL(string) (Article, error)
+	InsertArticleImage(*Image, *Article) error
+	SelectArticleByURL(string) (Article, error)
 }

@@ -19,6 +19,7 @@ type ArticleQueries struct {
 	selectVideoLimit        string
 	insertImageArticle      string
 	selectArticleByHref     string
+	selectArticlePagination string
 }
 
 var articleQueries = ArticleQueries{
@@ -62,6 +63,14 @@ var articleQueries = ArticleQueries{
 	article INNER JOIN image
 	ON article.image_id = image.image_id
 	WHERE kind = 'article' AND href = ?;`,
+
+	selectArticlePagination: `SELECT article_id, title, preview_text, article_time, tag, detail_text, href, comments, category, image_path
+	FROM
+	article INNER JOIN image
+	ON article.image_id = image.image_id
+	WHERE kind = 'article'
+	ORDER BY article_time DESC
+	LIMIT ? OFFSET ?;`,
 }
 
 // InsertArticleImage insert article to DB
@@ -97,13 +106,13 @@ func (r *MySQLArticleRepository) InsertArticleImage(image *model.Image, article 
 	return nil
 }
 
-func (r *MySQLArticleRepository) GetAllArticles() ([]model.Article, error) {
+func (r *MySQLArticleRepository) SelectAllArticles() ([]model.Article, error) {
 	articles := []model.Article{{ArticleID: 1}, {ArticleID: 2}}
 	return articles, nil
 }
 
-// GetHomeCarouselArticles get articles for carousel on home page
-func (r *MySQLArticleRepository) GetHomeCarouselArticles() ([]model.Article, error) {
+// SelectHomeCarouselArticles get articles for carousel on home page
+func (r *MySQLArticleRepository) SelectHomeCarouselArticles() ([]model.Article, error) {
 	const op = "repository.GetHomeCarouselArticles()"
 
 	var as []model.Article
@@ -129,8 +138,8 @@ func (r *MySQLArticleRepository) GetHomeCarouselArticles() ([]model.Article, err
 	return as, nil
 }
 
-// GetHomeTrendingArticlesTop return last four articles with // TODO large number of comments
-func (r *MySQLArticleRepository) GetHomeTrendingArticlesTop() ([]model.Article, error) {
+// SelectHomeTrendingArticlesTop return last four articles with // TODO large number of comments
+func (r *MySQLArticleRepository) SelectHomeTrendingArticlesTop() ([]model.Article, error) {
 	const op = "repository.GetHomeTrendingArticlesTop()"
 
 	var as []model.Article
@@ -156,8 +165,8 @@ func (r *MySQLArticleRepository) GetHomeTrendingArticlesTop() ([]model.Article, 
 	return as, nil
 }
 
-// GetHomeTrendingArticlesBottom return last six articles with // TODO large number of comments
-func (r *MySQLArticleRepository) GetHomeTrendingArticlesBottom() ([]model.Article, error) {
+// SelectHomeTrendingArticlesBottom return last six articles with // TODO large number of comments
+func (r *MySQLArticleRepository) SelectHomeTrendingArticlesBottom() ([]model.Article, error) {
 	const op = "repository.GetHomeTrendingArticlesBottom()"
 
 	var as []model.Article
@@ -185,8 +194,8 @@ func (r *MySQLArticleRepository) GetHomeTrendingArticlesBottom() ([]model.Articl
 	return as, nil
 }
 
-// GetHomeNewsArticles return 3 news for news/sport block
-func (r *MySQLArticleRepository) GetHomeNewsArticles() ([]model.Article, error) {
+// SelectHomeNewsArticles return 3 news for news/sport block
+func (r *MySQLArticleRepository) SelectHomeNewsArticles() ([]model.Article, error) {
 	const op = "repository.GetHomeNewsArticles()"
 
 	var as []model.Article
@@ -212,8 +221,8 @@ func (r *MySQLArticleRepository) GetHomeNewsArticles() ([]model.Article, error) 
 	return as, nil
 }
 
-// GetHomeSportArticles return 3 sport news for news/sport block
-func (r *MySQLArticleRepository) GetHomeSportArticles() ([]model.Article, error) {
+// SelectHomeSportArticles return 3 sport news for news/sport block
+func (r *MySQLArticleRepository) SelectHomeSportArticles() ([]model.Article, error) {
 	const op = "repository.GetHomeSportArticles()"
 
 	var as []model.Article
@@ -239,8 +248,8 @@ func (r *MySQLArticleRepository) GetHomeSportArticles() ([]model.Article, error)
 	return as, nil
 }
 
-// GetHomeVideoArticles return 3 video for video block
-func (r *MySQLArticleRepository) GetHomeVideoArticles() ([]model.Article, error) {
+// SelectHomeVideoArticles return 3 video for video block
+func (r *MySQLArticleRepository) SelectHomeVideoArticles() ([]model.Article, error) {
 	const op = "repository.GetHomeVideoArticles()"
 
 	var as []model.Article
@@ -267,8 +276,8 @@ func (r *MySQLArticleRepository) GetHomeVideoArticles() ([]model.Article, error)
 	return as, nil
 }
 
-// GetHomeAllArticles return all articles except video
-func (r *MySQLArticleRepository) GetHomeAllArticles() ([]model.Article, error) {
+// SelectHomeAllArticles return all articles except video
+func (r *MySQLArticleRepository) SelectHomeAllArticles() ([]model.Article, error) {
 	const op = "repository.GetHomeAllArticles()"
 
 	var as []model.Article
@@ -294,8 +303,35 @@ func (r *MySQLArticleRepository) GetHomeAllArticles() ([]model.Article, error) {
 	return as, nil
 }
 
-// GetArticleByURL return article by URL
-func (r *MySQLArticleRepository) GetArticleByURL(url string) (model.Article, error) {
+// SelectHomePaginationArticles get pagination articles
+func (r *MySQLArticleRepository) SelectHomePaginationArticles(limit, offset int) ([]model.Article, error) {
+	const op = "repository.GetHomePaginationArticles()"
+
+	var as []model.Article
+
+	rows, err := r.db.Query(articleQueries.selectArticlePagination, limit, offset)
+	if err != nil {
+		r.l.Warn().Msgf("%s: query select pagination articles > %s", op, err)
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var a model.Article
+		err = rows.Scan(&a.ArticleID, &a.Title, &a.PreviewText,
+			&a.ArticleTime, &a.Tag, &a.DetailText, &a.Href, &a.Comments, &a.Category, &a.ImagePath)
+		if err != nil {
+			r.l.Error().Msgf("%s: query scan pagination articles > %s", op, err)
+			return nil, err
+		}
+
+		as = append(as, a)
+	}
+
+	return as, nil
+}
+
+// SelectArticleByURL return article by URL
+func (r *MySQLArticleRepository) SelectArticleByURL(url string) (model.Article, error) {
 	const op = "repository.GetArticleByURL()"
 
 	var a model.Article

@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/alekslesik/neuro-news/internal/pkg/template"
 	"github.com/alekslesik/neuro-news/pkg/logger"
 )
 
@@ -21,18 +22,33 @@ func NewArticleHandler(appHandler *AppHandler, l *logger.Logger) *ArticleHandler
 	}
 }
 
+// GetHomeArticles GET handler for home page /?PAGEN_1
 func (a *ArticleHandler) GetHomeArticles(w http.ResponseWriter, r *http.Request) {
 	const (
-		op   = "GetHomeArticles()"
-		page = "home.page.html"
+		op       = "GetHomeArticles()"
+		tmplFile = "home.page.html"
 	)
 
-	td, err := a.AppHandler.articleService.GetHomeTemplateData()
-	if err != nil {
-		a.l.Error().Msgf("%s: GetHomeTemplateData error > %s", op, err)
+	var (
+		td  *template.TemplateData
+		err error
+	)
+
+	page := r.URL.Query().Get("PAGEN_1")
+
+	if page == "" || page == "1" {
+		td, err = a.AppHandler.articleService.GetHomeTemplateData()
+		if err != nil {
+			a.l.Error().Msgf("%s: GetHomeTemplateData error > %s", op, err)
+		}
+	} else {
+		td, err = a.AppHandler.articleService.GetHomePaginateData(page)
+		if err != nil {
+			a.l.Error().Msgf("%s: GetHomePaginateData error > %s", op, err)
+		}
 	}
 
-	err = a.AppHandler.articleService.RenderTemplate(w, r, page, td)
+	err = a.AppHandler.articleService.RenderTemplate(w, r, tmplFile, td)
 	if err != nil {
 		a.l.Error().Msgf("%s: RenderTemplate error > %s", op, err)
 	}

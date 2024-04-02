@@ -119,7 +119,7 @@ func (a *Application) Run() error {
 
 	go func() {
 		for {
-			article, err := a.svs.GetArticleService().GetNewArticle()
+			article, err := a.svs.GetArticleService().GrabNewArticle()
 			if err != nil {
 				a.log.Warn().Msgf("%s: get new article error > %s", op, err)
 				time.Sleep(time.Minute * 80)
@@ -157,7 +157,7 @@ func (a *Application) Run() error {
 		for {
 			time.Sleep(time.Minute * 30)
 
-			article, err := a.svs.GetArticleService().GetNewArticle()
+			article, err := a.svs.GetArticleService().GrabNewArticle()
 			if err != nil {
 				a.log.Warn().Msgf("%s: get new article error > %s", op, err)
 				time.Sleep(time.Minute * 30)
