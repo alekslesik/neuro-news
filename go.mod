@@ -21,7 +21,7 @@ require (
 
 require (
 	github.com/BurntSushi/toml v1.3.2 // indirect
-	github.com/alekslesik/kandinsky v0.1.5
+	github.com/alekslesik/kandinsky v0.1.6
 	github.com/ilyakaznacheev/cleanenv v1.5.0
 	github.com/joho/godotenv v1.5.1
 	github.com/justinas/nosurf v1.1.1
