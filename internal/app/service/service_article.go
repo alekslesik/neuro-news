@@ -209,10 +209,21 @@ func (as *articleService) GetPaginationTemplateData(page string) (*template.Temp
 	}
 
 	totalPages := math.Ceil(float64(articlesCount) / float64(articlesOnPage))
-	currentPage, err := strconv.Atoi(page)
-	if err != nil {
-		as.l.Error().Msgf("%s: convert page string pagination number to int > %s", op, err)
-		return nil, err
+
+	var currentPage int
+
+	if page == "" {
+		currentPage = 1
+	} else {
+		currentPage, err = strconv.Atoi(page)
+		if err != nil {
+			as.l.Error().Msgf("%s: convert page string pagination number to int > %s", op, err)
+			return nil, err
+		}
+		if currentPage > int(totalPages) {
+			as.l.Error().Msgf("%s: pagination page out of range > %s", op, err)
+			return nil, err
+		}
 	}
 
 	data := &template.TemplateDataPage{
