@@ -47,6 +47,7 @@ func (a *ArticleHandler) GetHomeArticles(w http.ResponseWriter, r *http.Request)
 	}
 }
 
+// GetHomeArticles GET handler for home page /news/#article_href
 func (a *ArticleHandler) GetArticle(w http.ResponseWriter, r *http.Request) {
 	const (
 		op   = "GetArticle()"

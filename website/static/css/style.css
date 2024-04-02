@@ -765,6 +765,7 @@ textarea.input {
 
 .article-pagination ul li {
 	display:inline-block;
+	padding-right: 7px;
 }
 
 .article-pagination ul li a {

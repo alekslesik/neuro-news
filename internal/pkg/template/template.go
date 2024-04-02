@@ -34,10 +34,16 @@ type TemplateData struct {
 	Flash               string
 	CSRFToken           string
 	TemplateDataArticle TemplateDataArticle
+	TemplateDataPage    *TemplateDataPage
 
 	// Form              *forms.Form
 	// File              *models.File
 	// Files             []*models.File
+}
+
+type TemplateDataPage struct {
+	TotalPaginationPages  int
+	CurrentPaginationPage int
 }
 
 type TemplateDataArticle struct {
@@ -49,6 +55,7 @@ type TemplateDataArticle struct {
 	VideoArticles          []model.Article
 	AllArticles            []model.Article
 	PaginationArticles     []model.Article
+	PaginationData         string
 	Article                model.Article
 }
 

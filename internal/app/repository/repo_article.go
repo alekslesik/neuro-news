@@ -20,6 +20,7 @@ type ArticleQueries struct {
 	insertImageArticle      string
 	selectArticleByHref     string
 	selectArticlePagination string
+	selectCount string
 }
 
 var articleQueries = ArticleQueries{
@@ -71,6 +72,8 @@ var articleQueries = ArticleQueries{
 	WHERE kind = 'article'
 	ORDER BY article_time DESC
 	LIMIT ? OFFSET ?;`,
+
+	selectCount :`SELECT COUNT(*) FROM article`,
 }
 
 // InsertArticleImage insert article to DB
@@ -109,6 +112,23 @@ func (r *MySQLArticleRepository) InsertArticleImage(image *model.Image, article 
 func (r *MySQLArticleRepository) SelectAllArticles() ([]model.Article, error) {
 	articles := []model.Article{{ArticleID: 1}, {ArticleID: 2}}
 	return articles, nil
+}
+
+// CountArticles return count of articles in article table
+func (r *MySQLArticleRepository) CountArticles() (int, error) {
+	const op = "repository.CountArticles()"
+
+	row := r.db.QueryRow(articleQueries.selectCount)
+
+	var count int
+
+	err := row.Scan(&count)
+	if err != nil {
+		r.l.Warn().Msgf("%s: query count articles error > %s", op, err)
+		return 0, err
+	}
+
+	return count, nil
 }
 
 // SelectHomeCarouselArticles get articles for carousel on home page

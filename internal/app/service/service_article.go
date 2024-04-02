@@ -1,6 +1,7 @@
 package service
 
 import (
+	"math"
 	"net/http"
 	"strconv"
 
@@ -135,6 +136,12 @@ func (as *articleService) GetHomePaginateData(page string) (*template.TemplateDa
 		return nil, err
 	}
 
+	as.t.TemplateData.TemplateDataPage, err = as.GetPaginationTemplateData(page)
+	if err != nil {
+		as.l.Error().Msgf("%s: get all home articles error > %s", op, err)
+		return nil, err
+	}
+
 	return &as.t.TemplateData, nil
 }
 
@@ -188,6 +195,28 @@ func (as *articleService) GetHomePaginationArticles(page string) ([]model.Articl
 	}
 
 	return as.ar.SelectPaginationArticles(limit, offset)
+}
+
+// GetPaginationTemplateData return pagination page data
+func (as *articleService) GetPaginationTemplateData(page string) (*template.TemplateDataPage, error) {
+	const op = "service.GetPaginationTemplateData()"
+
+	articlesOnPage := 15
+	articlesCount, err := as.ar.CountArticles()
+	if err != nil {
+		as.l.Error().Msgf("%s: render template error > %s", op, err)
+		return nil, err
+	}
+
+	totalPages := math.Ceil(float64(articlesCount) / float64(articlesOnPage))
+	currentPage, err := strconv.Atoi(page)
+
+	data := &template.TemplateDataPage{
+		TotalPaginationPages:  int(totalPages),
+		CurrentPaginationPage: currentPage,
+	}
+
+	return data, nil
 }
 
 // GetArticleTemplateData return template data for article page by article URL

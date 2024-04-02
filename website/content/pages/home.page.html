@@ -55,7 +55,7 @@
 									<div class="article-body">
 										<h4 class="article-title"><a href="/news/{{.Href}}">{{ .Title }}</a></h4>
 										<ul class="article-meta">
-											<li><i class="fa fa-clock-o"></i>  {{humanDate .ArticleTime}}</li>
+											<li><i class="fa fa-clock-o"></i> {{humanDate .ArticleTime}}</li>
 											<li><i class="fa fa-comments"></i> {{.Comments}}</li>
 										</ul>
 									</div>
@@ -325,7 +325,7 @@
 							<video width="370" height="370" autoplay muted loop>
 								<source src="{{.VideoPath}}" type="video/mp4">
 								Ваш браузер не поддерживает видео тег.
-						</video>
+							</video>
 						</div>
 						<div class="article-body">
 							<ul class="article-info">
@@ -354,7 +354,7 @@
 			<div class="col-md-8">
 				<!-- section title -->
 				<div class="section-title">
-					<h2 class="title">Все новости</h2>
+					<h2 class="title" >Все новости</h2>
 				</div>
 				<!-- /section title -->
 				<!-- ARTICLES -->
@@ -382,15 +382,9 @@
 				<!-- /ARTICLES -->
 
 				<!-- pagination -->
-				<div class="article-pagination">
-					<ul>
-						<li class="active"><a href="#" class="active">1</a></li>
-						<li><a href="#">2</a></li>
-						<li><a href="#">3</a></li>
-						<li><a href="#"><i class="fa fa-angle-right"></i></a></li>
-					</ul>
-				</div>
+				{{generatePaginationHTML .TemplateDataPage.TotalPaginationPages .TemplateDataPage.CurrentPaginationPage}}
 				<!-- /pagination -->
+
 			</div>
 			<!-- /Main Column -->
 
