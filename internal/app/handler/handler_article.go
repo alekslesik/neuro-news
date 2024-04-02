@@ -43,14 +43,14 @@ func (a *ArticleHandler) GetHomeArticles(w http.ResponseWriter, r *http.Request)
 
 	err = a.AppHandler.articleService.RenderTemplate(w, r, tmplFile, td)
 	if err != nil {
-		a.l.Error().Msgf("%s: RenderTemplate error > %s", op, err)
+		a.l.Error().Msgf("%s: RenderTemplate home page error > %s", op, err)
 	}
 }
 
 func (a *ArticleHandler) GetArticle(w http.ResponseWriter, r *http.Request) {
 	const (
 		op   = "GetArticle()"
-		page = "article.page.html"
+		tmplFile = "article.page.html"
 	)
 
 	// get article URL
@@ -67,8 +67,8 @@ func (a *ArticleHandler) GetArticle(w http.ResponseWriter, r *http.Request) {
 		a.l.Error().Msgf("%s: GetArticle error > %s", op, err)
 	}
 
-	err = a.AppHandler.articleService.RenderTemplate(w, r, page, td)
+	err = a.AppHandler.articleService.RenderTemplate(w, r, tmplFile, td)
 	if err != nil {
-		a.l.Error().Msgf("%s: RenderTemplate error > %s", op, err)
+		a.l.Error().Msgf("%s: RenderTemplate article page error > %s", op, err)
 	}
 }

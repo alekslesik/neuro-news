@@ -114,10 +114,10 @@ func (r *MySQLArticleRepository) SelectAllArticles() ([]model.Article, error) {
 // SelectHomeCarouselArticles get articles for carousel on home page
 func (r *MySQLArticleRepository) SelectHomeCarouselArticles() ([]model.Article, error) {
 	const op = "repository.GetHomeCarouselArticles()"
+	limit := 4
+	var as = make([]model.Article, 0, limit)
 
-	var as []model.Article
-
-	rows, err := r.db.Query(articleQueries.selectArticleLimit, 4)
+	rows, err := r.db.Query(articleQueries.selectArticleLimit, limit)
 	if err != nil {
 		r.l.Warn().Msgf("%s: query select articles for carousel > %s", op, err)
 	}
@@ -142,7 +142,8 @@ func (r *MySQLArticleRepository) SelectHomeCarouselArticles() ([]model.Article, 
 func (r *MySQLArticleRepository) SelectHomeTrendingArticlesTop() ([]model.Article, error) {
 	const op = "repository.GetHomeTrendingArticlesTop()"
 
-	var as []model.Article
+	limit := 4
+	var as = make([]model.Article, 0, limit)
 
 	rows, err := r.db.Query(articleQueries.selectArticleLimit, 4)
 	if err != nil {
@@ -169,7 +170,8 @@ func (r *MySQLArticleRepository) SelectHomeTrendingArticlesTop() ([]model.Articl
 func (r *MySQLArticleRepository) SelectHomeTrendingArticlesBottom() ([]model.Article, error) {
 	const op = "repository.GetHomeTrendingArticlesBottom()"
 
-	var as []model.Article
+	limit := 1
+	var as = make([]model.Article, 0, limit)
 
 	rows, err := r.db.Query(articleQueries.selectArticleLimit, 11)
 	if err != nil {
@@ -198,7 +200,8 @@ func (r *MySQLArticleRepository) SelectHomeTrendingArticlesBottom() ([]model.Art
 func (r *MySQLArticleRepository) SelectHomeNewsArticles() ([]model.Article, error) {
 	const op = "repository.GetHomeNewsArticles()"
 
-	var as []model.Article
+	limit := 3
+	var as = make([]model.Article, 0, limit)
 
 	rows, err := r.db.Query(articleQueries.selectArticleLimit, 3)
 	if err != nil {
@@ -225,7 +228,8 @@ func (r *MySQLArticleRepository) SelectHomeNewsArticles() ([]model.Article, erro
 func (r *MySQLArticleRepository) SelectHomeSportArticles() ([]model.Article, error) {
 	const op = "repository.GetHomeSportArticles()"
 
-	var as []model.Article
+	limit := 3
+	var as = make([]model.Article, 0, limit)
 
 	rows, err := r.db.Query(articleQueries.selectArticleWhereLimit, "sport", 3)
 	if err != nil {
@@ -252,7 +256,8 @@ func (r *MySQLArticleRepository) SelectHomeSportArticles() ([]model.Article, err
 func (r *MySQLArticleRepository) SelectHomeVideoArticles() ([]model.Article, error) {
 	const op = "repository.GetHomeVideoArticles()"
 
-	var as []model.Article
+	limit := 3
+	var as = make([]model.Article, 0, limit)
 
 	rows, err := r.db.Query(articleQueries.selectVideoLimit, 3)
 	if err != nil {
@@ -280,7 +285,8 @@ func (r *MySQLArticleRepository) SelectHomeVideoArticles() ([]model.Article, err
 func (r *MySQLArticleRepository) SelectHomeAllArticles() ([]model.Article, error) {
 	const op = "repository.GetHomeAllArticles()"
 
-	var as []model.Article
+	limit := 15
+	var as = make([]model.Article, 0, limit)
 
 	rows, err := r.db.Query(articleQueries.selectArticleLimit, 15)
 	if err != nil {
@@ -307,7 +313,7 @@ func (r *MySQLArticleRepository) SelectHomeAllArticles() ([]model.Article, error
 func (r *MySQLArticleRepository) SelectPaginationArticles(limit, offset int) ([]model.Article, error) {
 	const op = "repository.SelectPaginationArticles()"
 
-	var as []model.Article
+	var as = make([]model.Article, 0, limit)
 
 	rows, err := r.db.Query(articleQueries.selectArticlePagination, limit, offset)
 	if err != nil {
