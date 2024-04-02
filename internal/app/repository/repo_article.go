@@ -20,7 +20,7 @@ type ArticleQueries struct {
 	insertImageArticle      string
 	selectArticleByHref     string
 	selectArticlePagination string
-	selectCount string
+	selectCount             string
 }
 
 var articleQueries = ArticleQueries{
@@ -73,7 +73,7 @@ var articleQueries = ArticleQueries{
 	ORDER BY article_time DESC
 	LIMIT ? OFFSET ?;`,
 
-	selectCount :`SELECT COUNT(*) FROM article`,
+	selectCount: `SELECT COUNT(*) FROM article`,
 }
 
 // InsertArticleImage insert article to DB
@@ -329,7 +329,7 @@ func (r *MySQLArticleRepository) SelectHomeAllArticles() ([]model.Article, error
 	return as, nil
 }
 
-// SelectHomePaginationArticles get pagination articles
+// SelectPaginationArticles get pagination articles
 func (r *MySQLArticleRepository) SelectPaginationArticles(limit, offset int) ([]model.Article, error) {
 	const op = "repository.SelectPaginationArticles()"
 

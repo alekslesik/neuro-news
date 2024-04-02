@@ -3,8 +3,6 @@ filippo.io/edwards25519 v1.1.0/go.mod h1:BxyFTGdWcka3PhytdK4V28tE5sGfRvvvRV7EaN4
 github.com/BurntSushi/toml v1.2.1/go.mod h1:CxXYINrC8qIiEnFrOxCa7Jy5BFHlXnUU2pbicEuybxQ=
 github.com/BurntSushi/toml v1.3.2 h1:o7IhLm0Msx3BaB+n3Ag7L8EVlByGnpq14C4YWiu/gL8=
 github.com/BurntSushi/toml v1.3.2/go.mod h1:CxXYINrC8qIiEnFrOxCa7Jy5BFHlXnUU2pbicEuybxQ=
-github.com/alekslesik/kandinsky v0.1.5 h1:pow5R1KBRktT0dlhrVc9YTKkY0HjUDEyv6GjcxevrE8=
-github.com/alekslesik/kandinsky v0.1.5/go.mod h1:IniWSDZMN3ilUONnWF82LldSPKXyh+HL5ZRZja4wj14=
 github.com/alekslesik/kandinsky v0.1.6 h1:6+PdAVekp826PM2OIf20mVfgqs1SGxoI+A8W/YsvjGc=
 github.com/alekslesik/kandinsky v0.1.6/go.mod h1:IniWSDZMN3ilUONnWF82LldSPKXyh+HL5ZRZja4wj14=
 github.com/coreos/go-systemd/v22 v22.5.0/go.mod h1:Y58oyj3AT4RCenI/lSvhwexgC+NSVTIJ3seZv2GcEnc=

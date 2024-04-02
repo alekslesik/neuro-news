@@ -210,6 +210,10 @@ func (as *articleService) GetPaginationTemplateData(page string) (*template.Temp
 
 	totalPages := math.Ceil(float64(articlesCount) / float64(articlesOnPage))
 	currentPage, err := strconv.Atoi(page)
+	if err != nil {
+		as.l.Error().Msgf("%s: convert page string pagination number to int > %s", op, err)
+		return nil, err
+	}
 
 	data := &template.TemplateDataPage{
 		TotalPaginationPages:  int(totalPages),
