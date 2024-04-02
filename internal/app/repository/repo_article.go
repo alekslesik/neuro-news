@@ -304,8 +304,8 @@ func (r *MySQLArticleRepository) SelectHomeAllArticles() ([]model.Article, error
 }
 
 // SelectHomePaginationArticles get pagination articles
-func (r *MySQLArticleRepository) SelectHomePaginationArticles(limit, offset int) ([]model.Article, error) {
-	const op = "repository.GetHomePaginationArticles()"
+func (r *MySQLArticleRepository) SelectPaginationArticles(limit, offset int) ([]model.Article, error) {
+	const op = "repository.SelectPaginationArticles()"
 
 	var as []model.Article
 

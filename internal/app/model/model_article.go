@@ -30,7 +30,7 @@ type ArticleModel interface {
 	SelectHomeSportArticles() ([]Article, error)
 	SelectHomeVideoArticles() ([]Article, error)
 	SelectHomeAllArticles() ([]Article, error)
-	SelectHomePaginationArticles(limit, offset int) ([]Article, error)
+	SelectPaginationArticles(limit, offset int) ([]Article, error)
 
 	InsertArticleImage(*Image, *Article) error
 	SelectArticleByURL(string) (Article, error)

@@ -36,16 +36,9 @@ func (a *ArticleHandler) GetHomeArticles(w http.ResponseWriter, r *http.Request)
 
 	page := r.URL.Query().Get("PAGEN_1")
 
-	if page == "" || page == "1" {
-		td, err = a.AppHandler.articleService.GetHomeTemplateData()
-		if err != nil {
-			a.l.Error().Msgf("%s: GetHomeTemplateData error > %s", op, err)
-		}
-	} else {
-		td, err = a.AppHandler.articleService.GetHomePaginateData(page)
-		if err != nil {
-			a.l.Error().Msgf("%s: GetHomePaginateData error > %s", op, err)
-		}
+	td, err = a.AppHandler.articleService.GetHomePaginateData(page)
+	if err != nil {
+		a.l.Error().Msgf("%s: GetHomePaginateData error > %s", op, err)
 	}
 
 	err = a.AppHandler.articleService.RenderTemplate(w, r, tmplFile, td)

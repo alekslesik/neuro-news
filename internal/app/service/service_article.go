@@ -129,7 +129,7 @@ func (as *articleService) GetHomePaginateData(page string) (*template.TemplateDa
 		return nil, err
 	}
 
-	as.t.TemplateData.TemplateDataArticle.AllArticles, err = as.GetHomePaginationArticles(page)
+	as.t.TemplateData.TemplateDataArticle.PaginationArticles, err = as.GetHomePaginationArticles(page)
 	if err != nil {
 		as.l.Error().Msgf("%s: get all home articles error > %s", op, err)
 		return nil, err
@@ -178,16 +178,16 @@ func (as *articleService) GetHomePaginationArticles(page string) ([]model.Articl
 
 	if page == "" {
 		offset = 0
+	} else {
+		p, err := strconv.Atoi(page)
+		if err != nil {
+			as.l.Error().Msgf("%s: atoi convert pagination page error > %s", op, err)
+			return nil, err
+		}
+		offset = (p - 1) * limit
 	}
 
-	p, err := strconv.Atoi(page)
-	if err != nil {
-		as.l.Error().Msgf("%s: atoi convert pagination page error > %s", op, err)
-		return nil, err
-	}
-
-	offset = (p - 1) * limit
-	return as.ar.SelectHomePaginationArticles(limit, offset)
+	return as.ar.SelectPaginationArticles(limit, offset)
 }
 
 // GetArticleTemplateData return template data for article page by article URL
