@@ -57,15 +57,65 @@ func generatePaginationHTML(totalPages, currentPage int) template.HTML {
 
 	builder.WriteString(`<div class=article-pagination><ul>`)
 
-	for i := 1; i < totalPages; i++ {
-		if i == currentPage {
-			builder.WriteString(fmt.Sprintf(`<li class="active"><a href="#news" class="active">%d</a></li>`, i))
-		} else {
-			builder.WriteString(fmt.Sprintf(`<li><a href="/?PAGEN_1=%d#news">%d</a></li>`, i, i))
-		}
+	numbers := make([]int, 0, 5)
+
+	// Add button "back page"
+	if currentPage >= 2 {
+		builder.WriteString(`<li><a href="?PAGEN_1=` + strconv.Itoa(currentPage-1) + `#news` + `"><i class="fa fa-angle-left"></i></a></li>`)
 	}
 
-	// Добавление кнопки "Следующая страница", если это не последняя страница
+	switch {
+	// from 1 to 3
+	case currentPage <= 3:
+		for i := 1; i <= 4; i++ {
+			numbers = append(numbers, i)
+		}
+		for _, n := range numbers {
+			if n == currentPage {
+				builder.WriteString(fmt.Sprintf(`<li class="active"><a href="#news" class="active">%d</a></li>`, n))
+			} else {
+				builder.WriteString(fmt.Sprintf(`<li><a href="/?PAGEN_1=%d#news">%d</a></li>`, n, n))
+			}
+		}
+
+		builder.WriteString(`<li><a class="disabled" href="">...</a></li>`)
+		builder.WriteString(fmt.Sprintf(`<li><a href="/?PAGEN_1=%d#news">%d</a></li>`, totalPages, totalPages))
+	// from totalPages-3
+	case currentPage >= totalPages-3:
+		builder.WriteString(`<li><a href="/?PAGEN_1=1#news">1</a></li>`)
+		builder.WriteString(`<li><a class="disabled" href="">...</a></li>`)
+
+		for i := totalPages - 3; i <= totalPages; i++ {
+			numbers = append(numbers, i)
+		}
+		for _, n := range numbers {
+			if n == currentPage {
+				builder.WriteString(fmt.Sprintf(`<li class="active"><a href="#news" class="active">%d</a></li>`, n))
+			} else {
+				builder.WriteString(fmt.Sprintf(`<li><a href="/?PAGEN_1=%d#news">%d</a></li>`, n, n))
+			}
+		}
+	// from 4 to totalPages-3
+	default:
+		for i := totalPages - 3; i <= totalPages; i++ {
+			numbers = append(numbers, i)
+		}
+
+		builder.WriteString(`<li><a href="/?PAGEN_1=1#news">1</a></li>`)
+		builder.WriteString(`<li><a class="disabled" href="">...</a></li>`)
+
+		for _, n := range numbers {
+			if n == currentPage {
+				builder.WriteString(fmt.Sprintf(`<li class="active"><a href="#news" class="active">%d</a></li>`, n))
+			} else {
+				builder.WriteString(fmt.Sprintf(`<li><a href="/?PAGEN_1=%d#news">%d</a></li>`, n, n))
+			}
+		}
+
+		builder.WriteString(`<li><a class="disabled" href="">...</a></li>`)
+		builder.WriteString(fmt.Sprintf(`<li><a href="/?PAGEN_1=%d#news">%d</a></li>`, totalPages, totalPages))
+	}
+
 	// Add button "next page", if it is not the end page
 	if currentPage < totalPages {
 		builder.WriteString(`<li><a href="?PAGEN_1=` + strconv.Itoa(currentPage+1) + `#news` + `"><i class="fa fa-angle-right"></i></a></li>`)

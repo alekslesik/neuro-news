@@ -786,6 +786,12 @@ textarea.input {
 	color:#FFF;
 }
 
+a.disabled {
+	pointer-events: none;
+	text-decoration: none;
+	cursor: default;
+}
+
 /*=========================================================
 	WIDGET
 ===========================================================*/
