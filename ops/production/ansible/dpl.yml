@@ -9,11 +9,10 @@
 
   tasks:
     # Copy neuro-news binary to the specified path on the remote host
-    - name: Sync website dir with content
-      synchronize:
-        src: "{{ website }}"
-        dest: "{{ app_host_path }}"
-        recursive: yes
+    - name: Copy neuro-news binary
+      copy:
+        src: "{{ app_name }}"
+        dest: "{{ app_host_path }}/{{ app_name }}"
 
     # Copy website dir with content to the specified path on the remote host
     - name: Sync systemd unit file
