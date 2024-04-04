@@ -97,7 +97,7 @@ func generatePaginationHTML(totalPages, currentPage int) template.HTML {
 		}
 	// from 4 to totalPages-3
 	default:
-		for i := totalPages - 3; i <= totalPages; i++ {
+		for i := currentPage - 1; i <= currentPage+1; i++ {
 			numbers = append(numbers, i)
 		}
 
