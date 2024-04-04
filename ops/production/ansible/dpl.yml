@@ -12,7 +12,7 @@
     - name: Copy neuro-news binary
       copy:
         src: "{{ app_name }}"
-        dest: "{{ app_host_path }}/{{ app_name }}"
+        dest: "{{ app_host_path }}"
 
     # Copy website dir with content to the specified path on the remote host
     - name: Sync systemd unit file
@@ -24,10 +24,11 @@
         become_user: root
 
     # Copy systemd unit file to /etc/systemd/system/
-    - name: Copy neuro-news binary
+    - name: Copy systemd unit file
+      become_user: root
       copy:
-        src: "{{ app_name }}"
-        dest: "{{ app_host_path }}/{{ app_name }}"
+        src: "{{ app_service }}"
+        dest: /etc/systemd/system/{{ app_service }}
 
     # Set executable permissions for neuro-news binary
     - name: Set executable permissions for neuro-news binary
