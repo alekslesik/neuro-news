@@ -15,13 +15,11 @@
         dest: "{{ app_host_path }}"
 
     # Copy website dir with content to the specified path on the remote host
-    - name: Sync systemd unit file
+    - name: Sync website dir with content
       synchronize:
-        src: "{{ app_service }}"
-        dest: "/etc/systemd/system/{{ app_service }}"
-        mode: push  # Указывает направление синхронизации; push для отправки файлов с управляющей машины, pull для их получения
-        become: yes
-        become_user: root
+        src: "{{ website }}/"
+        dest: "{{ app_host_path }}/"
+        recursive: yes
 
     # Copy systemd unit file to /etc/systemd/system/
     - name: Copy systemd unit file
