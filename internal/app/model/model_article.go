@@ -29,7 +29,6 @@ type ArticleModel interface {
 	SelectHomeNewsArticles() ([]Article, error)
 	SelectHomeSportArticles() ([]Article, error)
 	SelectHomeVideoArticles() ([]Article, error)
-	SelectHomeAllArticles() ([]Article, error)
 	SelectPaginationArticles(limit, offset int) ([]Article, error)
 	CountArticles() (int, error)
 
