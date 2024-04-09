@@ -71,7 +71,7 @@ func (a *ArticleHandler) Category(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	url := strings.Trim(strings.Trim(urlParts[len(urlParts)-1], "\""), " ")
+	url := strings.Trim(strings.Trim(urlParts[len(urlParts)-2], "\""), " ")
 
 	td, err = a.AppHandler.articleService.GetArticleTemplateData(url)
 	if err != nil {
