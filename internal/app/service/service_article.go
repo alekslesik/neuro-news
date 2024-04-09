@@ -31,7 +31,6 @@ type articleService struct {
 	g  *grabber.Grabber
 }
 
-
 // GetHomePaginateData return template data for home page
 func (as *articleService) GetHomePaginateData(page string) (*template.TemplateData, error) {
 	const op = "service.GetHomeTemplateData()"
@@ -131,7 +130,6 @@ func (as *articleService) getHomeSportArticles() ([]model.Article, error) {
 func (as *articleService) getHomeVideoArticles() ([]model.Article, error) {
 	return as.ar.SelectHomeVideoArticles()
 }
-
 
 // getHomePaginationArticles return []model.Article for pagination part
 func (as *articleService) getHomePaginationArticles(page string) ([]model.Article, error) {
