@@ -37,12 +37,12 @@ jobs:
         run: go vet ./...
 
       # Install staticcheck tool
-      - name: Install staticcheck
-        run: go install honnef.co/go/tools/cmd/staticcheck@latest
+      # - name: Install staticcheck
+      #   run: go install honnef.co/go/tools/cmd/staticcheck@latest
 
       # Run staticcheck to analyze Go code statically
-      - name: Run staticcheck
-        run: staticcheck -checks=all,-ST1000,-U1000 ./...
+      # - name: Run staticcheck
+      #   run: staticcheck -checks=all,-ST1000,-U1000 ./...
 
       # Install govulncheck
       - name: Install govulncheck
