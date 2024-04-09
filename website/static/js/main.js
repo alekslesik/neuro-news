@@ -87,3 +87,29 @@
 	});
 
 })(jQuery);
+
+$(document).ready(function() {
+	// Получаем текущий путь URL
+	var currentPath = window.location.pathname;
+
+	// Перебираем все элементы меню
+	$('#main-nav .main-nav.nav.navbar-nav li').each(function() {
+			// Получаем ссылку (href) из элемента меню
+			var menuItemLink = $(this).find('a');
+
+			// Если ссылка существует
+			if (menuItemLink.length > 0) {
+					// Получаем путь (href) из ссылки
+					var menuItemPath = menuItemLink.attr('href');
+
+					// Проверяем, совпадает ли текущий путь с путем элемента меню
+					if (currentPath === menuItemPath) {
+							// Если совпадает, добавляем класс "active" элементу меню
+							$(this).addClass('active');
+					} else {
+							// Иначе, удаляем класс "active" (если он был установлен)
+							$(this).removeClass('active');
+					}
+			}
+	});
+});

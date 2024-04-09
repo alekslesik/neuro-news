@@ -1,10 +1,8 @@
 {{template "base" .}}
 
-{{define "title"}}NeuroNews - {{.Category}} {{end}}
+{{define "title"}}NeuroNews - {{end}}
 
 {{define "main"}}
-
-{{template "carousel" .}}
 
 <!-- type Article struct {
 	ArticleID   int
@@ -21,11 +19,8 @@
 } -->
 
 
-<!-- AD ARTICLES -->
-<div class="visible-lg visible-md">
-  <img class="center-block" src="/static/img/ad-3.jpg" alt="">
-</div>
-<!-- /AD ARTICLES -->
+
+
 
 <!-- ALL ARTICLES -->
 <div class="section">
@@ -41,16 +36,16 @@
         {{range .TemplateDataArticle.PaginationArticles}}
         <article class="article row-article">
           <div class="article-img">
-            <a href="/news/{{.Href}}">
+            <a href="/news/{{.Category}}/{{.Href}}/">
               <img src="{{.ImagePath}}" alt="">
             </a>
           </div>
           <div class="article-body">
             <ul class="article-info">
-              <li class="article-category"><a href="{{.Category}}">{{.Tag}}</a></li>
+              <li class="article-category"><a href="/news/{{.Category}}/">{{.Tag}}</a></li>
               <li class="article-type"><i class="fa fa-file-text"></i></li>
             </ul>
-            <h3 class="article-title"><a href="/news/{{.Href}}">{{.Title}}</a></h3>
+            <h3 class="article-title"><a href="/news/{{.Category}}/{{.Href}}/">{{.Title}}</a></h3>
             <ul class="article-meta">
               <li><i class="fa fa-clock-o"></i> {{humanDate .ArticleTime}}</li>
               <li><i class="fa fa-comments"></i>{{.Comments}}</li>

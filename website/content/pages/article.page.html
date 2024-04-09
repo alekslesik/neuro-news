@@ -9,11 +9,11 @@
     <div class="row">
       <!-- Main Column -->
       <div class="col-md-8">
-        {{ $article := .TemplateDataArticle.Article }}
+        {{$article := .TemplateDataArticle.Article}}
         <!-- breadcrumb -->
         <ul class="article-breadcrumb">
           <li><a href="/">Главная</a></li>
-          <li><a href="/{{$article.Category}}">{{$article.Tag}}</a></li>
+          <li><a href="/news/{{$article.Category}}/">{{$article.Tag}}</a></li>
           <li>{{$article.Title}}</li>
         </ul>
         <!-- /breadcrumb -->
@@ -30,7 +30,7 @@
           </div>
           <div class="article-body">
             <ul class="article-info">
-              <li class="article-category"><a href="/{{$article.Category}}">{{$article.Tag}}</a></li>
+              <li class="article-category"><a href="/news/{{$article.Category}}">{{$article.Tag}}</a></li>
               <!-- <li class="article-type"><i class="fa fa-file-text"></i></li> -->
             </ul>
             <h1 class="article-title">{{$article.Title}}</h1>
@@ -51,7 +51,7 @@
         <!-- widget tags -->
         <div class="widget-tags">
           <ul>
-            <li><a href="#">{{$article.Tag}}</a></li>
+            <li><a href="/news/{{$article.Category}}">{{$article.Tag}}</a></li>
             <!-- <li><a href="#">Sport</a></li>
             <li><a href="#">Lifestyle</a></li>
             <li><a href="#">Fashion</a></li>
