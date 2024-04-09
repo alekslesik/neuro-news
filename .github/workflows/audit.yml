@@ -25,7 +25,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v4
         with:
-          go-version: 1.21.9
+          go-version: 1.22.2
           check-latest: true
 
       # Verify Go module dependencies
@@ -66,11 +66,11 @@ jobs:
       # Checkout the code from the repository
       - uses: actions/checkout@v4
 
-      # Set up Go environment with version 1.21
+      # Set up Go environment with version 1.22
       - name: Set up Go
         uses: actions/setup-go@v4
         with:
-          go-version: 1.21.9
+          go-version: 1.22.2
 
       # Build the binary for the neuro-news application
       - name: Build binary
