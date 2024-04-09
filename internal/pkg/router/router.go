@@ -24,6 +24,7 @@ func (r *Router) Route() http.Handler {
 	// dynamic pages
 	mux.HandleFunc("/{$}", r.h.ArticleHandler.Home)
 
+	mux.Handle("/news/", http.RedirectHandler("/", http.StatusSeeOther))
 	mux.HandleFunc("/news/{category}/{article}/", r.h.ArticleHandler.Article)
 	mux.HandleFunc("/news/{category}/", r.h.ArticleHandler.Category)
 
