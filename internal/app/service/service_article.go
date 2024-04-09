@@ -12,24 +12,15 @@ import (
 )
 
 type ArticleService interface {
-	GetAllArticles() ([]model.Article, error)
-	GetHomeCarouselArticles() ([]model.Article, error)
-	GetHomeTrendingArticlesTop() ([]model.Article, error)
-	GetHomeTrendingArticlesBottom() ([]model.Article, error)
-	GetHomeNewsArticles() ([]model.Article, error)
-	GetHomeSportArticles() ([]model.Article, error)
-	GetHomeVideoArticles() ([]model.Article, error)
-	GetHomeAllArticles() ([]model.Article, error)
-	GetHomePaginationArticles(page string) ([]model.Article, error)
-	GetArticleByURL(string) (model.Article, error)
-	InsertArticleImage(*model.Image, *model.Article) error
+	GetHomePaginateData(string) (*template.TemplateData, error)
 
 	GrabNewArticle() (*model.Article, error)
-
-	GetHomeTemplateData() (*template.TemplateData, error)
-	GetHomePaginateData(string) (*template.TemplateData, error)
-	GetListArticleData(string) (*template.TemplateData, error)
+	GetArticleByURL(string) (model.Article, error)
+	InsertArticleImage(*model.Image, *model.Article) error
 	GetArticleTemplateData(string) (*template.TemplateData, error)
+
+	GetListArticleData(string) (*template.TemplateData, error)
+
 	RenderTemplate(w http.ResponseWriter, r *http.Request, name string, td *template.TemplateData) error
 }
 
@@ -40,98 +31,49 @@ type articleService struct {
 	g  *grabber.Grabber
 }
 
-// GetHomeTemplateData return template data for home page
-func (as *articleService) GetHomeTemplateData() (*template.TemplateData, error) {
-	const op = "service.GetHomeTemplateData()"
-	var err error
 
-	as.t.TemplateData.TemplateDataArticle.CarouselArticles, err = as.GetHomeCarouselArticles()
-	if err != nil {
-		as.l.Error().Msgf("%s: get home carouser articles error > %s", op, err)
-		return nil, err
-	}
-
-	as.t.TemplateData.TemplateDataArticle.TrendingArticlesTop, err = as.GetHomeTrendingArticlesTop()
-	if err != nil {
-		as.l.Error().Msgf("%s: get home trending articles top error > %s", op, err)
-		return nil, err
-	}
-
-	as.t.TemplateData.TemplateDataArticle.TrendingArticlesBottom, err = as.GetHomeTrendingArticlesBottom()
-	if err != nil {
-		as.l.Error().Msgf("%s: get home trending articles bottom error > %s", op, err)
-		return nil, err
-	}
-
-	as.t.TemplateData.TemplateDataArticle.NewsArticles, err = as.GetHomeNewsArticles()
-	if err != nil {
-		as.l.Error().Msgf("%s: get home news articles error > %s", op, err)
-		return nil, err
-	}
-
-	as.t.TemplateData.TemplateDataArticle.SportArticles, err = as.GetHomeSportArticles()
-	if err != nil {
-		as.l.Error().Msgf("%s: get home sport news articles error > %s", op, err)
-		return nil, err
-	}
-
-	as.t.TemplateData.TemplateDataArticle.VideoArticles, err = as.GetHomeVideoArticles()
-	if err != nil {
-		as.l.Error().Msgf("%s: get home video articles error > %s", op, err)
-		return nil, err
-	}
-
-	as.t.TemplateData.TemplateDataArticle.AllArticles, err = as.GetHomeAllArticles()
-	if err != nil {
-		as.l.Error().Msgf("%s: get all home articles error > %s", op, err)
-		return nil, err
-	}
-
-	return &as.t.TemplateData, nil
-}
-
-// GetHomeTemplateData return template data for home page
+// GetHomePaginateData return template data for home page
 func (as *articleService) GetHomePaginateData(page string) (*template.TemplateData, error) {
 	const op = "service.GetHomeTemplateData()"
 	var err error
 
-	as.t.TemplateData.TemplateDataArticle.CarouselArticles, err = as.GetHomeCarouselArticles()
+	as.t.TemplateData.TemplateDataArticle.CarouselArticles, err = as.getHomeCarouselArticles()
 	if err != nil {
 		as.l.Error().Msgf("%s: get home carouser articles data error > %s", op, err)
 		return nil, err
 	}
 
-	as.t.TemplateData.TemplateDataArticle.TrendingArticlesTop, err = as.GetHomeTrendingArticlesTop()
+	as.t.TemplateData.TemplateDataArticle.TrendingArticlesTop, err = as.getHomeTrendingArticlesTop()
 	if err != nil {
 		as.l.Error().Msgf("%s: get home trending articles data top error > %s", op, err)
 		return nil, err
 	}
 
-	as.t.TemplateData.TemplateDataArticle.TrendingArticlesBottom, err = as.GetHomeTrendingArticlesBottom()
+	as.t.TemplateData.TemplateDataArticle.TrendingArticlesBottom, err = as.getHomeTrendingArticlesBottom()
 	if err != nil {
 		as.l.Error().Msgf("%s: get home trending articles data bottom error > %s", op, err)
 		return nil, err
 	}
 
-	as.t.TemplateData.TemplateDataArticle.NewsArticles, err = as.GetHomeNewsArticles()
+	as.t.TemplateData.TemplateDataArticle.NewsArticles, err = as.getHomeNewsArticles()
 	if err != nil {
 		as.l.Error().Msgf("%s: get home news articles data error > %s", op, err)
 		return nil, err
 	}
 
-	as.t.TemplateData.TemplateDataArticle.SportArticles, err = as.GetHomeSportArticles()
+	as.t.TemplateData.TemplateDataArticle.SportArticles, err = as.getHomeSportArticles()
 	if err != nil {
 		as.l.Error().Msgf("%s: get home sport news articles data error > %s", op, err)
 		return nil, err
 	}
 
-	as.t.TemplateData.TemplateDataArticle.VideoArticles, err = as.GetHomeVideoArticles()
+	as.t.TemplateData.TemplateDataArticle.VideoArticles, err = as.getHomeVideoArticles()
 	if err != nil {
 		as.l.Error().Msgf("%s: get home video articles data error > %s", op, err)
 		return nil, err
 	}
 
-	as.t.TemplateData.TemplateDataArticle.PaginationArticles, err = as.GetHomePaginationArticles(page)
+	as.t.TemplateData.TemplateDataArticle.PaginationArticles, err = as.getHomePaginationArticles(page)
 	if err != nil {
 		as.l.Error().Msgf("%s: get pagination articles data on home page error > %s", op, err)
 		return nil, err
@@ -151,7 +93,7 @@ func (as *articleService) GetListArticleData(page string) (*template.TemplateDat
 	const op = "service.GetListArticleData()"
 	var err error
 
-	as.t.TemplateData.TemplateDataArticle.PaginationArticles, err = as.GetHomePaginationArticles(page)
+	as.t.TemplateData.TemplateDataArticle.PaginationArticles, err = as.getHomePaginationArticles(page)
 	if err != nil {
 		as.l.Error().Msgf("%s: get pagination articles data on list article page error > %s", op, err)
 		return nil, err
@@ -166,40 +108,33 @@ func (as *articleService) GetListArticleData(page string) (*template.TemplateDat
 	return &as.t.TemplateData, nil
 }
 
-func (as *articleService) GetAllArticles() ([]model.Article, error) {
-	return as.ar.SelectAllArticles()
-}
-
-func (as *articleService) GetHomeCarouselArticles() ([]model.Article, error) {
+func (as *articleService) getHomeCarouselArticles() ([]model.Article, error) {
 	return as.ar.SelectHomeCarouselArticles()
 }
 
-func (as *articleService) GetHomeTrendingArticlesTop() ([]model.Article, error) {
+func (as *articleService) getHomeTrendingArticlesTop() ([]model.Article, error) {
 	return as.ar.SelectHomeTrendingArticlesTop()
 }
 
-func (as *articleService) GetHomeTrendingArticlesBottom() ([]model.Article, error) {
+func (as *articleService) getHomeTrendingArticlesBottom() ([]model.Article, error) {
 	return as.ar.SelectHomeTrendingArticlesBottom()
 }
 
-func (as *articleService) GetHomeNewsArticles() ([]model.Article, error) {
+func (as *articleService) getHomeNewsArticles() ([]model.Article, error) {
 	return as.ar.SelectHomeNewsArticles()
 }
 
-func (as *articleService) GetHomeSportArticles() ([]model.Article, error) {
+func (as *articleService) getHomeSportArticles() ([]model.Article, error) {
 	return as.ar.SelectHomeSportArticles()
 }
 
-func (as *articleService) GetHomeVideoArticles() ([]model.Article, error) {
+func (as *articleService) getHomeVideoArticles() ([]model.Article, error) {
 	return as.ar.SelectHomeVideoArticles()
 }
 
-func (as *articleService) GetHomeAllArticles() ([]model.Article, error) {
-	return as.ar.SelectHomeAllArticles()
-}
 
-// GetHomePaginationArticles return []model.Article for pagination part
-func (as *articleService) GetHomePaginationArticles(page string) ([]model.Article, error) {
+// getHomePaginationArticles return []model.Article for pagination part
+func (as *articleService) getHomePaginationArticles(page string) ([]model.Article, error) {
 	op := "service.GetHomePaginationArticles"
 	limit := 15
 	var offset int
