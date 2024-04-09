@@ -1,6 +1,6 @@
 module github.com/alekslesik/neuro-news
 
-go 1.21.6
+go 1.22.2
 
 require (
 	github.com/go-mail/mail/v2 v2.3.0
