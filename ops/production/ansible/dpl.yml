@@ -21,7 +21,6 @@
         dest: "{{ app_host_path }}/"
         recursive: yes
         
-
     # Copy systemd unit file to /etc/systemd/system/
     - name: Copy systemd unit file
       become_user: root
