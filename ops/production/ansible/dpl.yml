@@ -15,10 +15,6 @@
         dest: "{{ app_host_path }}"
 
     # Sync website dir with content to the specified path on the remote host
-    # - name: Copy website dir with content to the specified path on the remote host
-      # copy:
-      #   src: "{{ website }}/"
-      #   dest: "{{ app_host_path }}/"
     - name: Sync website dir with content
       synchronize:
         src: "{{ website }}/"
