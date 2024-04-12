@@ -116,78 +116,88 @@ func (a *Application) Run() error {
 
 	var err error
 	errChan := make(chan error)
+	done := make(chan bool)
+	defer close(done)
+
+	delta := int64(1)
 
 	go func() {
 		for {
+			<-done
 			article, err := a.svs.GetArticleService().GrabNewArticle()
 			if err != nil {
 				a.log.Warn().Msgf("%s: get new article error > %s", op, err)
-				time.Sleep(time.Minute * 80)
+				time.Sleep(time.Minute * time.Duration(delta))
 				continue
 			}
 
 			image, err := a.svs.GetImageService().GenerateImageKand(article)
 			if err != nil {
 				a.log.Warn().Msgf("%s: generate new image error > %s", op, err)
-				time.Sleep(time.Minute * 80)
+				time.Sleep(time.Minute * time.Duration(delta))
 				continue
 			}
 
 			err = a.svs.GetImageService().InsertImage(image)
 			if err != nil {
 				a.log.Warn().Msgf("%s: insert generated image to DB error > %s", op, err)
-				time.Sleep(time.Minute * 80)
+				time.Sleep(time.Minute * time.Duration(delta))
 				continue
 			}
 
 			err = a.svs.GetArticleService().InsertArticleImage(image, article)
 			if err != nil {
 				a.log.Warn().Msgf("%s: insert article to DB error > %s", op, err)
-				time.Sleep(time.Minute * 80)
+				time.Sleep(time.Minute * time.Duration(delta))
 				continue
 			}
 
 			a.log.Info().Msgf("%s: article insert to DB through kandinsky package", op)
 
-			time.Sleep(time.Minute * 80)
+			time.Sleep(time.Minute * time.Duration(delta))
+			done <- true
 		}
 	}()
 
 	go func() {
 		for {
-			time.Sleep(time.Minute * 30)
-
+			<-done
 			article, err := a.svs.GetArticleService().GrabNewArticle()
 			if err != nil {
 				a.log.Warn().Msgf("%s: get new article error > %s", op, err)
-				time.Sleep(time.Minute * 30)
+				time.Sleep(time.Minute * time.Duration(delta))
 				continue
 			}
 
 			image, err := a.svs.GetImageService().GenerateImageFruity(article)
 			if err != nil {
 				a.log.Warn().Msgf("%s: generate new image error > %s", op, err)
-				time.Sleep(time.Minute * 30)
+				time.Sleep(time.Minute * time.Duration(delta))
 				continue
 			}
 
 			err = a.svs.GetImageService().InsertImage(image)
 			if err != nil {
 				a.log.Warn().Msgf("%s: insert generated image to DB error > %s", op, err)
-				time.Sleep(time.Minute * 30)
+				time.Sleep(time.Minute * time.Duration(delta))
 				continue
 			}
 
 			err = a.svs.GetArticleService().InsertArticleImage(image, article)
 			if err != nil {
 				a.log.Warn().Msgf("%s: insert article to DB error > %s", op, err)
-				time.Sleep(time.Minute * 30)
+				time.Sleep(time.Minute * time.Duration(delta))
 				continue
 			}
 
 			a.log.Info().Msgf("%s: article insert to DB through Fruity API", op)
+
+			time.Sleep(time.Minute * time.Duration(delta))
+			done <- true
 		}
 	}()
+
+	done <- true
 
 	// db close
 	defer a.closeDB()
