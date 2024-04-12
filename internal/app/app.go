@@ -119,7 +119,7 @@ func (a *Application) Run() error {
 	done := make(chan bool)
 	defer close(done)
 
-	delta := int64(1)
+	delta := int64(15)
 
 	go func() {
 		for {
