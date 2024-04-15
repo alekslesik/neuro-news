@@ -22,6 +22,7 @@ func Init(config *config.Config) error {
 	flagSet.StringVar(&config.App.Env, "env", config.App.Env, "Environment (development|staging|production)")
 	flagSet.StringVar(&config.App.Host, "host", config.App.Host, "Host name")
 	flagSet.IntVar(&config.App.Port, "port", config.App.Port, "API server port")
+	flagSet.IntVar(&config.App.Delta, "delta", config.App.Delta, "Friquensy article grabbing in minutes")
 
 	// take arguments transferred to application using os.Args slice
 	args := os.Args[1:]

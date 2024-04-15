@@ -19,6 +19,7 @@ type AppConfig struct {
 	Port      int    `env:"PORT" env-default:"443"`
 	Host      string `env:"HOST" env-default:""`
 	Env       string `env:"ENV" env-default:"development"`
+	Delta     int `env:"DELTA" env-default:"15"`
 	AdminUser struct {
 		Email    string `env:"ADMIN_EMAIL" env-default:"admin"`
 		Password string `env:"ADMIN_PWD" env-default:"admin"`
