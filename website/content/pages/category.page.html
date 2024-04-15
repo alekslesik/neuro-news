@@ -1,6 +1,6 @@
 {{template "base" .}}
 
-{{define "title"}}NeuroNews - {{end}}
+{{define "title"}}NeuroNews - News{{end}}
 
 {{define "main"}}
 
@@ -18,10 +18,6 @@
 	VideoPath				string
 } -->
 
-
-
-
-
 <!-- ALL ARTICLES -->
 <div class="section">
   <div class="container">
@@ -35,6 +31,7 @@
         <!-- ARTICLES -->
         {{range .TemplateDataArticle.PaginationArticles}}
         <article class="article row-article">
+
           <div class="article-img">
             <a href="/news/{{.Category}}/{{.Href}}/">
               <img src="{{.ImagePath}}" alt="">
@@ -57,7 +54,7 @@
         <!-- /ARTICLES -->
 
         <!-- pagination -->
-        {{generatePaginationHTML .TemplateDataPage.TotalPaginationPages .TemplateDataPage.CurrentPaginationPage}}
+        {{generatePaginationHTML .TemplateDataPage.TotalPaginationPages .TemplateDataPage.CurrentPaginationPage .TemplateDataPage.Category}}
         <!-- /pagination -->
 
       </div>
