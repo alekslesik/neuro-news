@@ -74,8 +74,6 @@ func (a *ArticleHandler) Category(w http.ResponseWriter, r *http.Request) {
 	url := strings.Trim(strings.Trim(urlParts[len(urlParts)-2], "\""), " ")
 	page := r.URL.Query().Get("PAGEN_1")
 
-
-
 	td, err = a.AppHandler.articleService.GetCategoryArticlesData(url, page)
 	if err != nil {
 		a.l.Error().Msgf("%s: GetArticle error > %s", op, err)
