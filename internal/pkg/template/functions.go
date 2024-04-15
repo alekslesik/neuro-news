@@ -52,8 +52,12 @@ func decodeHTML(s string) template.HTML {
 }
 
 // Generate HTML for pagination
-func generatePaginationHTML(totalPages, currentPage int) template.HTML {
+func generatePaginationHTML(totalPages, currentPage int, category string) template.HTML {
 	var builder strings.Builder
+
+	if category != "" {
+		category = "news/" + category + "/"
+	}
 
 	builder.WriteString(`<div class=article-pagination><ul>`)
 
@@ -61,7 +65,7 @@ func generatePaginationHTML(totalPages, currentPage int) template.HTML {
 
 	// Add button "back page"
 	if currentPage >= 2 {
-		builder.WriteString(`<li><a href="?PAGEN_1=` + strconv.Itoa(currentPage-1) + `#news` + `"><i class="fa fa-angle-left"></i></a></li>`)
+		builder.WriteString(`<li><a href="/`+ category +`?PAGEN_1=` + strconv.Itoa(currentPage-1) + `#news` + `"><i class="fa fa-angle-left"></i></a></li>`)
 	}
 
 	switch {
@@ -74,15 +78,15 @@ func generatePaginationHTML(totalPages, currentPage int) template.HTML {
 			if n == currentPage {
 				builder.WriteString(fmt.Sprintf(`<li class="active"><a href="#news" class="active">%d</a></li>`, n))
 			} else {
-				builder.WriteString(fmt.Sprintf(`<li><a href="/?PAGEN_1=%d#news">%d</a></li>`, n, n))
+				builder.WriteString(fmt.Sprintf(`<li><a href="/`+ category +`?PAGEN_1=%d#news">%d</a></li>`, n, n))
 			}
 		}
 
 		builder.WriteString(`<li><a class="disabled" href="">...</a></li>`)
-		builder.WriteString(fmt.Sprintf(`<li><a href="/?PAGEN_1=%d#news">%d</a></li>`, totalPages, totalPages))
+		builder.WriteString(fmt.Sprintf(`<li><a href="/`+ category +`?PAGEN_1=%d#news">%d</a></li>`, totalPages, totalPages))
 	// from totalPages-3
 	case currentPage >= totalPages-3:
-		builder.WriteString(`<li><a href="/?PAGEN_1=1#news">1</a></li>`)
+		builder.WriteString(`<li><a href="/`+ category +`?PAGEN_1=1#news">1</a></li>`)
 		builder.WriteString(`<li><a class="disabled" href="">...</a></li>`)
 
 		for i := totalPages - 3; i <= totalPages; i++ {
@@ -92,7 +96,7 @@ func generatePaginationHTML(totalPages, currentPage int) template.HTML {
 			if n == currentPage {
 				builder.WriteString(fmt.Sprintf(`<li class="active"><a href="#news" class="active">%d</a></li>`, n))
 			} else {
-				builder.WriteString(fmt.Sprintf(`<li><a href="/?PAGEN_1=%d#news">%d</a></li>`, n, n))
+				builder.WriteString(fmt.Sprintf(`<li><a href="/`+ category +`?PAGEN_1=%d#news">%d</a></li>`, n, n))
 			}
 		}
 	// from 4 to totalPages-3
@@ -101,24 +105,24 @@ func generatePaginationHTML(totalPages, currentPage int) template.HTML {
 			numbers = append(numbers, i)
 		}
 
-		builder.WriteString(`<li><a href="/?PAGEN_1=1#news">1</a></li>`)
+		builder.WriteString(`<li><a href="/`+ category +`?PAGEN_1=1#news">1</a></li>`)
 		builder.WriteString(`<li><a class="disabled" href="">...</a></li>`)
 
 		for _, n := range numbers {
 			if n == currentPage {
 				builder.WriteString(fmt.Sprintf(`<li class="active"><a href="#news" class="active">%d</a></li>`, n))
 			} else {
-				builder.WriteString(fmt.Sprintf(`<li><a href="/?PAGEN_1=%d#news">%d</a></li>`, n, n))
+				builder.WriteString(fmt.Sprintf(`<li><a href="/`+ category +`?PAGEN_1=%d#news">%d</a></li>`, n, n))
 			}
 		}
 
 		builder.WriteString(`<li><a class="disabled" href="">...</a></li>`)
-		builder.WriteString(fmt.Sprintf(`<li><a href="/?PAGEN_1=%d#news">%d</a></li>`, totalPages, totalPages))
+		builder.WriteString(fmt.Sprintf(`<li><a href="/`+ category +`?PAGEN_1=%d#news">%d</a></li>`, totalPages, totalPages))
 	}
 
 	// Add button "next page", if it is not the end page
 	if currentPage < totalPages {
-		builder.WriteString(`<li><a href="?PAGEN_1=` + strconv.Itoa(currentPage+1) + `#news` + `"><i class="fa fa-angle-right"></i></a></li>`)
+		builder.WriteString(`<li><a href="/`+ category +`?PAGEN_1=` + strconv.Itoa(currentPage+1) + `#news` + `"><i class="fa fa-angle-right"></i></a></li>`)
 	}
 
 	builder.WriteString(`</ul></div>`)

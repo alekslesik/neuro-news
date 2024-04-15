@@ -44,6 +44,7 @@ type TemplateData struct {
 type TemplateDataPage struct {
 	TotalPaginationPages  int
 	CurrentPaginationPage int
+	Category              string
 }
 
 type TemplateDataArticle struct {
