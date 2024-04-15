@@ -141,14 +141,12 @@ func (a *Application) Run() error {
 			err = a.svs.GetImageService().InsertImage(image)
 			if err != nil {
 				a.log.Warn().Msgf("%s: insert generated image to DB error > %s", op, err)
-				time.Sleep(time.Minute * time.Duration(delta))
 				continue
 			}
 
 			err = a.svs.GetArticleService().InsertArticleImage(image, article)
 			if err != nil {
 				a.log.Warn().Msgf("%s: insert article to DB error > %s", op, err)
-				time.Sleep(time.Minute * time.Duration(delta))
 				continue
 			}
 
@@ -179,14 +177,12 @@ func (a *Application) Run() error {
 			err = a.svs.GetImageService().InsertImage(image)
 			if err != nil {
 				a.log.Warn().Msgf("%s: insert generated image to DB error > %s", op, err)
-				time.Sleep(time.Minute * time.Duration(delta))
 				continue
 			}
 
 			err = a.svs.GetArticleService().InsertArticleImage(image, article)
 			if err != nil {
 				a.log.Warn().Msgf("%s: insert article to DB error > %s", op, err)
-				time.Sleep(time.Minute * time.Duration(delta))
 				continue
 			}
 
