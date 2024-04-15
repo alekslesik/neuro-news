@@ -13,14 +13,15 @@ type MySQLArticleRepository struct {
 }
 
 type ArticleQueries struct {
-	selectAllArticle        string
-	selectArticleLimit      string
-	selectArticleWhereLimit string
-	selectVideoLimit        string
-	insertImageArticle      string
-	selectArticleByHref     string
-	selectArticlePagination string
-	selectCount             string
+	selectAllArticle                      string
+	selectArticleLimit                    string
+	selectArticleWhereLimit               string
+	selectVideoLimit                      string
+	insertImageArticle                    string
+	selectArticleByHref                   string
+	selectArticleLimitOffset              string
+	selectArticleLimitOffsetWhereCategory string
+	selectCount                           string
 }
 
 var articleQueries = ArticleQueries{
@@ -65,11 +66,19 @@ var articleQueries = ArticleQueries{
 	ON article.image_id = image.image_id
 	WHERE kind = 'article' AND href = ?;`,
 
-	selectArticlePagination: `SELECT article_id, title, preview_text, article_time, tag, detail_text, href, comments, category, image_path
+	selectArticleLimitOffset: `SELECT article_id, title, preview_text, article_time, tag, detail_text, href, comments, category, image_path
 	FROM
 	article INNER JOIN image
 	ON article.image_id = image.image_id
 	WHERE kind = 'article'
+	ORDER BY article_time DESC
+	LIMIT ? OFFSET ?;`,
+
+	selectArticleLimitOffsetWhereCategory: `SELECT article_id, title, preview_text, article_time, tag, detail_text, href, comments, category, image_path
+	FROM
+	article INNER JOIN image
+	ON article.image_id = image.image_id
+	WHERE kind = 'article' AND category = ?
 	ORDER BY article_time DESC
 	LIMIT ? OFFSET ?;`,
 
@@ -329,13 +338,13 @@ func (r *MySQLArticleRepository) SelectHomeAllArticles() ([]model.Article, error
 	return as, nil
 }
 
-// SelectPaginationArticles get pagination articles
-func (r *MySQLArticleRepository) SelectPaginationArticles(limit, offset int) ([]model.Article, error) {
+// SelectHomePaginationArticles get pagination articles
+func (r *MySQLArticleRepository) SelectHomePaginationArticles(limit, offset int) ([]model.Article, error) {
 	const op = "repository.SelectPaginationArticles()"
 
 	var as = make([]model.Article, 0, limit)
 
-	rows, err := r.db.Query(articleQueries.selectArticlePagination, limit, offset)
+	rows, err := r.db.Query(articleQueries.selectArticleLimitOffset, limit, offset)
 	if err != nil {
 		r.l.Warn().Msgf("%s: query select pagination articles > %s", op, err)
 	}
@@ -347,6 +356,33 @@ func (r *MySQLArticleRepository) SelectPaginationArticles(limit, offset int) ([]
 			&a.ArticleTime, &a.Tag, &a.DetailText, &a.Href, &a.Comments, &a.Category, &a.ImagePath)
 		if err != nil {
 			r.l.Error().Msgf("%s: query scan pagination articles > %s", op, err)
+			return nil, err
+		}
+
+		as = append(as, a)
+	}
+
+	return as, nil
+}
+
+// SelectCategoryArticles get pagination articles on category page
+func (r *MySQLArticleRepository) SelectCategoryArticles(category string, limit, offset int) ([]model.Article, error) {
+	const op = "repository.SelectCategoryArticles()"
+
+	var as = make([]model.Article, 0, limit)
+
+	rows, err := r.db.Query(articleQueries.selectArticleLimitOffsetWhereCategory, category, limit, offset)
+	if err != nil {
+		r.l.Warn().Msgf("%s: query select pagination articles on category page > %s", op, err)
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var a model.Article
+		err = rows.Scan(&a.ArticleID, &a.Title, &a.PreviewText,
+			&a.ArticleTime, &a.Tag, &a.DetailText, &a.Href, &a.Comments, &a.Category, &a.ImagePath)
+		if err != nil {
+			r.l.Error().Msgf("%s: query scan pagination articles on category page > %s", op, err)
 			return nil, err
 		}
 

@@ -29,9 +29,10 @@ type ArticleModel interface {
 	SelectHomeNewsArticles() ([]Article, error)
 	SelectHomeSportArticles() ([]Article, error)
 	SelectHomeVideoArticles() ([]Article, error)
-	SelectPaginationArticles(limit, offset int) ([]Article, error)
+	SelectHomePaginationArticles(limit, offset int) ([]Article, error)
+	SelectCategoryArticles(category string, limit, offset int) ([]Article, error)
 	CountArticles() (int, error)
 
 	InsertArticleImage(*Image, *Article) error
-	SelectArticleByURL(string) (Article, error)
+	SelectArticleByURL(url string) (Article, error)
 }
