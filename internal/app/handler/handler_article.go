@@ -54,8 +54,8 @@ func (a *ArticleHandler) Home(w http.ResponseWriter, r *http.Request) {
 // Category GET handler for category page with pagination: GET /{category}?PAGEN_1
 func (a *ArticleHandler) Category(w http.ResponseWriter, r *http.Request) {
 	const (
-		op       = "GetArticleList()"
-		tmplFile = "article.list.page.html"
+		op       = "Category()"
+		tmplFile = "category.page.html"
 	)
 
 	var (
@@ -72,11 +72,16 @@ func (a *ArticleHandler) Category(w http.ResponseWriter, r *http.Request) {
 	}
 
 	url := strings.Trim(strings.Trim(urlParts[len(urlParts)-2], "\""), " ")
+	page := r.URL.Query().Get("PAGEN_1")
 
-	td, err = a.AppHandler.articleService.GetArticleTemplateData(url)
+
+
+	td, err = a.AppHandler.articleService.GetCategoryArticlesData(url, page)
 	if err != nil {
 		a.l.Error().Msgf("%s: GetArticle error > %s", op, err)
 	}
+
+	td.TemplateDataPage.Category = url
 
 	err = a.AppHandler.articleService.RenderTemplate(w, r, tmplFile, td)
 	if err != nil {
