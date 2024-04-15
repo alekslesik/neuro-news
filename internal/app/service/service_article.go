@@ -15,11 +15,10 @@ type ArticleService interface {
 	GetHomePaginateData(string) (*template.TemplateData, error)
 
 	GrabNewArticle() (*model.Article, error)
-	GetArticleByURL(string) (model.Article, error)
-	InsertArticleImage(*model.Image, *model.Article) error
-	GetArticleTemplateData(string) (*template.TemplateData, error)
-
-	GetListArticleData(string) (*template.TemplateData, error)
+	GetArticleByURL(url string) (model.Article, error)
+	InsertArticleImage(i *model.Image, a *model.Article) error
+	GetArticleTemplateData(url string) (*template.TemplateData, error)
+	GetCategoryArticlesData(page, url string) (*template.TemplateData, error)
 
 	RenderTemplate(w http.ResponseWriter, r *http.Request, name string, td *template.TemplateData) error
 }
@@ -87,20 +86,20 @@ func (as *articleService) GetHomePaginateData(page string) (*template.TemplateDa
 	return &as.t.TemplateData, nil
 }
 
-// GetListArticleData return template data for list article page
-func (as *articleService) GetListArticleData(page string) (*template.TemplateData, error) {
-	const op = "service.GetListArticleData()"
+// GetCategoryArticlesData return template data for category page
+func (as *articleService) GetCategoryArticlesData(url, page string) (*template.TemplateData, error) {
+	const op = "service.GetCategoryListData()"
 	var err error
 
-	as.t.TemplateData.TemplateDataArticle.PaginationArticles, err = as.getHomePaginationArticles(page)
+	as.t.TemplateData.TemplateDataArticle.PaginationArticles, err = as.getCategoryPaginationArticles(url, page)
 	if err != nil {
-		as.l.Error().Msgf("%s: get pagination articles data on list article page error > %s", op, err)
+		as.l.Error().Msgf("%s: get pagination articles data on category page error > %s", op, err)
 		return nil, err
 	}
 
 	as.t.TemplateData.TemplateDataPage, err = as.GetPaginationTemplateData(page)
 	if err != nil {
-		as.l.Error().Msgf("%s: get pagination page data on list article page error > %s", op, err)
+		as.l.Error().Msgf("%s: get pagination page data on category page error > %s", op, err)
 		return nil, err
 	}
 
@@ -148,7 +147,27 @@ func (as *articleService) getHomePaginationArticles(page string) ([]model.Articl
 		offset = (p - 1) * limit
 	}
 
-	return as.ar.SelectPaginationArticles(limit, offset)
+	return as.ar.SelectHomePaginationArticles(limit, offset)
+}
+
+// getCategoryPaginationArticles return []model.Article with pagination on category page
+func (as *articleService) getCategoryPaginationArticles(url, page string) ([]model.Article, error) {
+	op := "service.GetHomePaginationArticles"
+	limit := 15
+	var offset int
+
+	if page == "" {
+		offset = 0
+	} else {
+		p, err := strconv.Atoi(page)
+		if err != nil {
+			as.l.Error().Msgf("%s: atoi convert pagination page error > %s", op, err)
+			return nil, err
+		}
+		offset = (p - 1) * limit
+	}
+
+	return as.ar.SelectCategoryArticles(url, limit, offset)
 }
 
 // GetPaginationTemplateData return pagination page data
