@@ -10,4 +10,5 @@ type Image struct {
 
 type ImageModel interface {
 	InsertImage(*Image) error
+	SelectGalleryImage(limit int) ([]Image, error)
 }

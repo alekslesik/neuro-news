@@ -374,7 +374,7 @@ func (r *MySQLArticleRepository) SelectHomePaginationArticles(limit, offset int)
 	return as, nil
 }
 
-// getRandomArticles get 5 random articles
+// GetRandomArticles return random articles
 func (r *MySQLArticleRepository) GetRandomArticles(limit int) ([]model.Article, error) {
 	const op = "repository.getRandomArticles()"
 	var as = make([]model.Article, 0, limit)
@@ -400,7 +400,7 @@ func (r *MySQLArticleRepository) GetRandomArticles(limit int) ([]model.Article, 
 	return as, nil
 }
 
-// SelectCategoryArticles get pagination articles on category page
+// SelectCategoryArticles return pagination articles on category page
 func (r *MySQLArticleRepository) SelectCategoryArticles(category string, limit, offset int) ([]model.Article, error) {
 	const op = "repository.SelectCategoryArticles()"
 

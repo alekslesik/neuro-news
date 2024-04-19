@@ -35,6 +35,7 @@ type TemplateData struct {
 	CSRFToken           string
 	TemplateDataArticle TemplateDataArticle
 	TemplateDataPage    *TemplateDataPage
+	TemplateDataImages  TemplateDataImages
 
 	// Form              *forms.Form
 	// File              *models.File
@@ -59,6 +60,10 @@ type TemplateDataArticle struct {
 	RandomArticles         []model.Article
 	PaginationData         string
 	Article                model.Article
+}
+
+type TemplateDataImages struct {
+	RandomImages []model.Image
 }
 
 // New return instance of template

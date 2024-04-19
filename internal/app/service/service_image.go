@@ -3,6 +3,7 @@ package service
 import (
 	"github.com/alekslesik/neuro-news/internal/app/model"
 	"github.com/alekslesik/neuro-news/internal/pkg/grabber"
+	"github.com/alekslesik/neuro-news/internal/pkg/template"
 	"github.com/alekslesik/neuro-news/pkg/logger"
 )
 
@@ -10,6 +11,7 @@ type ImageService interface {
 	InsertImage(*model.Image) error
 	GenerateImageKand(*model.Article) (*model.Image, error)
 	GenerateImageFruity(*model.Article) (*model.Image, error)
+	AddRandomImages(td *template.TemplateData) (*template.TemplateData, error)
 }
 
 type imageService struct {
@@ -28,6 +30,11 @@ func (is *imageService) InsertImage(i *model.Image) error {
 		return err
 	}
 	return nil
+}
+
+// GetRandomArticles return 16 images
+func (is *imageService) GetRandomImages(limit int) ([]model.Image, error) {
+	return is.ir.SelectGalleryImage(16)
 }
 
 // GenerateImageKand generate image through Kandinsky API
@@ -52,4 +59,18 @@ func (is *imageService) GenerateImageFruity(a *model.Article) (*model.Image, err
 		return nil, err
 	}
 	return image, nil
+}
+
+func (is *imageService) AddRandomImages(td *template.TemplateData) (*template.TemplateData, error) {
+	const op = "service.AddRandomImages()"
+
+	i, err := is.GetRandomImages(16)
+	if err != nil {
+		is.l.Error().Msgf("%s: get random images error > %s", op, err)
+		return nil, err
+	}
+
+	td.TemplateDataImages.RandomImages = i
+
+	return td, nil
 }

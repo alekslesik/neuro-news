@@ -149,7 +149,7 @@
 <div class="section">
 	<div class="container">
 		<div class="row">
-			<div class="col-md-8">
+			<div class="col-md-12">
 				<div class="row">
 					<!-- NEWS -->
 					<div class="col-md-6 col-sm-6">
@@ -261,11 +261,11 @@
 			<!-- /Main Column -->
 
 			<!-- Aside Column -->
-			<div class="col-md-4">
+			<!-- <div class="col-md-4"> -->
 				<!-- Ad widget -->
-				<div class="widget center-block hidden-xs">
+				<!-- <div class="widget center-block hidden-xs">
 					<img class="center-block" src="/static/img/ad-1.jpg" alt="">
-				</div>
+				</div> -->
 				<!-- /Ad widget -->
 
 				<!-- social widget -->
@@ -297,7 +297,7 @@
 					</form>
 				</div> -->
 				<!-- /subscribe widget -->
-			</div>
+			<!-- </div> -->
 			<!-- /Aside Column -->
 		</div>
 	</div>
@@ -353,7 +353,7 @@
 <!-- /VIDEO ARTICLES -->
 
 <!-- ALL ARTICLES -->
-<div class="section">
+<div class="section" id="news">
 	<div class="container">
 		<div class="row">
 			<div class="col-md-8">
@@ -394,7 +394,7 @@
 			<!-- /Main Column -->
 
 			<!-- Aside Column -->
-			<div class="col-md-4">
+			<div class="col-md-4 fixedDiv" id="">
 				<!-- article widget -->
 				<div class="widget">
 					<div class="widget-title">
@@ -431,23 +431,19 @@
 				<!-- galery widget -->
 				<div class="widget galery-widget">
 					<div class="widget-title">
-						<h2 class="title">Flickr фото</h2>
+						<h2 class="title">Фотогалерея</h2>
 					</div>
 					<ul>
-						<li><a href="#"><img src="/static/img/img-widget-3.jpg" alt=""></a></li>
-						<li><a href="#"><img src="/static/img/img-widget-4.jpg" alt=""></a></li>
-						<li><a href="#"><img src="/static/img/img-widget-5.jpg" alt=""></a></li>
-						<li><a href="#"><img src="/static/img/img-widget-6.jpg" alt=""></a></li>
-						<li><a href="#"><img src="/static/img/img-widget-7.jpg" alt=""></a></li>
-						<li><a href="#"><img src="/static/img/img-widget-8.jpg" alt=""></a></li>
-						<li><a href="#"><img src="/static/img/img-widget-9.jpg" alt=""></a></li>
-						<li><a href="#"><img src="/static/img/img-widget-10.jpg" alt=""></a></li>
+						{{range .TemplateDataImages.RandomImages}}
+							<li><a href="#"><img src="{{.ImagePath}}" alt="{{.Alt}}"></a></li>
+						{{end}}
 					</ul>
 				</div>
 				<!-- /galery widget -->
 
 				<!-- tweets widget -->
-				<div class="widget tweets-widget">
+				<!-- TODO -->
+				<!-- <div class="widget tweets-widget">
 					<div class="widget-title">
 						<h2 class="title">Недавние твитты</h2>
 					</div>
@@ -474,7 +470,7 @@
 							</div>
 						</li>
 					</ul>
-				</div>
+				</div> -->
 				<!-- /tweets widget -->
 			</div>
 			<!-- /Aside Column -->
