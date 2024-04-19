@@ -13,7 +13,7 @@ type MySQLImageRepository struct {
 }
 
 type ImageQueries struct {
-	insert string
+	insert                 string
 	selectArticleRandLimit string
 }
 
@@ -22,7 +22,7 @@ var imageQueries = ImageQueries{
 	(image_path, image_size, image_name, image_alt)
 	VALUES(?, ?, ?, ?);`,
 
-	selectArticleRandLimit:`SELECT image_path, image_alt
+	selectArticleRandLimit: `SELECT image_path, image_alt
 	FROM image
 	ORDER BY RAND()
 	LIMIT ?;`,

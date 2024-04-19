@@ -21,7 +21,7 @@ func New(services *service.Services, l *logger.Logger, templates *template.Templ
 	appHandler := &AppHandler{
 		articleService: services.GetArticleService(),
 		userService:    services.GetUserService(),
-		imageService: services.GetImageService(),
+		imageService:   services.GetImageService(),
 		templates:      templates,
 	}
 
