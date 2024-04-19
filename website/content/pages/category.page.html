@@ -54,7 +54,8 @@
         <!-- /ARTICLES -->
 
         <!-- pagination -->
-        {{generatePaginationHTML .TemplateDataPage.TotalPaginationPages .TemplateDataPage.CurrentPaginationPage .TemplateDataPage.Category}}
+        {{generatePaginationHTML .TemplateDataPage.TotalPaginationPages .TemplateDataPage.CurrentPaginationPage
+        .TemplateDataPage.Category}}
         <!-- /pagination -->
 
       </div>
@@ -64,9 +65,6 @@
       <div class="col-md-4">
         <!-- article widget -->
         <div class="widget">
-          <div class="widget center-block hidden-xs">
-            <img class="center-block" src="/static/img/ad-1.jpg" alt="">
-          </div>
           <!-- /Ad widget -->
 
           <!-- social widget -->
@@ -105,44 +103,31 @@
           <!-- owl carousel 4 -->
           <div id="owl-carousel-4" class="owl-carousel owl-theme">
             <!-- ARTICLE -->
+            {{range .TemplateDataArticle.RandomArticles}}
             <article class="article thumb-article">
               <div class="article-img">
-                <img src="/static/img/img-thumb-1.jpg" alt="">
+                <img src="{{.ImagePath}}" alt="{{.Title}}">
               </div>
               <div class="article-body">
                 <ul class="article-info">
-                  <li class="article-category"><a href="#">Новости</a></li>
-                  <li class="article-type"><i class="fa fa-video-camera"></i></li>
+                  <li class="article-category"><a href="/news/{{.Category}}/">{{.Tag}}</a></li>
+                  <li class="article-type"><i class="fa fa-camera"></i></li>
                 </ul>
-                <h3 class="article-title"><a href="#">Duis urbanitas eam in, tempor consequat.</a></h3>
+                <h2 class="article-title"><a href="/news/{{.Category}}/{{.Href}}/">{{.Title}}</a></h2>
                 <ul class="article-meta">
-                  <li><i class="fa fa-clock-o"></i> January 31, 2017</li>
-                  <li><i class="fa fa-comments"></i> 33</li>
+                  <li><i class="fa fa-clock-o"></i> {{humanDate .ArticleTime}}</li>
+                  <li><i class="fa fa-comments"></i> {{.Comments}}</li>
                 </ul>
               </div>
             </article>
-            <!-- /ARTICLE -->
-
-            <!-- ARTICLE -->
-            <article class="article thumb-article">
-              <div class="article-img">
-                <img src="/static/img/img-thumb-2.jpg" alt="">
-              </div>
-              <div class="article-body">
-                <ul class="article-info">
-                  <li class="article-category"><a href="#">Новости</a></li>
-                  <li class="article-type"><i class="fa fa-video-camera"></i></li>
-                </ul>
-                <h3 class="article-title"><a href="#">Duis urbanitas eam in, tempor consequat.</a></h3>
-                <ul class="article-meta">
-                  <li><i class="fa fa-clock-o"></i> January 31, 2017</li>
-                  <li><i class="fa fa-comments"></i> 33</li>
-                </ul>
-              </div>
-            </article>
-            <!-- /ARTICLE -->
+            {{end}}
+            <!-- /ARTICLES -->
           </div>
           <!-- /owl carousel 4 -->
+        </div>
+
+        <div class="widget center-block hidden-xs">
+          <img class="center-block" src="/static/img/ad-1.jpg" alt="">
         </div>
         <!-- /article widget -->
 
