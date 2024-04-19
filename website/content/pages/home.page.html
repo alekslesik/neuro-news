@@ -262,15 +262,15 @@
 
 			<!-- Aside Column -->
 			<!-- <div class="col-md-4"> -->
-				<!-- Ad widget -->
-				<!-- <div class="widget center-block hidden-xs">
+			<!-- Ad widget -->
+			<!-- <div class="widget center-block hidden-xs">
 					<img class="center-block" src="/static/img/ad-1.jpg" alt="">
 				</div> -->
-				<!-- /Ad widget -->
+			<!-- /Ad widget -->
 
-				<!-- social widget -->
-				<!-- TODO social -->
-				<!-- <div class="widget social-widget">
+			<!-- social widget -->
+			<!-- TODO social -->
+			<!-- <div class="widget social-widget">
 					<div class="widget-title">
 						<h2 class="title">Stay Connected</h2>
 					</div>
@@ -283,11 +283,11 @@
 						<li><a href="#" class="rss"><i class="fa fa-rss"></i><br><span>RSS</span></a></li>
 					</ul>
 				</div> -->
-				<!-- /social widget -->
+			<!-- /social widget -->
 
-				<!-- subscribe widget -->
-				<!-- TODO -->
-				<!-- <div class="widget subscribe-widget">
+			<!-- subscribe widget -->
+			<!-- TODO -->
+			<!-- <div class="widget subscribe-widget">
 					<div class="widget-title">
 						<h2 class="title">Оформить подписку</h2>
 					</div>
@@ -296,7 +296,7 @@
 						<button class="input-btn">Подписаться</button>
 					</form>
 				</div> -->
-				<!-- /subscribe widget -->
+			<!-- /subscribe widget -->
 			<!-- </div> -->
 			<!-- /Aside Column -->
 		</div>
@@ -428,6 +428,12 @@
 				</div>
 				<!-- /article widget -->
 
+				<!-- Ad widget -->
+				<div class="widget center-block hidden-xs">
+					<img class="center-block" src="/static/img/ad-1.jpg" alt="">
+				</div>
+				<!-- /Ad widget -->
+
 				<!-- galery widget -->
 				<div class="widget galery-widget">
 					<div class="widget-title">
@@ -435,10 +441,12 @@
 					</div>
 					<ul>
 						{{range .TemplateDataImages.RandomImages}}
-							<li><a href="#"><img src="{{.ImagePath}}" alt="{{.Alt}}"></a></li>
+						<li><a href="#"><img src="{{.ImagePath}}" alt="{{.Alt}}"></a></li>
 						{{end}}
 					</ul>
 				</div>
+
+
 				<!-- /galery widget -->
 
 				<!-- tweets widget -->
