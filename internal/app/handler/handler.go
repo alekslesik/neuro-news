@@ -9,6 +9,7 @@ import (
 type AppHandler struct {
 	articleService service.ArticleService
 	userService    service.UserService
+	imageService   service.ImageService
 	CommonHandler  CommonHandler
 	ArticleHandler ArticleHandler
 	UserHandler    UserHandler
@@ -20,6 +21,7 @@ func New(services *service.Services, l *logger.Logger, templates *template.Templ
 	appHandler := &AppHandler{
 		articleService: services.GetArticleService(),
 		userService:    services.GetUserService(),
+		imageService: services.GetImageService(),
 		templates:      templates,
 	}
 

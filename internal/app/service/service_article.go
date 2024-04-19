@@ -83,6 +83,12 @@ func (as *articleService) GetHomePaginateData(page string) (*template.TemplateDa
 		return nil, err
 	}
 
+	as.t.TemplateData.TemplateDataArticle.RandomArticles, err = as.getRandomArticles(5)
+	if err != nil {
+		as.l.Error().Msgf("%s: get random page data on home page error > %s", op, err)
+		return nil, err
+	}
+
 	return &as.t.TemplateData, nil
 }
 
@@ -100,6 +106,12 @@ func (as *articleService) GetCategoryArticlesData(url, page string) (*template.T
 	as.t.TemplateData.TemplateDataPage, err = as.GetPaginationTemplateData(page)
 	if err != nil {
 		as.l.Error().Msgf("%s: get pagination page data on category page error > %s", op, err)
+		return nil, err
+	}
+
+	as.t.TemplateData.TemplateDataArticle.RandomArticles, err = as.getRandomArticles(5)
+	if err != nil {
+		as.l.Error().Msgf("%s: get random page data on category page error > %s", op, err)
 		return nil, err
 	}
 
@@ -148,6 +160,11 @@ func (as *articleService) getHomePaginationArticles(page string) ([]model.Articl
 	}
 
 	return as.ar.SelectHomePaginationArticles(limit, offset)
+}
+
+// getRandomArticles return 5 random articles
+func (as *articleService) getRandomArticles(limit int) ([]model.Article, error) {
+	return as.ar.GetRandomArticles(limit)
 }
 
 // getCategoryPaginationArticles return []model.Article with pagination on category page
@@ -215,6 +232,12 @@ func (as *articleService) GetArticleTemplateData(url string) (*template.Template
 	as.t.TemplateData.TemplateDataArticle.Article, err = as.GetArticleByURL(url)
 	if err != nil {
 		as.l.Error().Msgf("%s: get article template data error > %s", op, err)
+		return nil, err
+	}
+
+	as.t.TemplateData.TemplateDataArticle.RandomArticles, err = as.getRandomArticles(10)
+	if err != nil {
+		as.l.Error().Msgf("%s: get random page data on article page error > %s", op, err)
 		return nil, err
 	}
 

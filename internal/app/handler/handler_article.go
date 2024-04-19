@@ -45,6 +45,11 @@ func (a *ArticleHandler) Home(w http.ResponseWriter, r *http.Request) {
 		a.l.Error().Msgf("%s: GetHomePaginateData error > %s", op, err)
 	}
 
+	td, err = a.AppHandler.imageService.AddRandomImages(td)
+	if err != nil {
+		a.l.Error().Msgf("%s: AddRandomImages error > %s", op, err)
+	}
+
 	err = a.AppHandler.articleService.RenderTemplate(w, r, tmplFile, td)
 	if err != nil {
 		a.l.Error().Msgf("%s: RenderTemplate home page error > %s", op, err)
@@ -81,6 +86,11 @@ func (a *ArticleHandler) Category(w http.ResponseWriter, r *http.Request) {
 
 	td.TemplateDataPage.Category = url
 
+	td, err = a.AppHandler.imageService.AddRandomImages(td)
+	if err != nil {
+		a.l.Error().Msgf("%s: AddRandomImages error > %s", op, err)
+	}
+
 	err = a.AppHandler.articleService.RenderTemplate(w, r, tmplFile, td)
 	if err != nil {
 		a.l.Error().Msgf("%s: RenderTemplate article page error > %s", op, err)
@@ -112,6 +122,11 @@ func (a *ArticleHandler) Article(w http.ResponseWriter, r *http.Request) {
 	td, err = a.AppHandler.articleService.GetArticleTemplateData(url)
 	if err != nil {
 		a.l.Error().Msgf("%s: GetArticle error > %s", op, err)
+	}
+
+	td, err = a.AppHandler.imageService.AddRandomImages(td)
+	if err != nil {
+		a.l.Error().Msgf("%s: AddRandomImages error > %s", op, err)
 	}
 
 	err = a.AppHandler.articleService.RenderTemplate(w, r, tmplFile, td)

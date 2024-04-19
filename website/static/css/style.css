@@ -1408,3 +1408,16 @@ a.disabled {
 	    -ms-transform:translateY(0px);
 	        transform:translateY(0px);
 }
+
+/*=========================================================
+	Fixed right column
+===========================================================*/
+/* .fixedDiv {
+  position: relative;
+  top: 0;
+}
+
+.fixed {
+  position: fixed;
+  top: 0;
+} */
