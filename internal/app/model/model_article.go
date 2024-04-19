@@ -30,6 +30,7 @@ type ArticleModel interface {
 	SelectHomeSportArticles() ([]Article, error)
 	SelectHomeVideoArticles() ([]Article, error)
 	SelectHomePaginationArticles(limit, offset int) ([]Article, error)
+	GetRandomArticles(limit int) ([]Article, error)
 	SelectCategoryArticles(category string, limit, offset int) ([]Article, error)
 	CountArticles() (int, error)
 

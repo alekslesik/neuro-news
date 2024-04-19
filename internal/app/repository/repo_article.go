@@ -22,6 +22,7 @@ type ArticleQueries struct {
 	selectArticleLimitOffset              string
 	selectArticleLimitOffsetWhereCategory string
 	selectCount                           string
+	selectArticleRandLimit                string
 }
 
 var articleQueries = ArticleQueries{
@@ -82,7 +83,15 @@ var articleQueries = ArticleQueries{
 	ORDER BY article_time DESC
 	LIMIT ? OFFSET ?;`,
 
-	selectCount: `SELECT COUNT(*) FROM article`,
+	selectCount: `SELECT COUNT(*) FROM article;`,
+
+	selectArticleRandLimit: `SELECT article_id, title, preview_text, article_time, tag, detail_text, href, comments, category, image_path
+	FROM article
+	INNER JOIN image
+	ON article.image_id = image.image_id
+	WHERE kind = 'article'
+	ORDER BY RAND()
+	LIMIT ?;`,
 }
 
 // InsertArticleImage insert article to DB
@@ -356,6 +365,32 @@ func (r *MySQLArticleRepository) SelectHomePaginationArticles(limit, offset int)
 			&a.ArticleTime, &a.Tag, &a.DetailText, &a.Href, &a.Comments, &a.Category, &a.ImagePath)
 		if err != nil {
 			r.l.Error().Msgf("%s: query scan pagination articles > %s", op, err)
+			return nil, err
+		}
+
+		as = append(as, a)
+	}
+
+	return as, nil
+}
+
+// getRandomArticles get 5 random articles
+func (r *MySQLArticleRepository) GetRandomArticles(limit int) ([]model.Article, error) {
+	const op = "repository.getRandomArticles()"
+	var as = make([]model.Article, 0, limit)
+
+	rows, err := r.db.Query(articleQueries.selectArticleRandLimit, limit)
+	if err != nil {
+		r.l.Warn().Msgf("%s: query select random articles error > %s", op, err)
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var a model.Article
+		err = rows.Scan(&a.ArticleID, &a.Title, &a.PreviewText,
+			&a.ArticleTime, &a.Tag, &a.DetailText, &a.Href, &a.Comments, &a.Category, &a.ImagePath)
+		if err != nil {
+			r.l.Error().Msgf("%s: query scan random articles error > %s", op, err)
 			return nil, err
 		}
 

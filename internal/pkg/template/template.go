@@ -56,6 +56,7 @@ type TemplateDataArticle struct {
 	VideoArticles          []model.Article
 	AllArticles            []model.Article
 	PaginationArticles     []model.Article
+	RandomArticles         []model.Article
 	PaginationData         string
 	Article                model.Article
 }
