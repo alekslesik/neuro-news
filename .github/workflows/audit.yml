@@ -1,4 +1,4 @@
-name: CI and deploy
+name: CI
 
 on:
   push:
@@ -42,32 +42,3 @@ jobs:
 
       - name: Build application
         run: go build ./cmd/neuro-news
-
-  deploy:
-    name: Deploy
-    runs-on: ubuntu-22.04
-    needs: ci
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up Go
-        uses: actions/setup-go@v5
-        with:
-          go-version-file: go.mod
-          cache: true
-
-      - name: Build binary
-        run: go build -o ./ops/production/ansible/ ./cmd/neuro-news/
-
-      - name: Copy website dir
-        run: cp -r website/ ops/production/ansible/
-
-      - name: Run Ansible playbook
-        uses: dawidd6/action-ansible-playbook@v2
-        with:
-          playbook: dpl.yml
-          directory: ./ops/production/ansible
-          key: ${{secrets.DEPLOY_USER_PRIVATE_KEY}}
-          options: |
-            --inventory hosts.ini
