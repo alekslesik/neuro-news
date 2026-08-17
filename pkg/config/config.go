@@ -2,8 +2,10 @@ package config
 
 import (
 	"errors"
+	"fmt"
 	"io/fs"
 	"log"
+	"strings"
 	"sync"
 
 	"github.com/ilyakaznacheev/cleanenv"
@@ -12,6 +14,7 @@ import (
 
 var (
 	ErrEnvNotExists error = errors.New(".env file is not exists")
+	ErrRequiredEnv  error = errors.New("required environment variable is missing")
 )
 
 // AppConfig is general config for application
@@ -21,8 +24,8 @@ type AppConfig struct {
 	Env       string `env:"ENV" env-default:"development"`
 	Delta     int    `env:"DELTA" env-default:"15"`
 	AdminUser struct {
-		Email    string `env:"ADMIN_EMAIL" env-default:"admin"`
-		Password string `env:"ADMIN_PWD" env-default:"admin"`
+		Email    string `env:"ADMIN_EMAIL"`
+		Password string `env:"ADMIN_PWD"`
 	}
 }
 
@@ -48,7 +51,7 @@ type LoggerConfig struct {
 // MySQLConfig is config fo MySQL part
 type MySQLConfig struct {
 	Driver string `env:"MYSQL_DRIVER" env-default:"mysql"`
-	DSN    string `env:"MYSQL_DSN" env-default:"root:486464@tcp(localhost:3306)/neuronews?parseTime=true"`
+	DSN    string `env:"MYSQL_DSN"`
 }
 
 // TLSConfig is config for TLS part
@@ -59,7 +62,7 @@ type TLSConfig struct {
 
 // SessionConfig is config for session part
 type SessionConfig struct {
-	Secret string `env:"SESSION_SECRET" env-default:"s6Ndh+pPbnzHbS*+9Pk8qGWhTzbpa@ge"`
+	Secret string `env:"SESSION_SECRET"`
 }
 
 // SMTPConfig is config for SMTP part
@@ -83,19 +86,18 @@ type Config struct {
 }
 
 var (
-	instance *Config
-	once     sync.Once
+	instance    *Config
+	instanceErr error
+	once        sync.Once
 )
 
 // New return instance of config (singleton)
 func New() (*Config, error) {
-	var err error
-
 	once.Do(func() {
-		instance, err = loadEnv()
+		instance, instanceErr = loadEnv()
 	})
 
-	return instance, err
+	return instance, instanceErr
 }
 
 // loadEnv load environments from .env file
@@ -121,8 +123,31 @@ func loadEnv() (*Config, error) {
 	if err != nil {
 		return nil, err
 	}
+	if err = cfg.validate(); err != nil {
+		return nil, err
+	}
 
 	return cfg, nil
+}
+
+func (c *Config) validate() error {
+	var errs []error
+
+	require := func(name, value string) {
+		if strings.TrimSpace(value) == "" {
+			errs = append(errs, fmt.Errorf("%w: %s", ErrRequiredEnv, name))
+		}
+	}
+
+	require("MYSQL_DSN", c.MySQL.DSN)
+
+	if c.App.Env == "production" {
+		require("ADMIN_EMAIL", c.App.AdminUser.Email)
+		require("ADMIN_PWD", c.App.AdminUser.Password)
+		require("SESSION_SECRET", c.Session.Secret)
+	}
+
+	return errors.Join(errs...)
 }
 
 //TODO Планы по улучшению пакета конфигурации:
