@@ -24,6 +24,9 @@ jobs:
       - name: Verify dependencies
         run: go mod verify
 
+      - name: Scan for known vulnerabilities
+        run: go run golang.org/x/vuln/cmd/govulncheck@latest ./...
+
       - name: Check formatting
         shell: bash
         run: |
